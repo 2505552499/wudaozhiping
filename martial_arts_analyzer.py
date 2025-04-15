@@ -515,7 +515,7 @@ class MartialArtsAnalyzer:
     def stop_camera(self):
         self.camera_on = False
         if hasattr(self, 'control_window') and self.control_window:
-            self.control_window.destroy()
+            self.control_window.window.destroy()
         
         self.start_camera_btn.config(state=tk.NORMAL)
         self.stop_camera_btn.config(state=tk.DISABLED)
