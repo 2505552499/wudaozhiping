@@ -94,17 +94,32 @@ class MartialArtsAnalyzer:
         move_frame.pack(pady=20)
         
         move_label = tk.Label(move_frame, text="选择动作类型:", bg="white")
-        move_label.pack(side=tk.LEFT, padx=10)
+        move_label.pack(pady=10)
         
-        # 三个动作按钮
-        moves = ['弓步冲拳', '猛虎出洞', '五花坐山']
+        # 创建按钮框架 - 分成网格布局以容纳更多按钮
+        button_frame = tk.Frame(move_frame, bg="white")
+        button_frame.pack()
         
+        # 所有招式列表
+        moves = [
+            '弓步冲拳', '猛虎出洞', '五花坐山',
+            '滚身冲拳', '猿猴纳肘', '马步推掌',
+            '并步崩拳', '狮子张嘴', '马步扣床',
+            '罗汉张掌'
+        ]
+        
+        # 创建动作按钮网格
+        row, col = 0, 0
         for move in moves:
-            button = tk.Button(move_frame, text=move, 
+            button = tk.Button(button_frame, text=move, 
                              command=lambda m=move: self.upload_image(m),
                              bg='#4285F4', fg='white', font=('Arial', 11), 
                              height=1, width=15)
-            button.pack(side=tk.LEFT, padx=10)
+            button.grid(row=row, column=col, padx=10, pady=5)
+            col += 1
+            if col > 2:  # 每行3个按钮
+                col = 0
+                row += 1
     
     def setup_video_tab(self):
         frame = tk.Frame(self.tab_video, bg="white")
@@ -127,8 +142,13 @@ class MartialArtsAnalyzer:
         
         # 动作下拉菜单
         self.video_move_var = tk.StringVar()
-        moves = ['弓步冲拳', '猛虎出洞', '五花坐山']
-        self.video_move_dropdown = ttk.Combobox(control_frame, textvariable=self.video_move_var, values=moves, width=10)
+        moves = [
+            '弓步冲拳', '猛虎出洞', '五花坐山',
+            '滚身冲拳', '猿猴纳肘', '马步推掌',
+            '并步崩拳', '狮子张嘴', '马步扣床',
+            '罗汉张掌'
+        ]
+        self.video_move_dropdown = ttk.Combobox(control_frame, textvariable=self.video_move_var, values=moves, width=15)
         self.video_move_dropdown.current(0)
         self.video_move_dropdown.pack(side=tk.LEFT, padx=10)
         
@@ -184,8 +204,13 @@ class MartialArtsAnalyzer:
         
         # 动作下拉菜单
         self.camera_move_var = tk.StringVar()
-        moves = ['弓步冲拳', '猛虎出洞', '五花坐山']
-        self.camera_move_dropdown = ttk.Combobox(control_frame, textvariable=self.camera_move_var, values=moves, width=10)
+        moves = [
+            '弓步冲拳', '猛虎出洞', '五花坐山',
+            '滚身冲拳', '猿猴纳肘', '马步推掌',
+            '并步崩拳', '狮子张嘴', '马步扣床',
+            '罗汉张掌'
+        ]
+        self.camera_move_dropdown = ttk.Combobox(control_frame, textvariable=self.camera_move_var, values=moves, width=15)
         self.camera_move_dropdown.current(0)
         self.camera_move_dropdown.pack(side=tk.LEFT, padx=10)
         
@@ -479,7 +504,16 @@ class MartialArtsAnalyzer:
                 os.makedirs(img_dir)
                 
             # 根据招式名称修改文件名
-            move_code = move_name.replace("弓步冲拳", "gongbuchongquan").replace("猛虎出洞", "menghuchudong").replace("五花坐山", "wuhuazuoshan")
+            move_code = move_name.replace("弓步冲拳", "gongbuchongquan")\
+                                .replace("猛虎出洞", "menghuchudong")\
+                                .replace("五花坐山", "wuhuazuoshan")\
+                                .replace("滚身冲拳", "gunshenchongquan")\
+                                .replace("猿猴纳肘", "yuanhounazhou")\
+                                .replace("马步推掌", "mabutuizhang")\
+                                .replace("并步崩拳", "bingbubengquan")\
+                                .replace("狮子张嘴", "shizizhangzui")\
+                                .replace("马步扣床", "mabukouchuang")\
+                                .replace("罗汉张掌", "luohanzhangzhang")
             
             # 目标文件路径
             target_file = os.path.join(img_dir, move_code + os.path.splitext(filepath)[1])
@@ -526,7 +560,16 @@ class MartialArtsAnalyzer:
             
             # 获取选中的动作类型
             move_name = self.video_move_var.get()
-            move_code = move_name.replace("弓步冲拳", "gongbuchongquan").replace("猛虎出洞", "menghuchudong").replace("五花坐山", "wuhuazuoshan")
+            move_code = move_name.replace("弓步冲拳", "gongbuchongquan")\
+                                .replace("猛虎出洞", "menghuchudong")\
+                                .replace("五花坐山", "wuhuazuoshan")\
+                                .replace("滚身冲拳", "gunshenchongquan")\
+                                .replace("猿猴纳肘", "yuanhounazhou")\
+                                .replace("马步推掌", "mabutuizhang")\
+                                .replace("并步崩拳", "bingbubengquan")\
+                                .replace("狮子张嘴", "shizizhangzui")\
+                                .replace("马步扣床", "mabukouchuang")\
+                                .replace("罗汉张掌", "luohanzhangzhang")
             
             # 启动视频分析线程
             self.analysis_thread = threading.Thread(target=self.analyze_video, args=(move_code,))
@@ -746,7 +789,16 @@ class MartialArtsAnalyzer:
         if hasattr(self, 'current_frame') and self.current_frame is not None:
             # 获取当前选择的动作类型
             move_name = self.camera_move_var.get()
-            move_code = move_name.replace("弓步冲拳", "gongbuchongquan").replace("猛虎出洞", "menghuchudong").replace("五花坐山", "wuhuazuoshan")
+            move_code = move_name.replace("弓步冲拳", "gongbuchongquan")\
+                                .replace("猛虎出洞", "menghuchudong")\
+                                .replace("五花坐山", "wuhuazuoshan")\
+                                .replace("滚身冲拳", "gunshenchongquan")\
+                                .replace("猿猴纳肘", "yuanhounazhou")\
+                                .replace("马步推掌", "mabutuizhang")\
+                                .replace("并步崩拳", "bingbubengquan")\
+                                .replace("狮子张嘴", "shizizhangzui")\
+                                .replace("马步扣床", "mabukouchuang")\
+                                .replace("罗汉张掌", "luohanzhangzhang")
             
             # 确保img目录存在
             img_dir = 'img'
@@ -800,6 +852,20 @@ def analyze_frame(img_path, posture):
             angles2 = calculate_angles(coordinate_master.master_meng_hu_chu_dong)
         elif "wuhuazuoshan" in posture:
             angles2 = calculate_angles(coordinate_master.master_wu_hua_zuo_shan)
+        elif "gunshenchongquan" in posture:
+            angles2 = calculate_angles(coordinate_master.master_gun_shen_chong_quan)
+        elif "yuanhounazhou" in posture:
+            angles2 = calculate_angles(coordinate_master.master_yuan_hou_na_zhou)
+        elif "mabutuizhang" in posture:
+            angles2 = calculate_angles(coordinate_master.master_ma_bu_tui_zhang)
+        elif "bingbubengquan" in posture:
+            angles2 = calculate_angles(coordinate_master.master_bing_bu_beng_quan)
+        elif "shizizhangzui" in posture:
+            angles2 = calculate_angles(coordinate_master.master_shi_zi_zhang_zui)
+        elif "mabukouchuang" in posture:
+            angles2 = calculate_angles(coordinate_master.master_ma_bu_kou_chuang)
+        elif "luohanzhangzhang" in posture:
+            angles2 = calculate_angles(coordinate_master.master_luo_han_zhang_zhang)
         else:
             print(f"未知姿态类型: {posture}")
             return 0
