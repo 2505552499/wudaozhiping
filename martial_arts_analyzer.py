@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog, ttk
+from tkinter import filedialog, ttk, messagebox
 import shutil
 import cv2
 import model
@@ -8,21 +8,45 @@ import threading
 import time
 from PIL import Image, ImageTk
 from camera_control import CameraControl
+import sys
 
 class MartialArtsAnalyzer:
-    def __init__(self, root):
+    def __init__(self, root, username="游客"):
         self.root = root
         self.root.title("武道智评: 智能姿态分析系统")
         self.root.geometry("1000x650")
         self.root.configure(bg="#f0f0f0")
         
+        # 保存用户名
+        self.username = username
+        
         # 设置主标题
         self.title_frame = tk.Frame(self.root, bg="#c62828", height=60)
         self.title_frame.pack(fill=tk.X)
         
-        self.title_label = tk.Label(self.title_frame, text="武道智评: 智能姿态分析系统", 
+        # 标题栏布局调整，添加用户信息显示
+        title_container = tk.Frame(self.title_frame, bg="#c62828")
+        title_container.pack(fill=tk.X)
+        
+        self.title_label = tk.Label(title_container, text="武道智评: 智能姿态分析系统", 
                                     font=("Arial", 18, "bold"), fg="white", bg="#c62828")
-        self.title_label.pack(pady=10)
+        self.title_label.pack(side=tk.LEFT, pady=10, padx=20)
+        
+        # 用户信息显示
+        user_frame = tk.Frame(title_container, bg="#c62828")
+        user_frame.pack(side=tk.RIGHT, pady=10, padx=20)
+        
+        user_label = tk.Label(user_frame, text=f"当前用户: {self.username}", 
+                            font=("Arial", 12), fg="white", bg="#c62828")
+        user_label.pack(side=tk.RIGHT)
+        
+        # 如果不是游客，添加退出登录按钮
+        if self.username != "游客":
+            logout_btn = tk.Button(user_frame, text="退出登录", 
+                                command=self.logout,
+                                bg='#f44336', fg='white', font=('Arial', 9), 
+                                height=1, width=8)
+            logout_btn.pack(side=tk.RIGHT, padx=10)
         
         # 创建选项卡控件
         self.tab_control = ttk.Notebook(self.root)
@@ -201,15 +225,38 @@ class MartialArtsAnalyzer:
         frame = tk.Frame(self.tab_settings, bg="white")
         frame.pack(fill="both", expand=True, padx=20, pady=20)
         
+        # 创建notebook选项卡切换帮助和用户设置
+        settings_notebook = ttk.Notebook(frame)
+        settings_notebook.pack(fill="both", expand=True)
+        
+        # 帮助选项卡
+        help_tab = ttk.Frame(settings_notebook)
+        settings_notebook.add(help_tab, text="帮助与使用说明")
+        
+        # 用户设置选项卡(仅对注册用户显示)
+        if self.username != "游客":
+            user_tab = ttk.Frame(settings_notebook)
+            settings_notebook.add(user_tab, text="用户设置")
+            self.setup_user_settings(user_tab, self.username)
+        
+        # 设置帮助选项卡内容
+        self.setup_help_tab(help_tab)
+        
+        # 版本信息
+        version_label = tk.Label(frame, text="版本: V1.0.0  |  开发者: 武术智能辅助团队", bg="white")
+        version_label.pack(side=tk.BOTTOM, pady=10)
+    
+    def setup_help_tab(self, parent):
+        """帮助选项卡内容"""
         # 帮助说明
-        title_label = tk.Label(frame, text="帮助与使用说明", font=("Arial", 16, "bold"), bg="white")
+        title_label = tk.Label(parent, text="帮助与使用说明", font=("Arial", 16, "bold"))
         title_label.pack(pady=10)
         
         # 使用技巧
-        tips_frame = tk.Frame(frame, bg="white", bd=2, relief=tk.GROOVE)
+        tips_frame = tk.Frame(parent, bd=2, relief=tk.GROOVE)
         tips_frame.pack(fill=tk.X, padx=20, pady=10)
         
-        tips_title = tk.Label(tips_frame, text="使用技巧", font=("Arial", 14, "bold"), bg="white")
+        tips_title = tk.Label(tips_frame, text="使用技巧", font=("Arial", 14, "bold"))
         tips_title.pack(anchor=tk.W, padx=10, pady=5)
         
         tips = [
@@ -221,14 +268,14 @@ class MartialArtsAnalyzer:
         ]
         
         for tip in tips:
-            tip_label = tk.Label(tips_frame, text="• " + tip, bg="white", anchor=tk.W)
+            tip_label = tk.Label(tips_frame, text="• " + tip, anchor=tk.W)
             tip_label.pack(fill=tk.X, padx=20, pady=2)
             
         # 关于系统
-        about_frame = tk.Frame(frame, bg="white", bd=2, relief=tk.GROOVE)
+        about_frame = tk.Frame(parent, bd=2, relief=tk.GROOVE)
         about_frame.pack(fill=tk.X, padx=20, pady=20)
         
-        about_title = tk.Label(about_frame, text="关于系统", font=("Arial", 14, "bold"), bg="white")
+        about_title = tk.Label(about_frame, text="关于系统", font=("Arial", 14, "bold"))
         about_title.pack(anchor=tk.W, padx=10, pady=5)
         
         about_text = """武道智评系统是一款专为武术爱好者设计的智能姿态分析工具。
@@ -238,12 +285,183 @@ class MartialArtsAnalyzer:
 本系统可分析图片、视频以及实时摄像头输入，全方位满足不同学习场景需求。
         """
         
-        about_label = tk.Label(about_frame, text=about_text, bg="white", justify=tk.LEFT, wraplength=800)
+        about_label = tk.Label(about_frame, text=about_text, justify=tk.LEFT, wraplength=800)
         about_label.pack(padx=20, pady=10, anchor=tk.W)
+    
+    def setup_user_settings(self, parent, username):
+        """用户设置选项卡内容"""
+        import json
         
-        # 版本信息
-        version_label = tk.Label(frame, text="版本: V1.0.0  |  开发者: 武术智能辅助团队", bg="white")
-        version_label.pack(side=tk.BOTTOM, pady=10)
+        # 标题
+        title_label = tk.Label(parent, text="用户信息与设置", font=("Arial", 16, "bold"))
+        title_label.pack(pady=10)
+        
+        # 用户信息框架
+        info_frame = tk.LabelFrame(parent, text="账号信息", font=("Arial", 12))
+        info_frame.pack(fill=tk.X, padx=20, pady=10)
+        
+        # 加载用户数据
+        user_data = {}
+        try:
+            with open("users.json", "r", encoding='utf-8') as f:
+                users = json.load(f)
+                if username in users:
+                    user_data = users[username]
+        except Exception as e:
+            print(f"加载用户数据错误: {e}")
+        
+        # 用户名
+        username_frame = tk.Frame(info_frame)
+        username_frame.pack(fill=tk.X, padx=20, pady=5)
+        
+        username_label = tk.Label(username_frame, text="用户名:", width=10, anchor=tk.W)
+        username_label.pack(side=tk.LEFT, padx=5)
+        
+        username_value = tk.Label(username_frame, text=username)
+        username_value.pack(side=tk.LEFT, padx=5)
+        
+        # 注册时间
+        reg_time_frame = tk.Frame(info_frame)
+        reg_time_frame.pack(fill=tk.X, padx=20, pady=5)
+        
+        reg_time_label = tk.Label(reg_time_frame, text="注册时间:", width=10, anchor=tk.W)
+        reg_time_label.pack(side=tk.LEFT, padx=5)
+        
+        reg_time_value = tk.Label(reg_time_frame, text=user_data.get("register_time", "未知"))
+        reg_time_value.pack(side=tk.LEFT, padx=5)
+        
+        # 上次登录
+        last_login_frame = tk.Frame(info_frame)
+        last_login_frame.pack(fill=tk.X, padx=20, pady=5)
+        
+        last_login_label = tk.Label(last_login_frame, text="上次登录:", width=10, anchor=tk.W)
+        last_login_label.pack(side=tk.LEFT, padx=5)
+        
+        last_login_value = tk.Label(last_login_frame, text=user_data.get("last_login", "未知"))
+        last_login_value.pack(side=tk.LEFT, padx=5)
+        
+        # 登录次数
+        login_count_frame = tk.Frame(info_frame)
+        login_count_frame.pack(fill=tk.X, padx=20, pady=5)
+        
+        login_count_label = tk.Label(login_count_frame, text="登录次数:", width=10, anchor=tk.W)
+        login_count_label.pack(side=tk.LEFT, padx=5)
+        
+        login_count_value = tk.Label(login_count_frame, text=str(user_data.get("login_count", 0)))
+        login_count_value.pack(side=tk.LEFT, padx=5)
+        
+        # 密码修改框架
+        passwd_frame = tk.LabelFrame(parent, text="修改密码", font=("Arial", 12))
+        passwd_frame.pack(fill=tk.X, padx=20, pady=20)
+        
+        # 当前密码
+        current_pwd_frame = tk.Frame(passwd_frame)
+        current_pwd_frame.pack(fill=tk.X, padx=20, pady=5)
+        
+        current_pwd_label = tk.Label(current_pwd_frame, text="当前密码:", width=10, anchor=tk.W)
+        current_pwd_label.pack(side=tk.LEFT, padx=5)
+        
+        self.current_pwd_var = tk.StringVar()
+        current_pwd_entry = tk.Entry(current_pwd_frame, show="*", width=20, textvariable=self.current_pwd_var)
+        current_pwd_entry.pack(side=tk.LEFT, padx=5)
+        
+        # 新密码
+        new_pwd_frame = tk.Frame(passwd_frame)
+        new_pwd_frame.pack(fill=tk.X, padx=20, pady=5)
+        
+        new_pwd_label = tk.Label(new_pwd_frame, text="新密码:", width=10, anchor=tk.W)
+        new_pwd_label.pack(side=tk.LEFT, padx=5)
+        
+        self.new_pwd_var = tk.StringVar()
+        new_pwd_entry = tk.Entry(new_pwd_frame, show="*", width=20, textvariable=self.new_pwd_var)
+        new_pwd_entry.pack(side=tk.LEFT, padx=5)
+        
+        # 确认新密码
+        confirm_pwd_frame = tk.Frame(passwd_frame)
+        confirm_pwd_frame.pack(fill=tk.X, padx=20, pady=5)
+        
+        confirm_pwd_label = tk.Label(confirm_pwd_frame, text="确认密码:", width=10, anchor=tk.W)
+        confirm_pwd_label.pack(side=tk.LEFT, padx=5)
+        
+        self.confirm_pwd_var = tk.StringVar()
+        confirm_pwd_entry = tk.Entry(confirm_pwd_frame, show="*", width=20, textvariable=self.confirm_pwd_var)
+        confirm_pwd_entry.pack(side=tk.LEFT, padx=5)
+        
+        # 修改密码按钮
+        change_pwd_btn = tk.Button(passwd_frame, text="修改密码", 
+                                 command=lambda: self.change_password(username),
+                                 bg='#4285F4', fg='white', font=('Arial', 11), 
+                                 height=1, width=15)
+        change_pwd_btn.pack(pady=10)
+    
+    def change_password(self, username):
+        """修改用户密码"""
+        import json
+        import hashlib
+        import re
+        
+        current_pwd = self.current_pwd_var.get()
+        new_pwd = self.new_pwd_var.get()
+        confirm_pwd = self.confirm_pwd_var.get()
+        
+        # 验证输入
+        if not current_pwd or not new_pwd or not confirm_pwd:
+            messagebox.showerror("错误", "所有密码字段都必须填写")
+            return
+        
+        # 验证新密码格式
+        if len(new_pwd) < 8 or not re.search(r'[a-zA-Z]', new_pwd) or not re.search(r'[0-9]', new_pwd):
+            messagebox.showerror("错误", "新密码至少8位，且必须包含字母和数字")
+            return
+        
+        # 验证两次密码输入是否一致
+        if new_pwd != confirm_pwd:
+            messagebox.showerror("错误", "两次输入的新密码不一致")
+            return
+        
+        # 验证当前密码是否正确
+        try:
+            with open("users.json", "r", encoding='utf-8') as f:
+                users = json.load(f)
+                
+            if username not in users:
+                messagebox.showerror("错误", "用户数据异常，请重新登录")
+                return
+            
+            # 哈希当前输入的密码进行比对
+            current_pwd_hash = hashlib.sha256(current_pwd.encode()).hexdigest()
+            if users[username]["password"] != current_pwd_hash:
+                messagebox.showerror("错误", "当前密码不正确")
+                return
+            
+            # 更新密码
+            users[username]["password"] = hashlib.sha256(new_pwd.encode()).hexdigest()
+            users[username]["password_changed_at"] = self.get_current_time()
+            
+            with open("users.json", "w", encoding='utf-8') as f:
+                json.dump(users, f, indent=4)
+            
+            messagebox.showinfo("成功", "密码修改成功！")
+            
+            # 清空输入框
+            self.current_pwd_var.set("")
+            self.new_pwd_var.set("")
+            self.confirm_pwd_var.set("")
+            
+        except Exception as e:
+            messagebox.showerror("错误", f"修改密码时出错: {e}")
+    
+    def get_current_time(self):
+        """获取当前时间字符串"""
+        import datetime
+        return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
+    def logout(self):
+        """退出登录"""
+        if messagebox.askyesno("退出登录", "确定要退出登录吗?"):
+            self.root.destroy()  # 关闭当前窗口
+            # 重新启动应用
+            os.execl(sys.executable, sys.executable, *sys.argv)
         
     def upload_image(self, move_name):
         # 打开文件选择对话框
