@@ -51,16 +51,18 @@ class MartialArtsAnalyzer:
         # 创建选项卡控件
         self.tab_control = ttk.Notebook(self.root)
         
-        # 创建三个选项卡
+        # 创建选项卡
         self.tab_image = ttk.Frame(self.tab_control)
         self.tab_video = ttk.Frame(self.tab_control)
         self.tab_camera = ttk.Frame(self.tab_control)
+        self.tab_knowledge = ttk.Frame(self.tab_control)  # 新增武术知识库选项卡
         self.tab_settings = ttk.Frame(self.tab_control)
         
         # 添加选项卡到选项卡控件
         self.tab_control.add(self.tab_image, text="图像分析")
         self.tab_control.add(self.tab_video, text="视频分析")
         self.tab_control.add(self.tab_camera, text="摄像头分析")
+        self.tab_control.add(self.tab_knowledge, text="武术知识库")  # 新增武术知识库选项卡
         self.tab_control.add(self.tab_settings, text="帮助与设置")
         
         # 显示选项卡控件
@@ -70,6 +72,7 @@ class MartialArtsAnalyzer:
         self.setup_image_tab()
         self.setup_video_tab()
         self.setup_camera_tab()
+        self.setup_knowledge_tab()  # 初始化武术知识库选项卡
         self.setup_settings_tab()
         
         # 视频和摄像头分析变量
@@ -246,6 +249,263 @@ class MartialArtsAnalyzer:
         self.camera_label = tk.Label(self.camera_frame, bg="black")
         self.camera_label.pack(expand=True, fill=tk.BOTH)
         
+    def setup_knowledge_tab(self):
+        """设置武术知识库选项卡"""
+        frame = tk.Frame(self.tab_knowledge, bg="white")
+        frame.pack(fill="both", expand=True, padx=20, pady=20)
+        
+        # 标题
+        title_label = tk.Label(frame, text="武术知识库", font=("Arial", 16, "bold"), bg="white")
+        title_label.pack(pady=10)
+        
+        # 上部介绍
+        intro_text = """武术知识库收录了各派武术的基本资料、技法说明和历史文化，
+为武术爱好者提供全面的知识参考。通过左侧目录选择感兴趣的内容。"""
+        intro_label = tk.Label(frame, text=intro_text, wraplength=800, justify=tk.LEFT, bg="white")
+        intro_label.pack(pady=10, anchor=tk.W)
+        
+        # 创建主内容区，分为左侧目录和右侧内容
+        content_frame = tk.Frame(frame, bg="white")
+        content_frame.pack(fill="both", expand=True, pady=10)
+        
+        # 左侧目录框架
+        menu_frame = tk.Frame(content_frame, bg="#f5f5f5", width=200)
+        menu_frame.pack(side=tk.LEFT, fill="y", padx=(0, 10))
+        menu_frame.pack_propagate(False)  # 固定大小
+        
+        # 右侧内容框架
+        self.knowledge_content = tk.Frame(content_frame, bg="white")
+        self.knowledge_content.pack(side=tk.RIGHT, fill="both", expand=True)
+        
+        # 目录内容
+        menu_title = tk.Label(menu_frame, text="知识分类", font=("Arial", 12, "bold"), bg="#f5f5f5")
+        menu_title.pack(anchor=tk.W, padx=10, pady=10)
+        
+        # 目录类别
+        categories = [
+            ("武术流派", "流派"),
+            ("技法说明", "技法"),
+            ("历史文化", "历史"),
+            ("代表人物", "人物")
+        ]
+        
+        for cat_name, cat_id in categories:
+            cat_btn = tk.Button(menu_frame, text=cat_name, width=18, height=2,
+                             command=lambda c=cat_id: self.show_knowledge_category(c),
+                             bg="#e1e1e1", relief=tk.FLAT,
+                             anchor=tk.W, padx=15)
+            cat_btn.pack(fill=tk.X, pady=1)
+        
+        # 默认显示流派内容
+        self.show_knowledge_category("流派")
+    
+    def show_knowledge_category(self, category):
+        """显示指定类别的武术知识内容"""
+        # 清空内容区
+        for widget in self.knowledge_content.winfo_children():
+            widget.destroy()
+        
+        # 创建内容区滚动框架
+        content_canvas = tk.Canvas(self.knowledge_content, bg="white")
+        scrollbar = ttk.Scrollbar(self.knowledge_content, orient="vertical", command=content_canvas.yview)
+        scrollable_frame = ttk.Frame(content_canvas)
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: content_canvas.configure(scrollregion=content_canvas.bbox("all"))
+        )
+        
+        content_canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        content_canvas.configure(yscrollcommand=scrollbar.set)
+        
+        content_canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        # 根据类别显示不同内容
+        if category == "流派":
+            self.show_martial_arts_styles(scrollable_frame)
+        elif category == "技法":
+            self.show_techniques(scrollable_frame)
+        elif category == "历史":
+            self.show_history(scrollable_frame)
+        elif category == "人物":
+            self.show_famous_people(scrollable_frame)
+    
+    def show_martial_arts_styles(self, parent):
+        """显示武术流派内容"""
+        # 标题
+        title = tk.Label(parent, text="中国武术主要流派", font=("Arial", 14, "bold"))
+        title.pack(anchor=tk.W, pady=(0, 10))
+        
+        styles = [
+            {
+                "name": "太极拳",
+                "origin": "起源于河南温县陈家沟",
+                "desc": "太极拳强调以柔克刚，讲究内外兼修、形神兼备，动作圆活连贯，是一种内家拳法。代表人物有陈长兴、杨露禅等。",
+                "features": "柔和缓慢、刚柔相济、轻灵沉着、圆活连贯"
+            },
+            {
+                "name": "形意拳",
+                "origin": "源于河北邢台内丘县",
+                "desc": "形意拳取法于动物形态，以五行为纲，十二形为目，强调三体合一，讲究整体协调。代表人物有李洛能、郭云深等。",
+                "features": "刚猛凶狠、短促爆发、形神一体、直来直往"
+            },
+            {
+                "name": "八卦掌",
+                "origin": "创始于清朝道光年间",
+                "desc": "八卦掌以走圆为主要特征，强调手随身转、步随掌换，动作灵活多变。代表人物有董海川、尹福等。",
+                "features": "圆活绵长、连绵不断、变化多端、旋转走转"
+            }
+        ]
+        
+        # 遍历显示武术流派
+        for i, style in enumerate(styles):
+            style_frame = tk.Frame(parent, bd=1, relief=tk.GROOVE, padx=10, pady=10)
+            style_frame.pack(fill=tk.X, pady=5)
+            
+            name_label = tk.Label(style_frame, text=style["name"], font=("Arial", 12, "bold"))
+            name_label.pack(anchor=tk.W)
+            
+            origin_label = tk.Label(style_frame, text=f"起源: {style['origin']}")
+            origin_label.pack(anchor=tk.W, pady=(5, 0))
+            
+            desc_label = tk.Label(style_frame, text=style["desc"], wraplength=700, justify=tk.LEFT)
+            desc_label.pack(anchor=tk.W)
+            
+            features_label = tk.Label(style_frame, text=f"特点: {style['features']}")
+            features_label.pack(anchor=tk.W)
+    
+    def show_techniques(self, parent):
+        """显示武术技法内容"""
+        # 标题
+        title = tk.Label(parent, text="武术基本技法说明", font=("Arial", 14, "bold"))
+        title.pack(anchor=tk.W, pady=(0, 10))
+        
+        # 基本功分类展示
+        categories = [
+            {
+                "name": "基本步型",
+                "desc": "武术中的基本步型包括弓步、马步、仆步、虚步、歇步等，是武术技击的根基。",
+                "items": ["弓步: 前腿屈膝，膝关节与脚尖在同一垂直线上；后腿伸直", 
+                          "马步: 两腿与肩同宽，下蹲，膝盖向外，大腿与地面平行", 
+                          "虚步: 一腿承重，另一腿轻点地面，脚尖着地"]
+            },
+            {
+                "name": "手法技巧",
+                "desc": "武术手法包括拳、掌、勾、爪等多种形式，是武术攻防的主要技术。",
+                "items": ["拳法: 常见的有冲拳、横拳、直拳、摆拳、钩拳等", 
+                          "掌法: 包括推掌、劈掌、拍掌、云掌等手型和运动方式", 
+                          "指法: 一指禅、二指禅、梅花手等指型变化"]
+            },
+            {
+                "name": "身法技巧",
+                "desc": "身法是指武术中的各种身体移动、转换和姿态变化，是连接上下肢动作的纽带。",
+                "items": ["提沉: 通过提肩沉肘实现力量传导", 
+                          "旋转: 腰为轴的整体转动，增加发力距离", 
+                          "闪展: 身体快速收缩和展开的变化"]
+            }
+        ]
+        
+        # 遍历技法分类
+        for category in categories:
+            cat_frame = tk.Frame(parent, bd=1, relief=tk.GROOVE, padx=10, pady=10)
+            cat_frame.pack(fill=tk.X, pady=5)
+            
+            name_label = tk.Label(cat_frame, text=category["name"], font=("Arial", 12, "bold"))
+            name_label.pack(anchor=tk.W)
+            
+            desc_label = tk.Label(cat_frame, text=category["desc"], wraplength=700, justify=tk.LEFT)
+            desc_label.pack(anchor=tk.W, pady=5)
+            
+            for item in category["items"]:
+                item_label = tk.Label(cat_frame, text=f"• {item}", wraplength=700, justify=tk.LEFT)
+                item_label.pack(anchor=tk.W, padx=(15, 0))
+    
+    def show_history(self, parent):
+        """显示武术历史内容"""
+        # 标题
+        title = tk.Label(parent, text="中国武术发展历史", font=("Arial", 14, "bold"))
+        title.pack(anchor=tk.W, pady=(0, 10))
+        
+        # 武术历史时期
+        periods = [
+            {
+                "name": "远古时期 (约公元前2000年前)",
+                "desc": "原始武术源于原始人类的生存需求，主要为狩猎、防御野兽和部落间争斗。这一时期的武术动作多模仿动物动作，带有浓厚的巫术色彩。"
+            },
+            {
+                "name": "春秋战国时期 (公元前770年-公元前221年)",
+                "desc": "这一时期是中国武术的初步形成时期，产生了'六艺'，即礼、乐、射、御、书、数，其中'射'和'御'与武术直接相关。同时，这一时期也出现了专业的'技击之士'。"
+            },
+            {
+                "name": "秦汉时期 (公元前221年-公元220年)",
+                "desc": "此时期武术进一步发展，出现了'角力'、'手搏'等技击活动，并开始与军事训练结合。汉代出现了首部武术著作《手搏图》，标志着武术理论的初步形成。"
+            },
+            {
+                "name": "唐宋时期 (公元618年-公元1279年)",
+                "desc": "唐宋时期武术日益普及，并开始形成各种拳术流派。唐代的'角抵戏'和宋代的武举考试推动了武术的发展，同时佛家、道家思想开始渗入武术。"
+            },
+            {
+                "name": "明清时期 (公元1368年-公元1911年)",
+                "desc": "明清时期是中国武术发展的鼎盛时期，各大流派逐渐形成。太极拳、形意拳、八卦掌等内家拳兴起，少林、武当等门派发展壮大。这一时期出现了大量武术著作，武术理论更加系统化。"
+            }
+        ]
+        
+        # 遍历历史时期
+        for period in periods:
+            period_frame = tk.Frame(parent, bd=1, relief=tk.GROOVE, padx=10, pady=10)
+            period_frame.pack(fill=tk.X, pady=5)
+            
+            name_label = tk.Label(period_frame, text=period["name"], font=("Arial", 12, "bold"))
+            name_label.pack(anchor=tk.W)
+            
+            desc_label = tk.Label(period_frame, text=period["desc"], wraplength=700, justify=tk.LEFT)
+            desc_label.pack(anchor=tk.W, pady=5)
+    
+    def show_famous_people(self, parent):
+        """显示武术名人内容"""
+        # 标题
+        title = tk.Label(parent, text="武术代表人物", font=("Arial", 14, "bold"))
+        title.pack(anchor=tk.W, pady=(0, 10))
+        
+        # 武术名人
+        people = [
+            {
+                "name": "霍元甲 (1868-1910)",
+                "style": "精通密宗、擅长劈拳",
+                "desc": "天津静海人，近代著名武术家，精通密宗拳法和劈挂拳，创办精武体育会，致力于弘扬中华武术。与日本柔道家交流切磋，提升了中国武术的声誉。"
+            },
+            {
+                "name": "陈长兴 (1771-1853)",
+                "style": "陈式太极拳第九代传人",
+                "desc": "河南温县陈家沟人，陈式太极拳第九代传人，被称为'太极拳的集大成者'。他将陈式太极拳的动作和理论进一步完善，形成了完整的套路体系。杨露禅曾拜其为师。"
+            },
+            {
+                "name": "黄飞鸿 (1847-1924)",
+                "style": "洪家拳、佛山无影脚",
+                "desc": "广东佛山人，清末民初著名武术家，精通洪家拳、佛山无影脚等技艺。开设宝芝林药店行医治病，同时传授武艺，精神被多部影视作品所传颂。"
+            },
+            {
+                "name": "董海川 (1797-1882)",
+                "style": "八卦掌创始人",
+                "desc": "河北文安人，八卦掌创始人。据传他师从道士董奇，学得奇门遁甲之术和特殊的步法，后创编八卦掌。其特点是以走圆转身为主要运动形式，动作圆活连贯。"
+            }
+        ]
+        
+        # 遍历名人
+        for person in people:
+            person_frame = tk.Frame(parent, bd=1, relief=tk.GROOVE, padx=10, pady=10)
+            person_frame.pack(fill=tk.X, pady=5)
+            
+            name_label = tk.Label(person_frame, text=person["name"], font=("Arial", 12, "bold"))
+            name_label.pack(anchor=tk.W)
+            
+            style_label = tk.Label(person_frame, text=f"流派: {person['style']}")
+            style_label.pack(anchor=tk.W, pady=(5, 0))
+            
+            desc_label = tk.Label(person_frame, text=person["desc"], wraplength=700, justify=tk.LEFT)
+            desc_label.pack(anchor=tk.W, pady=5)
+    
     def setup_settings_tab(self):
         frame = tk.Frame(self.tab_settings, bg="white")
         frame.pack(fill="both", expand=True, padx=20, pady=20)
