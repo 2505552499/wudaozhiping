@@ -1,0 +1,18 @@
+{
+    "appointments": [
+        {
+            "id": "2",
+            "user_id": "yetong",
+            "coach_id": "coach2",
+            "coach_name": "zhangsan",
+            "coach_avatar": null,
+            "date": "2025-04-10",
+            "time": "02:02",
+            "location": "\u5317\u4eac\u5e02 \u6d77\u6dc0\u533a",
+            "skill": "\u9648\u6c0f\u592a\u6781\u62f3",
+            "duration": 1.5,
+            "status": "confirmed",
+            "created_at": "2025-04-28T14:12:39.579130"
+        }
+    ]
+}
