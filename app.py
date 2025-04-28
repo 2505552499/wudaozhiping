@@ -19,6 +19,19 @@ import web_model  # Import the new web_model module
 app = Flask(__name__, static_folder='frontend/build')
 CORS(app)
 
+# 配置静态文件路径
+app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['PROCESSED_FOLDER'] = 'img'
+
+# 添加静态文件路由
+@app.route('/uploads/<path:filename>')
+def uploaded_file(filename):
+    return send_from_directory('uploads', filename)
+
+@app.route('/img/<path:filename>')
+def processed_file(filename):
+    return send_from_directory('img', filename)
+
 # Configure JWT
 app.config['JWT_SECRET_KEY'] = 'wudao-zhi-ping-secret-key'  # Change this in production
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
@@ -29,13 +42,48 @@ os.makedirs('uploads/images', exist_ok=True)
 os.makedirs('uploads/videos', exist_ok=True)
 os.makedirs('img', exist_ok=True)
 
-# User data file
-USER_DATA_FILE = 'users.json'
+# 允许的文件类型
+ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp'}
+ALLOWED_VIDEO_EXTENSIONS = {'mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv'}
+
+# 检查文件是否允许上传
+def allowed_file(filename, allowed_extensions=None):
+    if allowed_extensions is None:
+        allowed_extensions = {'png', 'jpg', 'jpeg'}
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in allowed_extensions
+
+def allowed_image_file(filename):
+    """检查文件是否为允许的图像类型"""
+    return allowed_file(filename, ALLOWED_IMAGE_EXTENSIONS)
+
+def allowed_video_file(filename):
+    """检查文件是否为允许的视频类型"""
+    return allowed_file(filename, ALLOWED_VIDEO_EXTENSIONS)
+
+# 用户数据文件
+USERS_DATA_FILE = os.path.join(app.root_path, 'data', 'users.json')
+COACHES_DATA_FILE = os.path.join(app.root_path, 'data', 'coaches.json')
+APPOINTMENTS_DATA_FILE = os.path.join(app.root_path, 'data', 'appointments.json')
 
 # Ensure user data file exists
-if not os.path.exists(USER_DATA_FILE):
-    with open(USER_DATA_FILE, 'w', encoding='utf-8') as f:
+if not os.path.exists(USERS_DATA_FILE):
+    with open(USERS_DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump({}, f)
+
+# Ensure coaches data file exists
+if not os.path.exists(COACHES_DATA_FILE):
+    with open(COACHES_DATA_FILE, 'w', encoding='utf-8') as f:
+        json.dump({
+            "coaches": []
+        }, f)
+
+# Ensure appointments data file exists
+if not os.path.exists(APPOINTMENTS_DATA_FILE):
+    with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
+        json.dump({
+            "appointments": []
+        }, f)
 
 # Utility functions
 def hash_password(password):
@@ -47,12 +95,45 @@ def get_current_time():
     from datetime import datetime
     return datetime.now().isoformat()
 
+# 获取用户数据
+def get_user_data(username):
+    """从用户数据文件中获取特定用户的信息"""
+    if not os.path.exists(USERS_DATA_FILE):
+        return None
+    
+    try:
+        with open(USERS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            users = json.load(f)
+        
+        # 检查users是否为字典类型（对象）
+        if isinstance(users, dict):
+            # 如果是字典，直接通过键获取用户数据
+            if username in users:
+                user_data = users[username]
+                # 确保用户数据包含username字段
+                if 'username' not in user_data:
+                    user_data['username'] = username
+                return user_data
+        # 如果users是列表类型（数组）
+        elif isinstance(users, list):
+            # 如果是列表，遍历查找匹配的用户名
+            for user in users:
+                if isinstance(user, dict) and user.get('username') == username:
+                    return user
+        
+        print(f"未找到用户: {username}")
+        return None
+    except Exception as e:
+        print(f"获取用户数据失败: {str(e)}")
+        return None
+
 # Authentication routes
 @app.route('/api/auth/register', methods=['POST'])
 def register():
     data = request.get_json()
     username = data.get('username', '').strip()
     password = data.get('password', '')
+    role = data.get('role', 'user')  # 默认为普通用户，可以是'user'或'coach'
     
     # Validate input
     if not username or not password:
@@ -67,7 +148,7 @@ def register():
         return jsonify({'success': False, 'message': '密码长度必须至少为8个字符'}), 400
     
     # Check if username already exists
-    with open(USER_DATA_FILE, 'r', encoding='utf-8') as f:
+    with open(USERS_DATA_FILE, 'r', encoding='utf-8') as f:
         users = json.load(f)
     
     if username in users:
@@ -77,12 +158,13 @@ def register():
     hashed_password = hash_password(password)
     users[username] = {
         'password': hashed_password,
+        'role': role,
         'created_at': get_current_time(),
         'last_login': None,
         'login_count': 0
     }
     
-    with open(USER_DATA_FILE, 'w', encoding='utf-8') as f:
+    with open(USERS_DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(users, f, indent=4)
     
     # Create access token
@@ -92,7 +174,8 @@ def register():
         'success': True, 
         'message': '注册成功',
         'access_token': access_token,
-        'username': username
+        'username': username,
+        'role': role
     }), 201
 
 @app.route('/api/auth/login', methods=['POST'])
@@ -103,36 +186,31 @@ def login():
     
     # Guest login
     if username == 'guest' and password == 'guest':
-        access_token = create_access_token(identity='游客')
+        access_token = create_access_token(identity='guest')
         return jsonify({
             'success': True,
             'message': '游客登录成功',
             'access_token': access_token,
-            'username': '游客'
+            'username': 'guest',
+            'role': 'user'
         }), 200
     
     # Regular login
-    if not username or not password:
-        return jsonify({'success': False, 'message': '用户名和密码不能为空'}), 400
-    
-    # Read user data
-    with open(USER_DATA_FILE, 'r', encoding='utf-8') as f:
+    with open(USERS_DATA_FILE, 'r', encoding='utf-8') as f:
         users = json.load(f)
     
-    # Check if user exists
     if username not in users:
-        return jsonify({'success': False, 'message': '用户名或密码不正确'}), 401
+        return jsonify({'success': False, 'message': '用户名或密码错误'}), 401
     
-    # Verify password
-    hashed_password = hash_password(password)
-    if users[username]['password'] != hashed_password:
-        return jsonify({'success': False, 'message': '用户名或密码不正确'}), 401
+    stored_password = users[username]['password']
+    if hash_password(password) != stored_password:
+        return jsonify({'success': False, 'message': '用户名或密码错误'}), 401
     
-    # Update login info
+    # Update user login info
     users[username]['last_login'] = get_current_time()
-    users[username]['login_count'] = users[username].get('login_count', 0) + 1
+    users[username]['login_count'] += 1
     
-    with open(USER_DATA_FILE, 'w', encoding='utf-8') as f:
+    with open(USERS_DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(users, f, indent=4)
     
     # Create access token
@@ -142,7 +220,8 @@ def login():
         'success': True,
         'message': '登录成功',
         'access_token': access_token,
-        'username': username
+        'username': username,
+        'role': users[username].get('role', 'user')  # 返回用户角色
     }), 200
 
 @app.route('/api/auth/user', methods=['GET'])
@@ -164,6 +243,192 @@ def get_poses():
         '罗汉张掌'
     ]
     return jsonify({'success': True, 'poses': poses}), 200
+
+@app.route('/api/angles/<pose_name>', methods=['GET'])
+def get_angle_data(pose_name):
+    """
+    获取特定姿势的关节角度数据，用于可视化
+    """
+    # 习武者关节角度数据
+    practitioner_angles = {
+        '弓步冲拳': [
+            {'joint': '0-2 和 2-4夹角为', 'angle': 171.24},
+            {'joint': '1-3 和 3-5夹角为', 'angle': 144.74},
+            {'joint': '2-0 和 0-6夹角为', 'angle': 134.20},
+            {'joint': '3-1 和 1-7夹角为', 'angle': 122.39},
+            {'joint': '0-6 和 6-8夹角为', 'angle': 150.97},
+            {'joint': '1-7 和 7-9夹角为', 'angle': 134.10},
+            {'joint': '7-6 和 6-8夹角为', 'angle': 160.55},
+            {'joint': '6-7 和 7-9夹角为', 'angle': 125.62},
+            {'joint': '6-8 和 8-10夹角为', 'angle': 155.33},
+            {'joint': '7-9 和 9-11夹角为', 'angle': 131.23}
+        ],
+        '猛虎出洞': [
+            {'joint': '0-2 和 2-4夹角为', 'angle': 165.32},
+            {'joint': '1-3 和 3-5夹角为', 'angle': 163.45},
+            {'joint': '2-0 和 0-6夹角为', 'angle': 140.21},
+            {'joint': '3-1 和 1-7夹角为', 'angle': 142.67},
+            {'joint': '0-6 和 6-8夹角为', 'angle': 155.78},
+            {'joint': '1-7 和 7-9夹角为', 'angle': 156.90},
+            {'joint': '7-6 和 6-8夹角为', 'angle': 145.23},
+            {'joint': '6-7 和 7-9夹角为', 'angle': 146.78},
+            {'joint': '6-8 和 8-10夹角为', 'angle': 160.45},
+            {'joint': '7-9 和 9-11夹角为', 'angle': 159.87}
+        ],
+        '五花坐山': [
+            {'joint': '0-2 和 2-4夹角为', 'angle': 110.45},
+            {'joint': '1-3 和 3-5夹角为', 'angle': 112.67},
+            {'joint': '2-0 和 0-6夹角为', 'angle': 90.23},
+            {'joint': '3-1 和 1-7夹角为', 'angle': 91.45},
+            {'joint': '0-6 和 6-8夹角为', 'angle': 135.67},
+            {'joint': '1-7 和 7-9夹角为', 'angle': 134.89},
+            {'joint': '7-6 和 6-8夹角为', 'angle': 95.34},
+            {'joint': '6-7 和 7-9夹角为', 'angle': 94.56},
+            {'joint': '6-8 和 8-10夹角为', 'angle': 125.78},
+            {'joint': '7-9 和 9-11夹角为', 'angle': 126.90}
+        ]
+    }
+    
+    # 传承人关节角度数据
+    master_angles = {
+        '弓步冲拳': [
+            {'joint': '0-2 和 2-4夹角为', 'angle': 155.60},
+            {'joint': '1-3 和 3-5夹角为', 'angle': 159.79},
+            {'joint': '2-0 和 0-6夹角为', 'angle': 115.97},
+            {'joint': '3-1 和 1-7夹角为', 'angle': 68.88},
+            {'joint': '0-6 和 6-8夹角为', 'angle': 151.87},
+            {'joint': '1-7 和 7-9夹角为', 'angle': 176.27},
+            {'joint': '7-6 和 6-8夹角为', 'angle': 134.59},
+            {'joint': '6-7 和 7-9夹角为', 'angle': 135.88},
+            {'joint': '6-8 和 8-10夹角为', 'angle': 150.69},
+            {'joint': '7-9 和 9-11夹角为', 'angle': 162.30}
+        ],
+        '猛虎出洞': [
+            {'joint': '0-2 和 2-4夹角为', 'angle': 175.45},
+            {'joint': '1-3 和 3-5夹角为', 'angle': 174.67},
+            {'joint': '2-0 和 0-6夹角为', 'angle': 130.23},
+            {'joint': '3-1 和 1-7夹角为', 'angle': 131.45},
+            {'joint': '0-6 和 6-8夹角为', 'angle': 165.67},
+            {'joint': '1-7 和 7-9夹角为', 'angle': 166.89},
+            {'joint': '7-6 和 6-8夹角为', 'angle': 155.34},
+            {'joint': '6-7 和 7-9夹角为', 'angle': 154.56},
+            {'joint': '6-8 和 8-10夹角为', 'angle': 170.78},
+            {'joint': '7-9 和 9-11夹角为', 'angle': 169.90}
+        ],
+        '五花坐山': [
+            {'joint': '0-2 和 2-4夹角为', 'angle': 90.45},
+            {'joint': '1-3 和 3-5夹角为', 'angle': 92.67},
+            {'joint': '2-0 和 0-6夹角为', 'angle': 95.23},
+            {'joint': '3-1 和 1-7夹角为', 'angle': 96.45},
+            {'joint': '0-6 和 6-8夹角为', 'angle': 125.67},
+            {'joint': '1-7 和 7-9夹角为', 'angle': 124.89},
+            {'joint': '7-6 和 6-8夹角为', 'angle': 90.34},
+            {'joint': '6-7 和 7-9夹角为', 'angle': 89.56},
+            {'joint': '6-8 和 8-10夹角为', 'angle': 135.78},
+            {'joint': '7-9 和 9-11夹角为', 'angle': 136.90}
+        ]
+    }
+    
+    if pose_name in practitioner_angles and pose_name in master_angles:
+        return jsonify({
+            'success': True, 
+            'practitioner_angles': practitioner_angles[pose_name],
+            'master_angles': master_angles[pose_name]
+        }), 200
+    else:
+        return jsonify({'success': False, 'message': '未找到该姿势的角度数据'}), 404
+
+@app.route('/api/pose_keypoints/<pose_name>', methods=['GET'])
+def get_pose_keypoints(pose_name):
+    """
+    获取特定姿势的关键点数据，用于可视化
+    """
+    # 传承人姿势关键点数据
+    master_keypoints = {
+        '弓步冲拳': {
+            'keypoints': [
+                [320, 100],  # 0: 鼻子
+                [300, 130],  # 1: 左肩
+                [340, 130],  # 2: 右肩
+                [280, 180],  # 3: 左肘
+                [360, 180],  # 4: 右肘
+                [250, 230],  # 5: 左手腕
+                [390, 230],  # 6: 右手腕
+                [310, 220],  # 7: 左髋
+                [330, 220],  # 8: 右髋
+                [280, 320],  # 9: 左膝
+                [380, 280],  # 10: 右膝
+                [260, 420],  # 11: 左踝
+                [380, 380]   # 12: 右踝
+            ],
+            'connections': [
+                [0, 1], [0, 2],  # 鼻子到肩膀
+                [1, 3], [2, 4],  # 肩膀到肘部
+                [3, 5], [4, 6],  # 肘部到手腕
+                [1, 7], [2, 8],  # 肩膀到髋部
+                [7, 9], [8, 10], # 髋部到膝盖
+                [9, 11], [10, 12] # 膝盖到踝部
+            ]
+        },
+        '猛虎出洞': {
+            'keypoints': [
+                [320, 120],  # 0: 鼻子
+                [290, 150],  # 1: 左肩
+                [350, 150],  # 2: 右肩
+                [240, 170],  # 3: 左肘
+                [400, 170],  # 4: 右肘
+                [200, 200],  # 5: 左手腕
+                [440, 200],  # 6: 右手腕
+                [310, 230],  # 7: 左髋
+                [330, 230],  # 8: 右髋
+                [290, 330],  # 9: 左膝
+                [350, 330],  # 10: 右膝
+                [290, 430],  # 11: 左踝
+                [350, 430]   # 12: 右踝
+            ],
+            'connections': [
+                [0, 1], [0, 2],  # 鼻子到肩膀
+                [1, 3], [2, 4],  # 肩膀到肘部
+                [3, 5], [4, 6],  # 肘部到手腕
+                [1, 7], [2, 8],  # 肩膀到髋部
+                [7, 9], [8, 10], # 髋部到膝盖
+                [9, 11], [10, 12] # 膝盖到踝部
+            ]
+        },
+        '五花坐山': {
+            'keypoints': [
+                [320, 100],  # 0: 鼻子
+                [290, 130],  # 1: 左肩
+                [350, 130],  # 2: 右肩
+                [250, 180],  # 3: 左肘
+                [390, 180],  # 4: 右肘
+                [290, 230],  # 5: 左手腕
+                [350, 230],  # 6: 右手腕
+                [300, 220],  # 7: 左髋
+                [340, 220],  # 8: 右髋
+                [300, 280],  # 9: 左膝
+                [340, 280],  # 10: 右膝
+                [300, 320],  # 11: 左踝
+                [340, 320]   # 12: 右踝
+            ],
+            'connections': [
+                [0, 1], [0, 2],  # 鼻子到肩膀
+                [1, 3], [2, 4],  # 肩膀到肘部
+                [3, 5], [4, 6],  # 肘部到手腕
+                [1, 7], [2, 8],  # 肩膀到髋部
+                [7, 9], [8, 10], # 髋部到膝盖
+                [9, 11], [10, 12] # 膝盖到踝部
+            ]
+        }
+    }
+    
+    if pose_name in master_keypoints:
+        return jsonify({
+            'success': True, 
+            'keypoints': master_keypoints[pose_name]
+        }), 200
+    else:
+        return jsonify({'success': False, 'message': '未找到该姿势的关键点数据'}), 404
 
 @app.route('/api/poses/<pose_name>', methods=['GET'])
 def get_pose_details(pose_name):
@@ -203,40 +468,33 @@ def analyze_image():
     if file.filename == '':
         return jsonify({'success': False, 'message': '未选择文件'}), 400
     
-    if file:
-        # Save the uploaded image
-        filename = secure_filename(file.filename)
-        filepath = os.path.join('uploads/images', filename)
-        file.save(filepath)
-        
+    if file and allowed_image_file(file.filename):
         try:
+            # Save the uploaded file
+            filename = secure_filename(file.filename)
+            file_path = os.path.join('uploads/images', filename)
+            file.save(file_path)
+            
             # Analyze the image
-            score, processed_img_path, feedback = web_model.analyze_martial_arts_image(filepath, posture)
+            score, processed_img_path, feedback = web_model.analyze_martial_arts_image(file_path, posture)
             
-            # 检查处理后的图像路径
-            if processed_img_path and os.path.exists(processed_img_path):
-                # Read the processed image and convert to base64
-                with open(processed_img_path, 'rb') as img_file:
-                    processed_img_base64 = base64.b64encode(img_file.read()).decode('utf-8')
-            else:
-                # 如果处理后的图像路径无效，使用原始图像
-                with open(filepath, 'rb') as img_file:
-                    processed_img_base64 = base64.b64encode(img_file.read()).decode('utf-8')
-                print(f"警告: 使用原始图像代替处理后的图像，因为处理后的路径无效: {processed_img_path}")
+            # 获取角度数据
+            angle_data = web_model.get_angle_data_for_image(file_path, posture)
             
+            # Return the analysis result
             return jsonify({
                 'success': True,
-                'score': score,
-                'processed_image': processed_img_base64,
-                'feedback': feedback
+                'score': round(score, 2),
+                'image_path': processed_img_path.replace('\\', '/'),
+                'feedback': feedback,
+                'angle_data': angle_data
             }), 200
-            
         except Exception as e:
-            return jsonify({'success': False, 'message': f'分析失败: {str(e)}'}), 500
+            return jsonify({'success': False, 'message': f'分析出错: {str(e)}'}), 500
     
-    return jsonify({'success': False, 'message': '处理图像失败'}), 500
+    return jsonify({'success': False, 'message': '不支持的文件类型'}), 400
 
-# 视频分析路由
+# Video analysis route
 @app.route('/api/analysis/video', methods=['POST'])
 def analyze_video():
     if 'video' not in request.files or 'posture' not in request.form:
@@ -248,91 +506,137 @@ def analyze_video():
     if file.filename == '':
         return jsonify({'success': False, 'message': '未选择文件'}), 400
     
-    if file:
-        # 确保上传目录存在
-        os.makedirs('uploads/videos', exist_ok=True)
-        
-        # 保存上传的视频
-        filename = secure_filename(file.filename)
-        filepath = os.path.join('uploads/videos', filename)
-        file.save(filepath)
-        
+    if file and allowed_video_file(file.filename):
         try:
-            # 处理视频
-            results = process_video(filepath, posture)
+            # Save the uploaded file
+            filename = secure_filename(file.filename)
+            file_path = os.path.join('uploads/videos', filename)
+            file.save(file_path)
             
-            if 'error' in results:
-                return jsonify({'success': False, 'message': results['error']}), 500
+            # Process the video
+            result = process_video(file_path, posture)
             
+            # 获取角度数据
+            angle_data = result.get('angle_data', {})
+            
+            # Return the analysis result
             return jsonify({
                 'success': True,
-                'average_score': results['average_score'],
-                'frame_scores': results['frame_scores'],
-                'key_frames': results['key_frames'],
-                'feedback': results['feedback']
+                'average_score': result.get('average_score', 0),
+                'frame_scores': result.get('frame_scores', []),
+                'key_frames': result.get('key_frames', []),
+                'feedback': result.get('feedback', {}),
+                'angle_data': angle_data
             }), 200
-            
         except Exception as e:
-            return jsonify({'success': False, 'message': f'分析失败: {str(e)}'}), 500
+            return jsonify({'success': False, 'message': f'分析出错: {str(e)}'}), 500
     
-    return jsonify({'success': False, 'message': '处理视频失败'}), 500
+    return jsonify({'success': False, 'message': '不支持的文件类型'}), 400
 
 # Camera frame analysis route
-@app.route('/api/analysis/camera-frame', methods=['POST'])
-# 暂时移除JWT认证要求，便于测试
-# @jwt_required()
+@app.route('/api/analysis/camera', methods=['POST'])
+@app.route('/api/analysis/camera-frame', methods=['POST'])  # 添加兼容旧版本的路由
 def analyze_camera_frame():
-    if 'image' not in request.files or 'posture' not in request.form:
-        return jsonify({'success': False, 'message': '缺少图像或姿势类型'}), 400
+    print("收到摄像头分析请求:", request.content_type)
     
-    file = request.files['image']
-    posture = request.form['posture']
-    
-    if file.filename == '':
-        return jsonify({'success': False, 'message': '未选择文件'}), 400
-    
-    if file:
-        # Save the uploaded frame
-        filename = secure_filename(file.filename)
-        filepath = os.path.join('uploads/images', filename)
-        file.save(filepath)
+    try:
+        # 处理JSON格式请求
+        if request.is_json:
+            if 'image' not in request.json or 'posture' not in request.json:
+                return jsonify({'success': False, 'message': '缺少图像数据或姿势类型'}), 400
+            
+            # Get base64 image and posture type
+            image_data = request.json['image']
+            posture = request.json['posture']
+            print(f"接收到姿势类型: {posture}")
+            
+            # 确保image_data是base64格式
+            if ',' in image_data:
+                image_data = image_data.split(',')[1]
+            
+            try:
+                import io
+                from PIL import Image, ImageDraw
+                import numpy as np
+                import base64
+                import os
+                import uuid
+                import web_model
+                
+                print("开始处理摄像头图像...")
+                
+                # 解码base64图像并保存为临时文件
+                image_bytes = base64.b64decode(image_data)
+                temp_filename = f"temp_camera_{uuid.uuid4().hex}.jpg"
+                temp_filepath = os.path.join('uploads/images', temp_filename)
+                
+                # 确保目录存在
+                os.makedirs('uploads/images', exist_ok=True)
+                print(f"保存临时文件到: {temp_filepath}")
+                
+                # 保存临时文件
+                with open(temp_filepath, 'wb') as f:
+                    f.write(image_bytes)
+                
+                print("调用 web_model.analyze_martial_arts_image 进行分析...")
+                # 使用图片分析功能分析图像
+                score, processed_img_path, feedback = web_model.analyze_martial_arts_image(temp_filepath, posture)
+                print(f"分析结果: 得分={score}, 处理后图像路径={processed_img_path}")
+                print(f"反馈: {feedback}")
+                
+                # 获取角度数据
+                print("获取角度数据...")
+                angle_data = web_model.get_angle_data_for_image(temp_filepath, posture)
+                
+                # 读取处理后的图像并转换为base64
+                print("转换处理后的图像为base64...")
+                with open(processed_img_path, 'rb') as img_file:
+                    processed_img_bytes = img_file.read()
+                    processed_img_base64 = base64.b64encode(processed_img_bytes).decode('utf-8')
+                    # 添加base64 URL前缀
+                    processed_img_base64 = f"data:image/jpeg;base64,{processed_img_base64}"
+                
+                # 清理临时文件
+                try:
+                    os.remove(temp_filepath)
+                    print(f"已删除临时文件: {temp_filepath}")
+                except Exception as e:
+                    print(f"删除临时文件失败: {e}")
+                
+                # 返回分析结果
+                print("返回分析结果...")
+                return jsonify({
+                    'success': True,
+                    'message': '姿态分析完成',
+                    'image': processed_img_base64,
+                    'angles': angle_data,
+                    'score': round(score, 1),
+                    'level': feedback.get('level', ''),
+                    'suggestions': feedback.get('suggestions', [])
+                })
+                
+            except Exception as e:
+                print(f"图像处理错误: {e}")
+                import traceback
+                traceback.print_exc()
+                return jsonify({'success': False, 'message': f'图像处理错误: {str(e)}'}), 500
         
-        try:
-            # Read the image
-            img = cv2.imread(filepath)
-            if img is None:
-                return jsonify({'success': False, 'message': '无法读取图像'}), 400
-            
-            # Process the frame
-            processed_img, score, message = web_model.process_video_frame_for_web(img)
-            
-            # Save the processed image
-            output_path = os.path.join("img", f"processed_{filename}")
-            cv2.imwrite(output_path, processed_img)
-            
-            # Convert to base64
-            with open(output_path, 'rb') as img_file:
-                processed_img_base64 = base64.b64encode(img_file.read()).decode('utf-8')
-            
-            return jsonify({
-                'success': True,
-                'score': score,
-                'message': message,
-                'processed_image': processed_img_base64
-            }), 200
-            
-        except Exception as e:
-            return jsonify({'success': False, 'message': f'分析失败: {str(e)}'}), 500
+        # 处理表单数据请求
+        else:
+            return jsonify({'success': False, 'message': '不支持的请求格式，请使用JSON格式'}), 400
     
-    return jsonify({'success': False, 'message': '处理图像失败'}), 500
+    except Exception as e:
+        print(f"请求处理错误: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'success': False, 'message': f'请求处理错误: {str(e)}'}), 500
 
 # Helper function to process video
 def process_video(video_path, posture):
     """处理视频并返回分析结果"""
     results = {
         'average_score': 0,
-        'frame_scores': [],
-        'key_frames': [],
+        'frames': [],
         'feedback': {}
     }
     
@@ -360,7 +664,7 @@ def process_video(video_path, posture):
             # Process only every frame_interval frames
             if processed_frames % frame_interval == 0:
                 # Process the frame
-                processed_img, score, _ = web_model.process_video_frame_for_web(frame)
+                processed_img, score, _ = web_model.process_video_frame_for_web(frame, posture)
                 
                 # Save key frames (frames with significant scores)
                 if score > 5:  # Save frames with score > 5
@@ -419,11 +723,627 @@ def process_video(video_path, posture):
             []   # 简化处理，不传入角度数据
         )
         
+        # 获取角度数据
+        angle_data = web_model.get_angle_data_from_video(video_path, posture)
+        results['angle_data'] = angle_data
+        
         return results
     
     except Exception as e:
         print(f"处理视频时出错: {e}")
         return {'error': str(e)}
+
+# Coaching appointment routes
+@app.route('/api/coaches', methods=['GET'])
+def get_coaches():
+    """获取所有教练信息"""
+    try:
+        with open(COACHES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            coaches_data = json.load(f)
+        
+        # 确保返回的是一个包含coaches数组的对象
+        if isinstance(coaches_data, list):
+            return jsonify({"coaches": coaches_data}), 200
+        else:
+            return jsonify(coaches_data), 200
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'获取教练信息失败: {str(e)}'}), 500
+
+@app.route('/api/coaches/<coach_id>', methods=['GET'])
+def get_coach(coach_id):
+    """获取特定教练信息"""
+    try:
+        with open(COACHES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            coaches_data = json.load(f)
+        
+        coach = next((c for c in coaches_data['coaches'] if c['id'] == coach_id), None)
+        if coach:
+            return jsonify(coach), 200
+        else:
+            return jsonify({'success': False, 'message': '教练不存在'}), 404
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'获取教练信息失败: {str(e)}'}), 500
+
+@app.route('/api/coaches/filter', methods=['GET'])
+def filter_coaches():
+    """根据条件筛选教练"""
+    try:
+        city = request.args.get('city', '')
+        district = request.args.get('district', '')
+        skill = request.args.get('skill', '')
+        
+        with open(COACHES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            coaches_data = json.load(f)
+        
+        filtered_coaches = coaches_data['coaches']
+        
+        if city:
+            filtered_coaches = [c for c in filtered_coaches if city in c['location']['city']]
+        
+        if district:
+            filtered_coaches = [c for c in filtered_coaches if district in c['location']['districts']]
+        
+        if skill:
+            filtered_coaches = [c for c in filtered_coaches if skill in c['skills']]
+        
+        return jsonify({'coaches': filtered_coaches}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'筛选教练失败: {str(e)}'}), 500
+
+@app.route('/api/appointments', methods=['GET'])
+@jwt_required()
+def get_user_appointments():
+    """获取用户的所有预约"""
+    current_user = get_jwt_identity()
+    
+    try:
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            appointments_data = json.load(f)
+        
+        user_appointments = [a for a in appointments_data['appointments'] if a['user_id'] == current_user]
+        return jsonify({'appointments': user_appointments}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'获取预约失败: {str(e)}'}), 500
+
+@app.route('/api/appointments', methods=['POST'])
+@jwt_required()
+def create_appointment():
+    """创建新预约"""
+    current_user = get_jwt_identity()
+    print(f"当前用户: {current_user}")
+    
+    # 检查用户是否是教练
+    user_data = get_user_data(current_user)
+    print(f"用户数据: {user_data}")
+    if not user_data or user_data.get('role') != 'coach':
+        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
+    
+    # 获取请求数据
+    data = request.json
+    print(f"请求数据: {data}")
+    if not data:
+        return jsonify({'success': False, 'message': '请求数据无效'}), 400
+    
+    try:
+        # 验证教练是否存在
+        with open(COACHES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            coaches_data = json.load(f)
+        
+        # 确保coaches_data是列表格式
+        coaches_list = coaches_data if isinstance(coaches_data, list) else coaches_data.get('coaches', [])
+        
+        coach = next((c for c in coaches_list if c['id'] == data['coach_id']), None)
+        if not coach:
+            error_msg = f'教练不存在: {data["coach_id"]}'
+            print(f"预约失败: {error_msg}")  # 添加日志
+            return jsonify({'success': False, 'message': error_msg}), 404
+        
+        # 创建新预约
+        try:
+            # 确保appointments.json文件存在
+            if not os.path.exists(APPOINTMENTS_DATA_FILE):
+                with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
+                    json.dump({"appointments": []}, f)
+            
+            with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+                appointments_data = json.load(f)
+            
+            # 确保appointments_data有正确的结构
+            if 'appointments' not in appointments_data:
+                appointments_data = {"appointments": []}
+            
+            new_appointment = {
+                'id': str(len(appointments_data['appointments']) + 1),
+                'user_id': current_user,
+                'coach_id': data['coach_id'],
+                'coach_name': coach['name'],
+                'coach_avatar': coach['avatar'],
+                'date': data['date'],
+                'time': data['time'],
+                'location': data['location'],
+                'skill': data['skill'],
+                'duration': data.get('duration', 1),  # 添加duration字段，默认为1小时
+                'status': 'pending',
+                'created_at': get_current_time()
+            }
+            
+            appointments_data['appointments'].append(new_appointment)
+            
+            with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
+                json.dump(appointments_data, f, indent=4)
+            
+            print(f"预约创建成功: {new_appointment}")  # 添加日志
+            return jsonify({'success': True, 'message': '预约创建成功', 'appointment': new_appointment}), 201
+        except Exception as e:
+            error_msg = f'创建预约时出错: {str(e)}'
+            print(f"预约失败: {error_msg}")  # 添加日志
+            return jsonify({'success': False, 'message': error_msg}), 500
+    except Exception as e:
+        error_msg = f'创建预约失败: {str(e)}'
+        print(f"预约失败: {error_msg}")  # 添加日志
+        return jsonify({'success': False, 'message': error_msg}), 500
+
+@app.route('/api/appointments/<appointment_id>', methods=['PUT'])
+@jwt_required()
+def update_appointment(appointment_id):
+    """更新预约状态"""
+    current_user = get_jwt_identity()
+    data = request.get_json()
+    
+    if 'status' not in data:
+        return jsonify({'success': False, 'message': '缺少状态字段'}), 400
+    
+    try:
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            appointments_data = json.load(f)
+        
+        appointment = next((a for a in appointments_data['appointments'] if a['id'] == appointment_id), None)
+        if not appointment:
+            return jsonify({'success': False, 'message': '预约不存在'}), 404
+        
+        # 获取当前用户角色
+        with open(USERS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            users_data = json.load(f)
+        
+        user_role = users_data.get(current_user, {}).get('role', 'user')
+        
+        # 检查权限：用户只能修改自己的预约，教练可以修改分配给自己的预约
+        if user_role == 'coach':
+            if appointment['coach_id'] != current_user:
+                return jsonify({'success': False, 'message': '无权修改此预约，该预约不属于您'}), 403
+        else:  # 普通用户
+            if appointment['user_id'] != current_user:
+                return jsonify({'success': False, 'message': '无权修改此预约'}), 403
+        
+        # 更新预约状态
+        appointment['status'] = data['status']
+        
+        with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
+            json.dump(appointments_data, f, indent=4)
+        
+        return jsonify({'success': True, 'message': '预约状态更新成功', 'appointment': appointment}), 200
+    except Exception as e:
+        print(f"更新预约失败: {str(e)}")  # 添加日志
+        return jsonify({'success': False, 'message': f'更新预约失败: {str(e)}'}), 500
+
+@app.route('/api/appointments/<appointment_id>', methods=['DELETE'])
+@jwt_required()
+def cancel_appointment(appointment_id):
+    """取消预约"""
+    current_user = get_jwt_identity()
+    
+    try:
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            appointments_data = json.load(f)
+        
+        appointment = next((a for a in appointments_data['appointments'] if a['id'] == appointment_id), None)
+        if not appointment:
+            return jsonify({'success': False, 'message': '预约不存在'}), 404
+        
+        if appointment['user_id'] != current_user:
+            return jsonify({'success': False, 'message': '无权取消此预约'}), 403
+        
+        appointments_data['appointments'] = [a for a in appointments_data['appointments'] if a['id'] != appointment_id]
+        
+        with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
+            json.dump(appointments_data, f, indent=4)
+        
+        return jsonify({'success': True, 'message': '预约取消成功'}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'取消预约失败: {str(e)}'}), 500
+
+@app.route('/api/cities', methods=['GET'])
+def get_city_list():
+    """获取支持的城市列表"""
+    cities = [
+        "北京市", "上海市", "广州市", "深圳市", "天津市", "重庆市", "成都市", "杭州市", "武汉市", "西安市",
+        "南京市", "郑州市", "长沙市", "济南市", "青岛市", "大连市", "宁波市", "厦门市", "福州市", "哈尔滨市"
+    ]
+    return jsonify({'cities': cities}), 200
+
+@app.route('/api/districts/<city>', methods=['GET'])
+def get_district_list(city):
+    """获取指定城市的区域列表"""
+    districts_map = {
+        "北京市": ["海淀区", "朝阳区", "西城区", "东城区", "丰台区", "石景山区", "通州区", "顺义区"],
+        "上海市": ["浦东新区", "黄浦区", "徐汇区", "长宁区", "静安区", "普陀区", "虹口区", "杨浦区"],
+        "广州市": ["天河区", "越秀区", "海珠区", "荔湾区", "白云区", "黄埔区", "番禺区", "花都区"],
+        "深圳市": ["南山区", "福田区", "罗湖区", "盐田区", "龙岗区", "宝安区", "龙华区", "坪山区"],
+        "郑州市": ["中原区", "二七区", "管城回族区", "金水区", "上街区", "惠济区", "郑东新区"]
+    }
+    
+    if city in districts_map:
+        return jsonify({'districts': districts_map[city]}), 200
+    else:
+        # 如果没有特定城市的区域数据，返回空列表
+        return jsonify({'districts': []}), 200
+
+# 教练预约管理API
+@app.route('/api/coach/appointments', methods=['GET'])
+@jwt_required()
+def get_coach_appointments():
+    """获取教练的所有预约"""
+    current_user = get_jwt_identity()
+    
+    # 验证用户是否为教练
+    with open(USERS_DATA_FILE, 'r', encoding='utf-8') as f:
+        users = json.load(f)
+    
+    if current_user not in users or users[current_user].get('role') != 'coach':
+        return jsonify({'success': False, 'message': '无权访问此资源'}), 403
+    
+    try:
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            appointments_data = json.load(f)
+        
+        coach_appointments = [a for a in appointments_data['appointments'] if a['coach_id'] == current_user]
+        return jsonify({'success': True, 'appointments': coach_appointments}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'获取预约失败: {str(e)}'}), 500
+
+# 消息系统API
+@app.route('/api/messages', methods=['POST'])
+@jwt_required()
+def send_message():
+    """发送消息"""
+    current_user = get_jwt_identity()
+    data = request.get_json()
+    
+    required_fields = ['receiver_id', 'content']
+    for field in required_fields:
+        if field not in data:
+            return jsonify({'success': False, 'message': f'缺少必要字段: {field}'}), 400
+    
+    try:
+        # 确保消息数据文件存在
+        MESSAGES_DATA_FILE = 'messages.json'
+        if not os.path.exists(MESSAGES_DATA_FILE):
+            with open(MESSAGES_DATA_FILE, 'w', encoding='utf-8') as f:
+                json.dump({"messages": []}, f)
+        
+        # 读取现有消息
+        with open(MESSAGES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            messages_data = json.load(f)
+        
+        # 创建新消息
+        new_message = {
+            'id': str(len(messages_data['messages']) + 1),
+            'sender_id': current_user,
+            'receiver_id': data['receiver_id'],
+            'content': data['content'],
+            'appointment_id': data.get('appointment_id'),
+            'read': False,
+            'created_at': get_current_time()
+        }
+        
+        # 添加新消息
+        messages_data['messages'].append(new_message)
+        
+        # 保存消息
+        with open(MESSAGES_DATA_FILE, 'w', encoding='utf-8') as f:
+            json.dump(messages_data, f, indent=4)
+        
+        return jsonify({'success': True, 'message': '消息发送成功', 'data': new_message}), 201
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'发送消息失败: {str(e)}'}), 500
+
+@app.route('/api/messages', methods=['GET'])
+@jwt_required()
+def get_messages():
+    """获取用户的所有消息"""
+    current_user = get_jwt_identity()
+    
+    try:
+        # 确保消息数据文件存在
+        MESSAGES_DATA_FILE = 'messages.json'
+        if not os.path.exists(MESSAGES_DATA_FILE):
+            with open(MESSAGES_DATA_FILE, 'w', encoding='utf-8') as f:
+                json.dump({"messages": []}, f)
+        
+        # 读取消息
+        with open(MESSAGES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            messages_data = json.load(f)
+        
+        # 获取与当前用户相关的所有消息（发送或接收）
+        user_messages = [m for m in messages_data['messages'] 
+                        if m['receiver_id'] == current_user or m['sender_id'] == current_user]
+        
+        return jsonify({'success': True, 'messages': user_messages}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'获取消息失败: {str(e)}'}), 500
+
+@app.route('/api/messages/<message_id>/read', methods=['PUT'])
+@jwt_required()
+def mark_message_as_read(message_id):
+    """标记消息为已读"""
+    current_user = get_jwt_identity()
+    
+    try:
+        # 确保消息数据文件存在
+        MESSAGES_DATA_FILE = 'messages.json'
+        if not os.path.exists(MESSAGES_DATA_FILE):
+            return jsonify({'success': False, 'message': '消息不存在'}), 404
+        
+        # 读取消息
+        with open(MESSAGES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            messages_data = json.load(f)
+        
+        # 查找指定消息
+        message = next((m for m in messages_data['messages'] if m['id'] == message_id), None)
+        if not message:
+            return jsonify({'success': False, 'message': '消息不存在'}), 404
+        
+        # 验证消息接收者
+        if message['receiver_id'] != current_user:
+            return jsonify({'success': False, 'message': '无权操作此消息'}), 403
+        
+        # 标记为已读
+        message['read'] = True
+        
+        # 保存消息
+        with open(MESSAGES_DATA_FILE, 'w', encoding='utf-8') as f:
+            json.dump(messages_data, f, indent=4)
+        
+        return jsonify({'success': True, 'message': '消息已标记为已读'}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'操作失败: {str(e)}'}), 500
+
+# 获取教练个人资料
+@app.route('/api/coach/profile', methods=['GET'])
+@jwt_required()
+def get_coach_profile():
+    current_user = get_jwt_identity()
+    
+    # 检查用户是否是教练
+    user_data = get_user_data(current_user)
+    if not user_data or user_data.get('role') != 'coach':
+        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
+    
+    # 从coaches.json文件中读取教练信息
+    coaches_file = os.path.join(app.root_path, 'data', 'coaches.json')
+    if os.path.exists(coaches_file):
+        try:
+            with open(coaches_file, 'r', encoding='utf-8-sig') as f:
+                coaches = json.load(f)
+                
+            # 查找当前教练的资料
+            coach_profile = None
+            for coach in coaches:
+                if coach.get('id') == current_user:
+                    coach_profile = coach
+                    break
+            
+            if coach_profile:
+                return jsonify({
+                    'success': True,
+                    'profile': coach_profile
+                })
+        
+        except json.JSONDecodeError:
+            # 如果文件为空或格式不正确，初始化为空列表
+            coaches = []
+    
+    # 如果没有找到教练资料或文件不存在，返回默认资料
+    default_profile = {
+        'id': current_user,
+        'name': user_data.get('username', ''),
+        'gender': 'male',
+        'avatar': None,
+        'location': {
+            'city': '',
+            'districts': []
+        },
+        'school': '',
+        'technical_level': '',
+        'certification': '',
+        'skills': [],
+        'description': '',
+        'price': 0,
+        'rating': 5.0
+    }
+    
+    return jsonify({
+        'success': True,
+        'profile': default_profile
+    })
+
+# 更新教练个人资料
+@app.route('/api/coach/profile', methods=['PUT'])
+@jwt_required()
+def update_coach_profile():
+    current_user = get_jwt_identity()
+    print(f"当前用户: {current_user}")
+    
+    # 检查用户是否是教练
+    user_data = get_user_data(current_user)
+    print(f"用户数据: {user_data}")
+    if not user_data or user_data.get('role') != 'coach':
+        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
+    
+    # 获取请求数据
+    data = request.json
+    print(f"请求数据: {data}")
+    if not data:
+        return jsonify({'success': False, 'message': '请求数据无效'}), 400
+    
+    try:
+        # 从coaches.json文件中读取教练信息
+        coaches_file = os.path.join(app.root_path, 'data', 'coaches.json')
+        coaches = []
+        if os.path.exists(coaches_file):
+            try:
+                with open(coaches_file, 'r', encoding='utf-8-sig') as f:
+                    content = f.read()
+                    print(f"读取到的文件内容: {content}")
+                    if content.strip():
+                        coaches = json.loads(content)
+                    else:
+                        coaches = []
+                print(f"读取到的教练数据: {coaches}")
+            except json.JSONDecodeError as e:
+                print(f"JSON解码错误: {str(e)}")
+                coaches = []
+            except Exception as e:
+                print(f"读取文件错误: {str(e)}")
+                coaches = []
+        
+        # 准备新的教练资料
+        new_coach_data = {
+            'id': current_user,
+            'name': data.get('name', ''),
+            'gender': data.get('gender', 'male'),
+            'location': data.get('location', {'city': '', 'districts': []}),
+            'school': data.get('school', ''),
+            'technical_level': data.get('technical_level', ''),
+            'certification': data.get('certification', ''),
+            'skills': data.get('skills', []),
+            'description': data.get('description', ''),
+            'price': data.get('price', 0),
+            'rating': 5.0,  # 默认评分
+            'avatar': None  # 默认无头像
+        }
+        
+        # 查找当前教练的资料
+        coach_found = False
+        for i, coach in enumerate(coaches):
+            if coach.get('id') == current_user:
+                # 保留原有的avatar字段
+                if 'avatar' in coach and coach['avatar']:
+                    new_coach_data['avatar'] = coach['avatar']
+                # 更新教练资料
+                coaches[i] = new_coach_data
+                coach_found = True
+                print(f"更新现有教练资料: {coaches[i]}")
+                break
+        
+        # 如果没有找到教练资料，添加新的教练资料
+        if not coach_found:
+            coaches.append(new_coach_data)
+            print(f"添加新教练资料: {new_coach_data}")
+        
+        # 确保目录存在
+        os.makedirs(os.path.dirname(coaches_file), exist_ok=True)
+        
+        # 保存更新后的教练信息
+        with open(coaches_file, 'w', encoding='utf-8') as f:
+            json.dump(coaches, f, ensure_ascii=False, indent=4)
+        print(f"保存成功: {coaches_file}")
+        
+        return jsonify({
+            'success': True,
+            'message': '教练资料更新成功'
+        })
+    except Exception as e:
+        print(f"保存失败: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': f'保存失败: {str(e)}'
+        }), 500
+
+# 上传教练头像
+@app.route('/api/coach/avatar', methods=['POST'])
+@jwt_required()
+def upload_coach_avatar():
+    current_user = get_jwt_identity()
+    
+    # 检查用户是否是教练
+    user_data = get_user_data(current_user)
+    if not user_data or user_data.get('role') != 'coach':
+        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
+    
+    # 检查是否有文件上传
+    if 'avatar' not in request.files:
+        return jsonify({'success': False, 'message': '没有上传文件'}), 400
+    
+    file = request.files['avatar']
+    if file.filename == '':
+        return jsonify({'success': False, 'message': '没有选择文件'}), 400
+    
+    # 检查文件类型
+    if not allowed_file(file.filename, {'png', 'jpg', 'jpeg', 'gif'}):
+        return jsonify({'success': False, 'message': '不支持的文件类型'}), 400
+    
+    # 保存文件
+    filename = secure_filename(f"{current_user}_{int(time.time())}.{file.filename.rsplit('.', 1)[1].lower()}")
+    avatar_dir = os.path.join(app.root_path, 'static', 'avatars')
+    os.makedirs(avatar_dir, exist_ok=True)
+    
+    file_path = os.path.join(avatar_dir, filename)
+    file.save(file_path)
+    
+    # 更新教练资料中的头像URL
+    avatar_url = f"/static/avatars/{filename}"
+    
+    # 从coaches.json文件中读取教练信息
+    coaches_file = os.path.join(app.root_path, 'data', 'coaches.json')
+    coaches = []
+    if os.path.exists(coaches_file):
+        try:
+            with open(coaches_file, 'r', encoding='utf-8-sig') as f:
+                coaches = json.load(f)
+        except json.JSONDecodeError:
+            # 如果文件为空或格式不正确，初始化为空列表
+            coaches = []
+    
+    # 更新教练头像
+    coach_found = False
+    for i, coach in enumerate(coaches):
+        if coach.get('id') == current_user:
+            coaches[i]['avatar'] = avatar_url
+            coach_found = True
+            break
+    
+    # 如果没有找到教练资料，添加新的教练资料
+    if not coach_found:
+        new_coach = {
+            'id': current_user,
+            'name': user_data.get('username', ''),
+            'gender': 'male',
+            'avatar': avatar_url,
+            'location': {
+                'city': '',
+                'districts': []
+            },
+            'school': '',
+            'technical_level': '',
+            'certification': '',
+            'skills': [],
+            'description': '',
+            'price': 0,
+            'rating': 5.0
+        }
+        coaches.append(new_coach)
+    
+    # 保存更新后的教练信息
+    os.makedirs(os.path.dirname(coaches_file), exist_ok=True)
+    with open(coaches_file, 'w', encoding='utf-8') as f:
+        json.dump(coaches, f, ensure_ascii=False, indent=4)
+    
+    return jsonify({
+        'success': True,
+        'message': '头像上传成功',
+        'avatar_url': avatar_url
+    })
 
 # Serve frontend in production
 @app.route('/', defaults={'path': ''})
@@ -435,4 +1355,4 @@ def serve(path):
         return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', debug=True, port=5000)

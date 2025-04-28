@@ -18,8 +18,21 @@ from tkinter import PhotoImage
 import os
 
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']  # '微软雅黑'
-plt.rcParams['axes.unicode_minus'] = False  # 解决负号问题（例如在坐标轴上显示）
+plt.rcParams['axes.unicode_minus'] = False  # 解决负号问题（例如在坐标轴上）
 
+# 定义常量
+KEY_POINTS_LABEL = "动作要点:"
+DESCRIPTION_LABEL = "动作要领:"
+TITLE_LABEL = "总分:"
+SCORE_LABEL = "分"
+NO_PERSON_LABEL = "NO PERSON"
+FPS_LABEL = "FPS-{}"
+IMAGE_NOT_FOUND_ERROR = "错误: 无法找到图片 {}"
+INVALID_IMAGE_ERROR = "错误: 无法读取图片 {}"
+INVALID_KEYPOINTS_ERROR = "未检测到关键点数据"
+UNKNOWN_POSTURE_ERROR = "未知姿态类型: {}"
+VIDEO_FRAME_INVALID_ERROR = "无效的图像格式"
+VIDEO_FRAME_NO_PERSON_ERROR = "未检测到人体"
 
 mp_pose = mp.solutions.pose
 mp_drawing = mp.solutions.drawing_utils
@@ -51,35 +64,32 @@ def cv_imread(file_path):
         return None
 
 def process_frame(img):
-    start_time = time.time()
-    h, w = img.shape[0], img.shape[1]       # 高和宽
-    # 调整字体
-    tl = round(0.005 * (img.shape[0] + img.shape[1]) / 2) + 1
-    tf = max(tl-1, 1)
-    
-    # 确保图像是有效的BGR格式
-    if img is None or len(img.shape) != 3:
-        print("无效的图像格式")
-        return None, []
-        
-    # 转换为RGB格式并确保是连续数组
-    img_RGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    img_RGB = np.ascontiguousarray(img_RGB)
-
-    # 检查图像大小，如果太大则调整大小
-    max_dimension = 1280  # 设置最大尺寸
-    if h > max_dimension or w > max_dimension:
-        scale = max_dimension / max(h, w)
-        new_h, new_w = int(h * scale), int(w * scale)
-        img_RGB = cv2.resize(img_RGB, (new_w, new_h))
-        print(f"图像已调整大小: {w}x{h} -> {new_w}x{new_h}")
-        # 更新原始图像尺寸
-        h, w = new_h, new_w
-        img = cv2.resize(img, (new_w, new_h))
-
     try:
+        start_time = time.time()
+        
+        # 确保图像是有效的BGR格式
+        if img is None or len(img.shape) != 3:
+            print(VIDEO_FRAME_INVALID_ERROR)
+            return None, []
+            
+        h, w = img.shape[0], img.shape[1]  # 高和宽
+        
+        # 检查图像大小，如果太大则调整大小
+        max_dimension = 1280  # 设置最大尺寸
+        if h > max_dimension or w > max_dimension:
+            scale = max_dimension / max(h, w)
+            new_h, new_w = int(h * scale), int(w * scale)
+            img = cv2.resize(img, (new_w, new_h))
+            print(f"图像已调整大小: {w}x{h} -> {new_w}x{new_h}")
+            # 更新图像尺寸
+            h, w = new_h, new_w
+        
+        # 转换为RGB格式并确保是连续数组
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img_rgb = np.ascontiguousarray(img_rgb)
+
         # 将RGB图像输入模型，获取关键点预测结果
-        results = pose.process(img_RGB)
+        results = pose.process(img_rgb)
         
         keypoints_indices = [11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28]  # 定义要输出的关键点索引
         keypoints = [None] * 33
@@ -101,8 +111,8 @@ def process_frame(img):
                 keypoints[i] = (cx, cy)                              
 
         else:
-            print("NO PERSON")
-            struction = "NO PERSON"
+            print(NO_PERSON_LABEL)
+            struction = NO_PERSON_LABEL
             img = cv2.putText(img, struction, (25, 100), cv2.FONT_HERSHEY_SIMPLEX, 1.25, (255, 255, 0), 6)
             
         end_time = time.time()
@@ -116,15 +126,14 @@ def process_frame(img):
                 cx, cy = keypoints[index]
                 img = cv2.circle(img, (cx, cy), radius[index], colors[index], -1)
                 
-        cv2.putText(img, "FPS-{}".format(str(int(fps))), (12, 100), cv2.FONT_HERSHEY_SIMPLEX,
-                    tl/3, (255, 255, 0), thickness=tf)
+        cv2.putText(img, FPS_LABEL.format(str(int(fps))), (12, 100), cv2.FONT_HERSHEY_SIMPLEX,
+                    3, (255, 255, 0), thickness=2)
                     
         return img, keypoints_data
         
     except Exception as e:
         print(f"处理图像时出错: {e}")
-        return img, []
-
+        return None, []
 
 def angle_between_points_3d(p1, p2, p3):
     """计算由三维点p1到p2和p2到p3形成的夹角"""
@@ -216,7 +225,6 @@ def view_bar(angles, name):
         margin_left = 250  # 左侧留出空间显示标签
         margin_top = 50
         margin_bottom = 50
-        available_height = canvas_height - margin_top - margin_bottom
         
         # 画水平线和刻度
         for i in range(5):
@@ -385,12 +393,12 @@ def show_score_and_description(score, description):
         content_frame.pack(padx=20, pady=20)
     
         # 评分标签
-        score_label = tk.Label(content_frame, text=f"总分: {score:.1f} 分", 
+        score_label = tk.Label(content_frame, text=f"{TITLE_LABEL} {score:.1f} {SCORE_LABEL}", 
                               fg='red', font=('Arial', 20, 'bold'), bg='white')
         score_label.pack(pady=20)
     
         # 动作要领标签
-        lbl_title = tk.Label(content_frame, text="动作要领:", 
+        lbl_title = tk.Label(content_frame, text=DESCRIPTION_LABEL, 
                             font=('Arial', 12, 'bold'), bg='white', anchor='w')
         lbl_title.pack(fill='x', pady=(10, 5))
         
@@ -401,7 +409,7 @@ def show_score_and_description(score, description):
         
         # 动作要点标签（可以根据不同姿势添加特定要点）
         if "弓步冲拳" in description:
-            lbl_points = tk.Label(content_frame, text="动作要点:", 
+            lbl_points = tk.Label(content_frame, text=KEY_POINTS_LABEL, 
                                 font=('Arial', 12, 'bold'), bg='white', anchor='w')
             lbl_points.pack(fill='x', pady=(10, 5))
             
@@ -412,7 +420,7 @@ def show_score_and_description(score, description):
             points_label.pack(fill='x', pady=5)
             
         elif "猛虎出洞" in description:
-            lbl_points = tk.Label(content_frame, text="动作要点:", 
+            lbl_points = tk.Label(content_frame, text=KEY_POINTS_LABEL, 
                                 font=('Arial', 12, 'bold'), bg='white', anchor='w')
             lbl_points.pack(fill='x', pady=(10, 5))
             
@@ -423,7 +431,7 @@ def show_score_and_description(score, description):
             points_label.pack(fill='x', pady=5)
             
         elif "五花坐山" in description:
-            lbl_points = tk.Label(content_frame, text="动作要点:", 
+            lbl_points = tk.Label(content_frame, text=KEY_POINTS_LABEL, 
                                 font=('Arial', 12, 'bold'), bg='white', anchor='w')
             lbl_points.pack(fill='x', pady=(10, 5))
             
@@ -446,7 +454,7 @@ def main(posture):
         # 检查图片是否存在
         img_path = f"img/{posture}.jpg"
         if not os.path.exists(img_path):
-            print(f"错误: 无法找到图片 {img_path}")
+            print(IMAGE_NOT_FOUND_ERROR.format(img_path))
             return
         
         print(f"读取图片: {img_path}")
@@ -457,7 +465,7 @@ def main(posture):
             img0 = cv_imread(img_path)
         
         if img0 is None:
-            print(f"错误: 无法读取图片 {img_path}")
+            print(INVALID_IMAGE_ERROR.format(img_path))
             return
             
         print(f"图片读取成功，尺寸: {img0.shape}")
@@ -468,7 +476,7 @@ def main(posture):
         image, keypoints_data = process_frame(img)
         
         if keypoints_data is None or len(keypoints_data) == 0:
-            print("未检测到关键点数据，请确保图片中有人物且姿势清晰")
+            print(INVALID_KEYPOINTS_ERROR)
             return
             
         angles = calculate_angles(keypoints_data)
@@ -487,7 +495,7 @@ def main(posture):
             show_master(coordinate_master.master_wu_hua_zuo_shan)
             yaoling = "左脚向左上步：右拳由下向右、向上摆至面前，拳心朝后：左掌变拳回收抱于腰间，拳心朝上：目视右拳"
         else:
-            print(f"未知姿态类型: {posture}")
+            print(UNKNOWN_POSTURE_ERROR.format(posture))
             return
             
         score = show_goal(angles, angles2)
@@ -569,11 +577,34 @@ def main(posture):
         print(f"处理过程中出现错误: {e}")
         print(traceback.format_exc())
 
+def get_posture_angles(posture):
+    """根据姿势类型获取标准角度数据"""
+    posture_map = {
+        "gongbuchongquan": coordinate_master.master_gong_bu_chong_quan,
+        "menghuchudong": coordinate_master.master_meng_hu_chu_dong,
+        "wuhuazuoshan": coordinate_master.master_wu_hua_zuo_shan,
+        "gunshenchongquan": coordinate_master.master_gun_shen_chong_quan,
+        "yuanhounazhou": coordinate_master.master_yuan_hou_na_zhou,
+        "mabutuizhang": coordinate_master.master_ma_bu_tui_zhang,
+        "bingbubengquan": coordinate_master.master_bing_bu_beng_quan,
+        "shizizhangzui": coordinate_master.master_shi_zi_zhang_zui,
+        "mabukouchuang": coordinate_master.master_ma_bu_kou_chuang,
+        "luohanzhangzhang": coordinate_master.master_luo_han_zhang_zhang
+    }
+    
+    for key, value in posture_map.items():
+        if key in posture:
+            return calculate_angles(value)
+    
+    print(UNKNOWN_POSTURE_ERROR.format(posture))
+    return None
+
 def analyze_frame(img_path, posture):
     """分析单帧图像并返回评分，不显示UI"""
     try:
+        # 检查图片是否存在
         if not os.path.exists(img_path):
-            print(f"错误: 无法找到图片 {img_path}")
+            print(IMAGE_NOT_FOUND_ERROR.format(img_path))
             return 0
         
         # 读取图片
@@ -582,7 +613,7 @@ def analyze_frame(img_path, posture):
             img0 = cv_imread(img_path)
             
         if img0 is None:
-            print(f"错误: 无法读取图片 {img_path}")
+            print(INVALID_IMAGE_ERROR.format(img_path))
             return 0
             
         image = img0.copy()
@@ -592,20 +623,15 @@ def analyze_frame(img_path, posture):
         image, keypoints_data = process_frame(img)
         
         if keypoints_data is None or len(keypoints_data) == 0:
-            print("未检测到关键点数据")
+            print(INVALID_KEYPOINTS_ERROR)
             return 0
             
+        # 计算当前姿势的角度
         angles = calculate_angles(keypoints_data)
         
-        # 根据姿态选择不同的对照数据
-        if "gongbuchongquan" in posture:
-            angles2 = calculate_angles(coordinate_master.master_gong_bu_chong_quan)
-        elif "menghuchudong" in posture:
-            angles2 = calculate_angles(coordinate_master.master_meng_hu_chu_dong)
-        elif "wuhuazuoshan" in posture:
-            angles2 = calculate_angles(coordinate_master.master_wu_hua_zuo_shan)
-        else:
-            print(f"未知姿态类型: {posture}")
+        # 获取标准姿势的角度
+        angles2 = get_posture_angles(posture)
+        if angles2 is None:
             return 0
             
         # 计算得分
@@ -620,17 +646,17 @@ def process_video_frame(img, draw=True, keypoint_size=10):
     """处理视频帧，返回处理后的图像和关键点数据"""
     try:
         if img is None or len(img.shape) != 3:
-            print("无效的图像格式")
+            print(VIDEO_FRAME_INVALID_ERROR)
             return img, []
         
         h, w = img.shape[0], img.shape[1]  # 高和宽
         
         # 转换为RGB格式并确保是连续数组
-        img_RGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img_RGB = np.ascontiguousarray(img_RGB)
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img_rgb = np.ascontiguousarray(img_rgb)
         
         # 将RGB图像输入模型，获取关键点预测结果
-        results = pose.process(img_RGB)
+        results = pose.process(img_rgb)
         
         keypoints_indices = [11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28]  # 定义要输出的关键点索引
         keypoints = [None] * 33
@@ -656,15 +682,10 @@ def process_video_frame(img, draw=True, keypoint_size=10):
                     cv2.circle(img, (cx, cy), keypoint_size, (0, 255, 0), -1)
         else:
             if draw:
-                cv2.putText(img, "未检测到人体", (25, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                cv2.putText(img, VIDEO_FRAME_NO_PERSON_ERROR, (25, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
         
         return img, keypoints_data
     
     except Exception as e:
         print(f"处理视频帧时出错: {e}")
         return img, []
-
-
-
-
-

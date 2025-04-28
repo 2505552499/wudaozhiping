@@ -782,8 +782,16 @@ class MartialArtsAnalyzer:
             shutil.copy(filepath, target_file)
             print(f"文件已保存到: {target_file}")
             
-            # 调用模型处理功能
-            model.main(move_code)
+            try:
+                # 调用模型分析功能
+                score = model.analyze_frame(target_file, move_code)
+                if score > 0:
+                    messagebox.showinfo("分析结果", f"动作评分：{score:.1f}分")
+                else:
+                    messagebox.showerror("分析失败", "无法识别动作姿势，请确保图片中有清晰的人物姿势")
+            except Exception as e:
+                messagebox.showerror("错误", f"分析图像时出错: {str(e)}")
+                print(f"分析图像时出错: {e}")
         else:
             print("没有选择文件")
     
