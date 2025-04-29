@@ -736,18 +736,84 @@ def process_video(video_path, posture):
 # Coaching appointment routes
 @app.route('/api/coaches', methods=['GET'])
 def get_coaches():
-    """获取所有教练信息"""
     try:
-        with open(COACHES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
-            coaches_data = json.load(f)
-        
-        # 确保返回的是一个包含coaches数组的对象
-        if isinstance(coaches_data, list):
-            return jsonify({"coaches": coaches_data}), 200
-        else:
-            return jsonify(coaches_data), 200
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            appointments_data = json.load(f)
+            
+            # 只包含等于空字符串的user_id也算没有user_id
+            coach_services = []
+            for appointment in appointments_data.get('appointments', []):
+                # 筛选出只有本地教练服务（空的或不存在的user_id）
+                # 且是approved状态的预约
+                user_id = appointment.get('user_id')
+                if (user_id is None or user_id == '') and appointment.get('approval_status') == 'approved':
+                    coach_services.append(appointment)
+            
+            print(f"DEBUG: 找到{len(coach_services)}个教练服务")
+            
+            # 不再按教练ID去重，允许同一教练有多个服务记录
+            # 将教练服务转换为需要的格式
+            coaches = []
+            
+            # 直接遍历每一条教练服务记录，生成教练对象
+            for service in coach_services:
+                coach_id = service.get('coach_id')
+                if not coach_id:
+                    continue  # 跳过没有教练ID的记录
+                
+                # 将技能字符串分割为数组
+                skills = []
+                if service.get('skill'):
+                    # 首先将技能字符串按逗号分割
+                    skills = [skill.strip() for skill in service.get('skill').split(',') if skill.strip()]
+                
+                # 处理位置信息
+                location = service.get('location', '')
+                city = location
+                district = ''
+                if ' ' in location:
+                    parts = location.split(' ')
+                    city = parts[0]
+                    district = parts[1] if len(parts) > 1 else ''
+                
+                # 生成教练对象，使用服务ID+教练ID作为唯一标识符
+                service_id = service.get('id', '')
+                unique_id = f"{coach_id}_{service_id}"
+                
+                # 创建教练对象
+                coach = {
+                    'id': unique_id,  # 使用服务ID和教练ID的组合作为唯一标识
+                    'coach_id': coach_id,  # 保留原始教练ID
+                    'name': service.get('coach_name', ''),
+                    'location': {
+                        'city': city,
+                        'districts': [district] if district else []
+                    },
+                    'skills': skills,
+                    'price': service.get('price', 0),
+                    'avatar': service.get('coach_avatar'),
+                    'rating': 5.0,  # 默认评分
+                    'description': service.get('notes', ''),
+                    'phone': service.get('phone', ''),
+                    'home_service': service.get('home_service', False),
+                    'service_id': service_id  # 添加服务ID以便前端可以识别
+                }
+                coaches.append(coach)
+            
+            # 如果从预约中找不到教练数据，空列表不合适，回退到基本教练数据文件
+            if not coaches:
+                with open(COACHES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+                    coach_data = json.load(f)
+                    if isinstance(coach_data, list):
+                        coaches = coach_data
+                    elif isinstance(coach_data, dict) and 'coaches' in coach_data:
+                        coaches = coach_data['coaches']
+                        
+            print(f"DEBUG: 返回{len(coaches)}个教练信息")
+            return jsonify({'coaches': coaches}), 200
     except Exception as e:
-        return jsonify({'success': False, 'message': f'获取教练信息失败: {str(e)}'}), 500
+        print(f'获取教练列表失败: {str(e)}')
+        return jsonify({'coaches': []}), 500
 
 @app.route('/api/coaches/<coach_id>', methods=['GET'])
 def get_coach(coach_id):
@@ -756,12 +822,19 @@ def get_coach(coach_id):
         with open(COACHES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
             coaches_data = json.load(f)
         
-        coach = next((c for c in coaches_data['coaches'] if c['id'] == coach_id), None)
+        # 处理直接是数组的情况
+        if isinstance(coaches_data, list):
+            coach = next((c for c in coaches_data if c['id'] == coach_id), None)
+        # 处理有coaches键的情况
+        else:
+            coach = next((c for c in coaches_data.get('coaches', []) if c['id'] == coach_id), None)
+        
         if coach:
             return jsonify(coach), 200
         else:
             return jsonify({'success': False, 'message': '教练不存在'}), 404
     except Exception as e:
+        print(f'获取教练信息失败: {str(e)}')
         return jsonify({'success': False, 'message': f'获取教练信息失败: {str(e)}'}), 500
 
 @app.route('/api/coaches/filter', methods=['GET'])
@@ -775,22 +848,28 @@ def filter_coaches():
         with open(COACHES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
             coaches_data = json.load(f)
         
-        filtered_coaches = coaches_data['coaches']
+        # 处理直接是数组的情况
+        if isinstance(coaches_data, list):
+            filtered_coaches = coaches_data
+        # 处理有coaches键的情况
+        else:
+            filtered_coaches = coaches_data.get('coaches', [])
         
         if city:
-            filtered_coaches = [c for c in filtered_coaches if city in c['location']['city']]
+            filtered_coaches = [c for c in filtered_coaches if 'location' in c and 'city' in c['location'] and city in c['location']['city']]
         
         if district:
-            filtered_coaches = [c for c in filtered_coaches if district in c['location']['districts']]
+            filtered_coaches = [c for c in filtered_coaches if 'location' in c and 'districts' in c['location'] and district in c['location']['districts']]
         
         if skill:
-            filtered_coaches = [c for c in filtered_coaches if skill in c['skills']]
+            filtered_coaches = [c for c in filtered_coaches if 'skills' in c and skill in c['skills']]
         
         return jsonify({'coaches': filtered_coaches}), 200
     except Exception as e:
+        print(f'筛选教练失败: {str(e)}')
         return jsonify({'success': False, 'message': f'筛选教练失败: {str(e)}'}), 500
 
-@app.route('/api/appointments', methods=['GET'])
+@app.route('/api/user/appointments', methods=['GET'])
 @jwt_required()
 def get_user_appointments():
     """获取用户的所有预约"""
@@ -800,7 +879,10 @@ def get_user_appointments():
         with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
             appointments_data = json.load(f)
         
-        user_appointments = [a for a in appointments_data['appointments'] if a['user_id'] == current_user]
+        # 只返回审核通过且未被撤销的预约
+        user_appointments = [a for a in appointments_data['appointments'] 
+                           if a.get('user_id') == current_user and 
+                           a.get('approval_status') == 'approved']
         return jsonify({'appointments': user_appointments}), 200
     except Exception as e:
         return jsonify({'success': False, 'message': f'获取预约失败: {str(e)}'}), 500
@@ -864,6 +946,7 @@ def create_appointment():
                 'skill': data['skill'],
                 'duration': data.get('duration', 1),  # 添加duration字段，默认为1小时
                 'status': 'pending',
+                'approval_status': 'pending',  # 添加approval_status字段，默认为pending
                 'created_at': get_current_time()
             }
             
@@ -1344,6 +1427,615 @@ def upload_coach_avatar():
         'message': '头像上传成功',
         'avatar_url': avatar_url
     })
+
+# Admin appointment management routes
+@app.route('/api/admin/appointments', methods=['GET'])
+@jwt_required()
+def get_pending_appointments():
+    current_user = get_jwt_identity()
+    user_data = get_user_data(current_user)
+    
+    # Check if user is admin
+    if not user_data or user_data.get('role') != 'admin':
+        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
+    
+    try:
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            appointments = data.get('appointments', [])
+            
+        # Filter appointments based on approval status
+        status = request.args.get('status', 'pending')  # pending, approved, rejected
+        filtered_appointments = [
+            apt for apt in appointments 
+            if apt.get('approval_status', 'pending') == status
+        ]
+        
+        return jsonify({
+            'success': True,
+            'appointments': filtered_appointments
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'获取预约列表失败: {str(e)}'
+        }), 500
+
+@app.route('/api/admin/appointments/<appointment_id>/review', methods=['POST'])
+@jwt_required()
+def review_appointment(appointment_id):
+    current_user = get_jwt_identity()
+    user_data = get_user_data(current_user)
+    
+    # Check if user is admin
+    if not user_data or user_data.get('role') != 'admin':
+        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
+    
+    data = request.get_json()
+    action = data.get('action')  # 'approve' or 'reject'
+    reason = data.get('reason', '')  # Optional reason for rejection
+    
+    if action not in ['approve', 'reject']:
+        return jsonify({'success': False, 'message': '无效的操作'}), 400
+    
+    try:
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8') as f:
+            file_data = json.load(f)
+            appointments = file_data.get('appointments', [])
+        
+        # Find and update the appointment
+        for apt in appointments:
+            if apt.get('id') == appointment_id:
+                apt['approval_status'] = 'approved' if action == 'approve' else 'rejected'
+                apt['review_time'] = get_current_time()
+                apt['reviewed_by'] = current_user
+                if action == 'reject' and reason:
+                    apt['rejection_reason'] = reason
+                break
+        else:
+            return jsonify({'success': False, 'message': '预约不存在'}), 404
+        
+        # Save the updated appointments
+        file_data['appointments'] = appointments
+        with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
+            json.dump(file_data, f, ensure_ascii=False, indent=4)
+        
+        return jsonify({
+            'success': True,
+            'message': '预约审核完成'
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'审核预约失败: {str(e)}'
+        }), 500
+
+@app.route('/api/appointments/user', methods=['GET'])
+@jwt_required()
+def get_user_appointments_detail():
+    current_user = get_jwt_identity()
+    try:
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            all_appointments = data.get('appointments', [])
+            
+            # Filter appointments for current user and only show approved ones
+            user_appointments = [
+                apt for apt in all_appointments 
+                if apt.get('user_id') == current_user and
+                apt.get('approval_status', 'pending') == 'approved'
+            ]
+            
+            # Sort by creation date (newest first)
+            user_appointments.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+            
+            return jsonify({
+                'success': True,
+                'appointments': user_appointments
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'获取预约列表失败: {str(e)}'
+        }), 500
+
+# 管理员API - 获取待审核的预约列表
+@app.route('/api/admin/appointments/pending', methods=['GET'])
+@jwt_required()
+def get_pending_appointments_list():
+    current_user = get_jwt_identity()
+    user_data = get_user_data(current_user)
+    
+    # 检查用户是否是管理员
+    if not user_data or user_data.get('role') != 'admin':
+        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
+    
+    try:
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            appointments = data.get('appointments', [])
+            
+        # 筛选待审核的预约
+        pending_appointments = [
+            apt for apt in appointments 
+            if apt.get('approval_status', 'pending') == 'pending'
+        ]
+        
+        # 按创建时间排序（最新的在前）
+        pending_appointments.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+        
+        return jsonify({
+            'success': True,
+            'appointments': pending_appointments
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'获取待审核预约失败: {str(e)}'
+        }), 500
+
+# 管理员API - 审核预约
+@app.route('/api/admin/appointments/<appointment_id>/review', methods=['POST'])
+@jwt_required()
+def review_appointment_status(appointment_id):
+    current_user = get_jwt_identity()
+    user_data = get_user_data(current_user)
+    
+    # 检查用户是否是管理员
+    if not user_data or user_data.get('role') != 'admin':
+        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
+    
+    data = request.get_json()
+    action = data.get('action')  # 'approve' 或 'reject'
+    reason = data.get('reason', '')  # 可选的拒绝原因
+    
+    if action not in ['approve', 'reject']:
+        return jsonify({'success': False, 'message': '无效的操作'}), 400
+    
+    try:
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8') as f:
+            file_data = json.load(f)
+            appointments = file_data.get('appointments', [])
+        
+        # 查找并更新预约
+        for apt in appointments:
+            if apt.get('id') == appointment_id:
+                apt['approval_status'] = 'approved' if action == 'approve' else 'rejected'
+                apt['review_time'] = get_current_time()
+                apt['reviewed_by'] = current_user
+                if action == 'reject' and reason:
+                    apt['rejection_reason'] = reason
+                break
+        else:
+            return jsonify({'success': False, 'message': '预约不存在'}), 404
+        
+        # 保存更新后的预约
+        file_data['appointments'] = appointments
+        with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
+            json.dump(file_data, f, ensure_ascii=False, indent=4)
+        
+        return jsonify({
+            'success': True,
+            'message': '预约审核完成'
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'审核预约失败: {str(e)}'
+        }), 500
+
+# 教练API - 获取自己创建的预约及其审核状态
+@app.route('/api/coach/appointments/with_status', methods=['GET'])
+@jwt_required()
+def get_coach_appointments_with_status():
+    current_user = get_jwt_identity()
+    user_data = get_user_data(current_user)
+    
+    # 检查用户是否是教练
+    if not user_data or user_data.get('role') != 'coach':
+        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
+    
+    try:
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            all_appointments = data.get('appointments', [])
+            
+        # 筛选当前教练创建的预约
+        coach_appointments = [
+            apt for apt in all_appointments 
+            if apt.get('coach_id') == current_user
+        ]
+        
+        # 按创建时间排序（最新的在前）
+        coach_appointments.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+        
+        return jsonify({
+            'success': True,
+            'appointments': coach_appointments
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'获取预约列表失败: {str(e)}'
+        }), 500
+
+# 用户获取预约列表API
+@app.route('/api/appointments', methods=['GET'])
+@jwt_required()
+def get_appointments():
+    try:
+        current_user = get_jwt_identity()
+        user_data = get_user_data(current_user)
+        
+        print(f"DEBUG: 用户身份: {current_user}, 角色: {user_data.get('role') if user_data else 'unknown'}")
+        
+        if not user_data:
+            return jsonify({'success': False, 'message': '用户未登录'}), 401
+        
+        # 确保不管发生什么都能获取预约列表
+        try:
+            # 获取所有预约
+            with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                all_appointments = data.get('appointments', [])
+            
+            user_appointments = []
+            role = user_data.get('role', 'user')
+            
+            print(f"DEBUG: 找到{len(all_appointments)}条预约记录")
+            print(f"DEBUG: 当前用户角色: {role}")
+            
+            # 用户角色决定获取的预约列表
+            if role == 'admin':
+                # 管理员可以查看所有预约
+                user_appointments = all_appointments
+            elif role == 'coach':
+                # 教练只能看到自己的预约
+                for apt in all_appointments:
+                    if apt.get('coach_id') == current_user or apt.get('user_id') == current_user:
+                        user_appointments.append(apt)
+            else:
+                # 普通用户的预约和所有可预约的教练
+                # 1. 用户个人的预约
+                personal_appointments = []
+                for apt in all_appointments:
+                    if apt.get('user_id') == current_user:
+                        personal_appointments.append(apt)
+                
+                # 2. 所有已审核通过的教练预约
+                approved_coach_appointments = []
+                for apt in all_appointments:
+                    if apt.get('approval_status') == 'approved':
+                        approved_coach_appointments.append(apt)
+                
+                # 合并列表
+                user_appointments = personal_appointments + approved_coach_appointments
+                
+                # 去除重复项
+                unique_appointments = {}
+                for item in user_appointments:
+                    item_id = item.get('id')
+                    if item_id and item_id not in unique_appointments:
+                        unique_appointments[item_id] = item
+                
+                user_appointments = list(unique_appointments.values())
+            
+            # 按创建时间排序（最新的在前）
+            user_appointments.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+            
+            return jsonify({
+                'success': True,
+                'appointments': user_appointments
+            })
+        except Exception as e:
+            print(f'DEBUG: 获取预约内部错误: {str(e)}')
+            # 返回空列表而不是错误，确保前端不会崩溃
+            return jsonify({
+                'success': True,
+                'appointments': [],
+                'debug_message': f'获取预约列表异常: {str(e)}'
+            })
+    except Exception as e:
+        print(f'DEBUG: 获取预约列表外部错误: {str(e)}')
+        # 返回200而不是500，确保前端能正常处理
+        return jsonify({
+            'success': True,
+            'appointments': [],
+            'error': str(e)
+        })
+
+# 教练API - 创建预约信息
+@app.route('/api/coach/create_appointment', methods=['POST'])
+@jwt_required()
+def create_coach_appointment():
+    current_user = get_jwt_identity()
+    user_data = get_user_data(current_user)
+    
+    # 检查用户是否是教练
+    if not user_data or user_data.get('role') != 'coach':
+        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
+    
+    data = request.get_json()
+    
+    # 检查必要字段
+    required_fields = ['coach_name', 'phone', 'skill', 'location', 'price']
+    for field in required_fields:
+        if field not in data or not data[field]:
+            return jsonify({
+                'success': False,
+                'message': f'缺少必要的字段: {field}'
+            }), 400
+    
+    try:
+        # 打开预约文件
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8') as f:
+            file_data = json.load(f)
+            appointments = file_data.get('appointments', [])
+        
+        # 生成唯一ID
+        import uuid
+        appointment_id = str(uuid.uuid4())
+        
+        # 创建新预约
+        new_appointment = {
+            'id': appointment_id,
+            'coach_id': current_user,
+            'coach_name': data.get('coach_name'),
+            'phone': data.get('phone'),
+            'skill': data.get('skill'),
+            'location': data.get('location'),
+            'price': data.get('price'),
+            'home_service': data.get('home_service', False),
+            'notes': data.get('notes', ''),
+            'created_at': get_current_time(),
+            'approval_status': 'pending',  # 初始状态为待审核
+        }
+        
+        # 添加到预约文件
+        appointments.append(new_appointment)
+        file_data['appointments'] = appointments
+        
+        with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
+            json.dump(file_data, f, ensure_ascii=False, indent=4)
+        
+        return jsonify({
+            'success': True,
+            'message': '预约信息发布成功，等待管理员审核',
+            'appointment_id': appointment_id
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'发布预约失败: {str(e)}'
+        }), 500
+
+# 添加用户预约API端点
+@app.route('/api/user/create_appointment', methods=['POST'])
+@jwt_required()
+def user_create_appointment():
+    """普通用户创建预约"""
+    current_user = get_jwt_identity()
+    print(f"当前用户: {current_user}")
+    
+    # 检查用户是否存在
+    user_data = get_user_data(current_user)
+    print(f"用户数据: {user_data}")
+    if not user_data:
+        return jsonify({'success': False, 'message': '用户不存在'}), 404
+    
+    # 获取请求数据
+    data = request.json
+    print(f"请求数据: {data}")
+    if not data:
+        return jsonify({'success': False, 'message': '请求数据无效'}), 400
+    
+    try:
+        # 验证教练是否存在
+        with open(COACHES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            coaches_data = json.load(f)
+        
+        # 确保coaches_data是列表格式
+        coaches_list = coaches_data if isinstance(coaches_data, list) else coaches_data.get('coaches', [])
+        
+        coach = next((c for c in coaches_list if c['id'] == data['coach_id']), None)
+        if not coach:
+            error_msg = f'教练不存在: {data["coach_id"]}'
+            print(f"预约失败: {error_msg}")
+            return jsonify({'success': False, 'message': error_msg}), 404
+        
+        # 创建新预约
+        try:
+            # 确保appointments.json文件存在
+            if not os.path.exists(APPOINTMENTS_DATA_FILE):
+                with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
+                    json.dump({"appointments": []}, f)
+            
+            with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+                appointments_data = json.load(f)
+            
+            # 确保appointments_data有正确的结构
+            if 'appointments' not in appointments_data:
+                appointments_data = {"appointments": []}
+            
+            # 生成唯一ID
+            import uuid
+            appointment_id = str(uuid.uuid4())
+            
+            new_appointment = {
+                'id': appointment_id,
+                'user_id': current_user,
+                'coach_id': data['coach_id'],
+                'coach_name': coach['name'],
+                'coach_avatar': coach.get('avatar'),
+                'date': data['date'],
+                'time': data['time'],
+                'location': data.get('location', f"{coach['location']['city']} {coach['location']['districts'][0]}"),
+                'skill': data['skill'],
+                'duration': data.get('duration', 1),
+                'status': 'pending',
+                'created_at': get_current_time()
+            }
+            
+            appointments_data['appointments'].append(new_appointment)
+            
+            with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
+                json.dump(appointments_data, f, indent=4, ensure_ascii=False)
+            
+            print(f"用户预约创建成功: {new_appointment}")
+            return jsonify({'success': True, 'message': '预约创建成功', 'appointment': new_appointment}), 201
+        except Exception as e:
+            error_msg = f'创建预约时出错: {str(e)}'
+            print(f"预约失败: {error_msg}")
+            return jsonify({'success': False, 'message': error_msg}), 500
+    except Exception as e:
+        error_msg = f'创建预约失败: {str(e)}'
+        print(f"预约失败: {error_msg}")
+        return jsonify({'success': False, 'message': error_msg}), 500
+
+# 管理员撤销教练预约API端点
+@app.route('/api/admin/appointments/<appointment_id>/revoke', methods=['POST'])
+@jwt_required()
+def admin_revoke_appointment(appointment_id):
+    """管理员撤销教练预约信息（软删除）"""
+    current_user = get_jwt_identity()
+    
+    # 检查用户是否是管理员
+    user_data = get_user_data(current_user)
+    if not user_data or user_data.get('role') != 'admin':
+        return jsonify({'success': False, 'message': '无权限访问此接口，仅管理员可操作'}), 403
+    
+    try:
+        # 读取预约数据
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            appointments_data = json.load(f)
+        
+        # 查找要撤销的预约
+        appointments = appointments_data.get('appointments', [])
+        found = False
+        revoked_appointment = None
+        
+        for appointment in appointments:
+            if appointment.get('id') == appointment_id:
+                found = True
+                # 更改成撤销状态而不是删除
+                appointment['approval_status'] = 'revoked'
+                appointment['review_time'] = get_current_time()
+                appointment['reviewed_by'] = current_user
+                appointment['revoke_reason'] = '管理员撤销'
+                revoked_appointment = appointment
+                break
+        
+        if not found:
+            return jsonify({'success': False, 'message': '未找到指定的预约信息'}), 404
+        
+        # 保存更新后的数据
+        with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
+            json.dump(appointments_data, f, ensure_ascii=False, indent=4)
+        
+        # 记录操作日志
+        operation_log = {
+            'operation': 'revoke_appointment',
+            'user': current_user,
+            'appointment_id': appointment_id,
+            'timestamp': get_current_time(),
+            'revoked_appointment': revoked_appointment
+        }
+        
+        # 可以选择将操作日志保存到文件或数据库
+        print(f"管理员撤销预约操作日志: {operation_log}")
+        
+        return jsonify({
+            'success': True, 
+            'message': '预约信息撤销成功',
+            'revoked_appointment': revoked_appointment
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'撤销预约失败: {str(e)}'}), 500
+
+# 管理员删除预约API端点
+@app.route('/api/admin/appointments/<appointment_id>', methods=['DELETE'])
+@jwt_required()
+def admin_delete_appointment(appointment_id):
+    """管理员物理删除预约信息（真实删除）"""
+    current_user = get_jwt_identity()
+    
+    # 检查用户是否是管理员
+    user_data = get_user_data(current_user)
+    if not user_data or user_data.get('role') != 'admin':
+        return jsonify({'success': False, 'message': '无权限访问此接口，仅管理员可操作'}), 403
+    
+    try:
+        # 读取预约数据
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            appointments_data = json.load(f)
+        
+        # 查找要删除的预约
+        appointments = appointments_data.get('appointments', [])
+        appointment_to_delete = None
+        
+        # 找到要删除的预约
+        for i, appointment in enumerate(appointments):
+            if appointment.get('id') == appointment_id:
+                appointment_to_delete = appointment
+                # 从预约列表中移除
+                appointments.pop(i)
+                break
+        
+        if not appointment_to_delete:
+            return jsonify({'success': False, 'message': '未找到指定的预约信息'}), 404
+        
+        # 保存更新后的数据
+        with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
+            json.dump(appointments_data, f, ensure_ascii=False, indent=4)
+        
+        # 记录操作日志
+        operation_log = {
+            'operation': 'delete_appointment',
+            'user': current_user,
+            'appointment_id': appointment_id,
+            'timestamp': get_current_time()
+        }
+        
+        # 可以选择将操作日志保存到文件或数据库
+        print(f"管理员删除预约操作日志: {operation_log}")
+        
+        return jsonify({
+            'success': True, 
+            'message': '预约信息删除成功'
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'删除预约失败: {str(e)}'}), 500
+
+# 教练查看自己发布的预约信息和审核状态
+@app.route('/api/coach/published_appointments', methods=['GET'])
+@jwt_required()
+def get_coach_published_appointments():
+    """Get published appointments and their approval status for a coach"""
+    current_user = get_jwt_identity()
+    
+    # 检查用户是否是教练
+    user_data = get_user_data(current_user)
+    if not user_data or user_data.get('role') != 'coach':
+        return jsonify({'success': False, 'message': '无权限访问此接口，仅教练可操作'}), 403
+    
+    try:
+        # 读取预约数据
+        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+            appointments_data = json.load(f)
+        
+        # 筛选出该教练发布的预约信息（非用户预约的）
+        coach_published_appointments = []
+        for appointment in appointments_data.get('appointments', []):
+            # 教练发布的预约将包含approval_status字段
+            if appointment.get('coach_id') == current_user and 'approval_status' in appointment:
+                coach_published_appointments.append(appointment)
+        
+        return jsonify({
+            'success': True,
+            'published_appointments': coach_published_appointments
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'获取发布预约信息失败: {str(e)}'}), 500
 
 # Serve frontend in production
 @app.route('/', defaults={'path': ''})

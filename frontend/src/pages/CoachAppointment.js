@@ -6,19 +6,20 @@ import {
 } from 'antd';
 import { 
   EnvironmentOutlined, FilterOutlined, UserOutlined, 
-  CalendarOutlined, ClockCircleOutlined, MessageOutlined, 
-  PhoneOutlined, CheckCircleOutlined
+  CalendarOutlined, ClockCircleOutlined
 } from '@ant-design/icons';
 import { coachAPI, appointmentAPI } from '../api';
+// 不再需要useNavigate，因为我们使用模态框替代页面导航
 import MainLayout from '../components/MainLayout';
 
 const { Content } = Layout;
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
 const { Option } = Select;
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 const CoachAppointment = () => {
+  
   // 状态管理
   const [coaches, setCoaches] = useState([]);
   const [filteredCoaches, setFilteredCoaches] = useState([]);
@@ -29,8 +30,8 @@ const CoachAppointment = () => {
   const [loading, setLoading] = useState(false);
   const [appointmentLoading, setAppointmentLoading] = useState(false);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
-  const [showCoachDetailModal, setShowCoachDetailModal] = useState(false);
   const [showMessageModal, setShowMessageModal] = useState(false);
+  const [showCoachDetailModal, setShowCoachDetailModal] = useState(false); // 添加教练详情模态框状态
   const [activeTab, setActiveTab] = useState('1');
   const [filters, setFilters] = useState({
     city: '',
@@ -56,6 +57,75 @@ const CoachAppointment = () => {
     // 其他体育项目
     '田径', '篮球', '足球', '羽毛球', '游泳', '体适能', '中小学体育', '跆拳道', '瑜伽'
   ];
+
+  // 筛选教练 - 使用useCallback以解决依赖问题
+  const handleFilterCoaches = React.useCallback(() => {
+    if (!coaches || coaches.length === 0) return;
+    
+    const filtered = coaches.filter(coach => {
+      // 筛选城市
+      if (filters.city && coach.location?.city !== filters.city) {
+        return false;
+      }
+      
+      // 筛选区域
+      if (filters.district && !coach.location?.districts?.includes(filters.district)) {
+        return false;
+      }
+      
+      // 筛选技能
+      if (filters.skill && !coach.skills?.includes(filters.skill)) {
+        return false;
+      }
+      
+      return true;
+    });
+    
+    setFilteredCoaches(filtered);
+  }, [coaches, filters]);
+  
+  // 首次加载时获取数据
+  useEffect(() => {
+    // 当activeTab变化时触发对应的数据刷新
+    if (activeTab === '1') {
+      // 在教练列表标签激活时，刷新教练数据
+      console.log('刷新教练列表数据');
+      fetchCoaches();
+      fetchCities();
+    } else if (activeTab === '2') {
+      // 在预约列表标签激活时，刷新预约数据
+      console.log('刷新预约列表数据');
+      fetchAppointments();
+    }
+    
+    // 定期检查数据更新，每30秒轮询一次
+    const dataCheckInterval = setInterval(() => {
+      if (activeTab === '1') {
+        // 在教练列表标签激活时，定期刷新教练数据
+        fetchCoaches();
+      } else if (activeTab === '2') {
+        // 在预约列表标签激活时，定期刷新预约数据
+        fetchAppointments();
+      }
+    }, 30000);
+
+    // 清理定时器
+    return () => clearInterval(dataCheckInterval);
+  }, [activeTab]);
+  
+  // 初始加载
+  useEffect(() => {
+    fetchCoaches();
+    fetchCities();
+    fetchAppointments();
+  }, []);
+
+  // 当筛选变化时，应用筛选条件
+  useEffect(() => {
+    if (coaches.length > 0) {
+      handleFilterCoaches();
+    }
+  }, [filters, coaches, handleFilterCoaches]);
 
   // 获取教练列表
   const fetchCoaches = async () => {
@@ -111,29 +181,7 @@ const CoachAppointment = () => {
     }
   };
 
-  // 筛选教练
-  const handleFilterCoaches = () => {
-    const filtered = coaches.filter(coach => {
-      // 筛选城市
-      if (filters.city && coach.location.city !== filters.city) {
-        return false;
-      }
-      
-      // 筛选区域
-      if (filters.district && !coach.location.districts.includes(filters.district)) {
-        return false;
-      }
-      
-      // 筛选技能
-      if (filters.skill && !coach.skills.includes(filters.skill)) {
-        return false;
-      }
-      
-      return true;
-    });
-    
-    setFilteredCoaches(filtered);
-  };
+
 
   // 重置筛选条件
   const handleResetFilters = () => {
@@ -185,7 +233,7 @@ const CoachAppointment = () => {
     form.resetFields();
   };
 
-  // 打开教练详情模态框
+  // 显示教练详情模态框
   const openCoachDetailModal = (coach) => {
     setSelectedCoach(coach);
     setShowCoachDetailModal(true);
@@ -197,7 +245,8 @@ const CoachAppointment = () => {
   };
 
   // 打开发送消息模态框
-  const openMessageModal = () => {
+  const openMessageModal = (coach) => {
+    setSelectedCoach(coach);
     setShowMessageModal(true);
     messageForm.resetFields();
   };
@@ -333,25 +382,25 @@ const CoachAppointment = () => {
   };
 
   // 渲染教练卡片
-  const renderCoachCard = (coach) => (
-    <Col xs={24} sm={12} md={8} lg={6} key={coach.id}>
+  const renderCoachCard = (coach) => {
+    return (
       <Card
         hoverable
+        style={{ marginBottom: 16, cursor: 'pointer' }}
+        onClick={() => openCoachDetailModal(coach)} // 点击卡片查看详情
         cover={
-          <div style={{ padding: '20px 0', textAlign: 'center', background: '#f5f5f5' }}>
+          <div style={{ padding: 24, textAlign: 'center', background: '#f5f5f5' }}>
             <Avatar src={coach.avatar} size={100} />
           </div>
         }
         actions={[
           <Button 
-            type="link" 
-            onClick={() => openCoachDetailModal(coach)}
-          >
-            查看详情
-          </Button>,
-          <Button 
+            key="appointment" 
             type="primary" 
-            onClick={() => openAppointmentModal(coach)}
+            onClick={(e) => {
+              e.stopPropagation(); // 阻止点击事件冒泡到卡片
+              openAppointmentModal(coach);
+            }}
           >
             立即预约
           </Button>
@@ -386,8 +435,8 @@ const CoachAppointment = () => {
           }
         />
       </Card>
-    </Col>
-  );
+    );
+  };
 
   // 渲染预约列表项
   const renderAppointmentItem = (appointment) => (
@@ -540,9 +589,10 @@ const CoachAppointment = () => {
         {/* 预约模态框 */}
         <Modal
           title="预约教练"
-          visible={showAppointmentModal}
+          open={showAppointmentModal}
           onCancel={closeAppointmentModal}
           footer={null}
+          destroyOnClose
         >
           {selectedCoach && (
             <>
@@ -622,85 +672,12 @@ const CoachAppointment = () => {
           )}
         </Modal>
 
-        {/* 教练详情模态框 */}
-        <Modal
-          title="教练详情"
-          visible={showCoachDetailModal}
-          onCancel={closeCoachDetailModal}
-          footer={[
-            <Button key="back" onClick={closeCoachDetailModal}>
-              关闭
-            </Button>,
-            <Button 
-              key="submit" 
-              type="primary" 
-              onClick={() => {
-                closeCoachDetailModal();
-                openAppointmentModal(selectedCoach);
-              }}
-            >
-              立即预约
-            </Button>,
-          ]}
-          width={600}
-        >
-          {selectedCoach && (
-            <div className="coach-detail">
-              <div style={{ textAlign: 'center', marginBottom: 24 }}>
-                <Avatar src={selectedCoach.avatar} size={100} />
-                <Title level={3} style={{ marginTop: 16, marginBottom: 0 }}>
-                  {selectedCoach.name}
-                </Title>
-                <Rate disabled defaultValue={selectedCoach.rating} />
-              </div>
 
-              <Row gutter={[16, 16]}>
-                <Col span={12}>
-                  <Card title="基本信息" size="small">
-                    <p><UserOutlined /> 性别: {selectedCoach.gender === 'male' ? '男' : '女'}</p>
-                    <p><EnvironmentOutlined /> 地区: {selectedCoach.location.city} {selectedCoach.location.districts.join('/')}</p>
-                    <p>所属院校: {selectedCoach.school}</p>
-                    <p>技术等级: {selectedCoach.technical_level}</p>
-                  </Card>
-                </Col>
-                <Col span={12}>
-                  <Card title="培训项目" size="small">
-                    {selectedCoach.skills.map(skill => (
-                      <Tag key={skill} color="blue" style={{ margin: '0 8px 8px 0' }}>{skill}</Tag>
-                    ))}
-                  </Card>
-                </Col>
-              </Row>
-
-              <Card title="教练介绍" style={{ marginTop: 16 }}>
-                <Paragraph>{selectedCoach.description}</Paragraph>
-              </Card>
-
-              <Card title="认证信息" style={{ marginTop: 16 }}>
-                <p><CheckCircleOutlined style={{ color: 'green' }} /> {selectedCoach.certification}</p>
-              </Card>
-
-              <div style={{ textAlign: 'center', marginTop: 24 }}>
-                <Text type="secondary">价格: </Text>
-                <Text strong style={{ color: 'red', fontSize: 20 }}>
-                  {selectedCoach.price}元/小时
-                </Text>
-              </div>
-
-              <div style={{ marginTop: 16, textAlign: 'center' }}>
-                <Space>
-                  <Button icon={<MessageOutlined />} onClick={openMessageModal}>发消息</Button>
-                  <Button icon={<PhoneOutlined />}>打电话</Button>
-                </Space>
-              </div>
-            </div>
-          )}
-        </Modal>
 
         {/* 发送消息模态框 */}
         <Modal
           title="发送消息"
-          visible={showMessageModal}
+          open={showMessageModal}
           onCancel={closeMessageModal}
           footer={null}
         >
@@ -730,6 +707,90 @@ const CoachAppointment = () => {
                 </Space>
               </Form.Item>
             </Form>
+          )}
+        </Modal>
+
+        {/* 教练详情模态框 */}
+        <Modal
+          title="教练详情"
+          open={showCoachDetailModal}
+          onCancel={closeCoachDetailModal}
+          footer={[
+            <Button key="close" onClick={closeCoachDetailModal}>关闭</Button>,
+            <Button 
+              key="appointment" 
+              type="primary" 
+              onClick={() => {
+                closeCoachDetailModal();
+                openAppointmentModal(selectedCoach);
+              }}
+            >
+              立即预约
+            </Button>,
+            <Button 
+              key="message" 
+              onClick={() => {
+                closeCoachDetailModal();
+                setShowMessageModal(true);
+              }}
+            >
+              发送消息
+            </Button>
+          ]}
+          width={600}
+        >
+          {selectedCoach && (
+            <div>
+              <Row gutter={[16, 16]} align="middle">
+                <Col span={8}>
+                  <Avatar 
+                    src={selectedCoach.avatar} 
+                    size={120} 
+                    icon={<UserOutlined />}
+                    style={{ display: 'block', margin: '0 auto' }} 
+                  />
+                </Col>
+                <Col span={16}>
+                  <Title level={3} style={{ margin: 0 }}>
+                    {selectedCoach.name}
+                  </Title>
+                  <Rate disabled value={selectedCoach.rating || 5} style={{ fontSize: 16 }} />
+                  <div style={{ margin: '8px 0' }}>
+                    <Tag color="red">{selectedCoach.price}元/小时</Tag>
+                    <Tag color="blue">{selectedCoach.technical_level || '专业教练'}</Tag>
+                  </div>
+                  <p>
+                    <EnvironmentOutlined /> {selectedCoach.location?.city} {selectedCoach.location?.districts?.[0]}
+                  </p>
+                </Col>
+              </Row>
+              
+              <Divider orientation="left">培训技能</Divider>
+              <div>
+                {selectedCoach.skills?.map(skill => (
+                  <Tag key={skill} color="blue" style={{ margin: '0 4px 8px 0' }}>{skill}</Tag>
+                ))}
+              </div>
+              
+              <Divider orientation="left">教练介绍</Divider>
+              <p style={{ lineHeight: '1.8' }}>
+                {selectedCoach.description || '暂无介绍'}
+              </p>
+              
+              {selectedCoach.certification && (
+                <>
+                  <Divider orientation="left">认证信息</Divider>
+                  <p>{selectedCoach.certification}</p>
+                </>
+              )}
+              
+              {selectedCoach.school && (
+                <>
+                  <Divider orientation="left">毕业院校</Divider>
+                  <p>{selectedCoach.school}</p>
+                </>
+              )}
+            </div>
           )}
         </Modal>
       </Content>

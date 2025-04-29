@@ -16,13 +16,15 @@ import MainLayout from '../components/MainLayout';
 import { appointmentAPI } from '../api';
 
 const { Content } = Layout;
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 const CoachDashboard = () => {
   const [appointments, setAppointments] = useState([]);
+  const [publishedAppointments, setPublishedAppointments] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [publishedLoading, setPublishedLoading] = useState(false);
   const [messageModal, setMessageModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [messageForm] = Form.useForm();
@@ -51,10 +53,29 @@ const CoachDashboard = () => {
       setLoading(false);
     }
   };
+  
+  // 获取教练发布的预约信息和审核状态
+  const fetchPublishedAppointments = async () => {
+    setPublishedLoading(true);
+    try {
+      const response = await appointmentAPI.getCoachPublishedAppointments();
+      if (response.data.success) {
+        setPublishedAppointments(response.data.published_appointments || []);
+      } else {
+        message.error(response.data.message || '获取发布的预约信息失败');
+      }
+    } catch (error) {
+      console.error('获取发布的预约信息失败:', error);
+      message.error('获取发布的预约信息失败，请稍后重试');
+    } finally {
+      setPublishedLoading(false);
+    }
+  };
 
   // 初始加载
   useEffect(() => {
     fetchCoachAppointments();
+    fetchPublishedAppointments();
   }, []);
 
   // 确认预约
@@ -150,13 +171,27 @@ const CoachDashboard = () => {
   const getStatusText = (status) => {
     switch (status) {
       case 'pending':
-        return '待确认';
+        return '待处理';
       case 'confirmed':
         return '已确认';
-      case 'completed':
-        return '已完成';
       case 'cancelled':
         return '已取消';
+      case 'rejected':
+        return '已拒绝';
+      case 'completed':
+        return '已完成';
+      default:
+        return '未知状态';
+    }
+  };
+
+  // 获取审核状态显示文本
+  const getApprovalStatusText = (status) => {
+    switch (status) {
+      case 'pending':
+        return '待审核';
+      case 'approved':
+        return '已通过';
       case 'rejected':
         return '已拒绝';
       default:
@@ -168,15 +203,29 @@ const CoachDashboard = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'pending':
-        return 'orange';
+        return 'processing';
       case 'confirmed':
-        return 'green';
-      case 'completed':
-        return 'blue';
+        return 'success';
       case 'cancelled':
-        return 'red';
+        return 'default';
       case 'rejected':
-        return 'red';
+        return 'error';
+      case 'completed':
+        return 'success';
+      default:
+        return 'default';
+    }
+  };
+
+  // 获取审核状态标签颜色
+  const getApprovalStatusColor = (status) => {
+    switch (status) {
+      case 'pending':
+        return 'processing';
+      case 'approved':
+        return 'success';
+      case 'rejected':
+        return 'error';
       default:
         return 'default';
     }
@@ -270,6 +319,62 @@ const CoachDashboard = () => {
     );
   };
 
+  // 渲染教练发布的预约信息列表项
+  const renderPublishedAppointmentItem = (appointment) => {
+    return (
+      <List.Item>
+        <List.Item.Meta
+          title={
+            <Space>
+              <span>{appointment.skill}</span>
+              <Tag color={getApprovalStatusColor(appointment.approval_status)}>
+                {getApprovalStatusText(appointment.approval_status)}
+              </Tag>
+            </Space>
+          }
+          description={
+            <>
+              <div style={{ marginBottom: 8 }}>
+                <Text type="secondary">电话: </Text>
+                <Text>{appointment.phone}</Text>
+              </div>
+              <div style={{ marginBottom: 8 }}>
+                <Text type="secondary">地点: </Text>
+                <Text>{appointment.location}</Text>
+              </div>
+              <div style={{ marginBottom: 8 }}>
+                <Text type="secondary">价格: </Text>
+                <Text strong style={{ color: 'red' }}>{appointment.price}元/小时</Text>
+              </div>
+              {appointment.notes && (
+                <div style={{ marginBottom: 8 }}>
+                  <Text type="secondary">备注: </Text>
+                  <Text>{appointment.notes}</Text>
+                </div>
+              )}
+              {appointment.approval_status === 'rejected' && appointment.rejection_reason && (
+                <div style={{ marginBottom: 8 }}>
+                  <Text type="secondary" strong style={{ color: '#ff4d4f' }}>拒绝理由: </Text>
+                  <Text type="danger">{appointment.rejection_reason}</Text>
+                </div>
+              )}
+              {appointment.review_time && (
+                <div style={{ marginBottom: 8 }}>
+                  <Text type="secondary">审核时间: </Text>
+                  <Text>{appointment.review_time}</Text>
+                </div>
+              )}
+              <div>
+                <Text type="secondary">发布时间: </Text>
+                <Text>{appointment.created_at}</Text>
+              </div>
+            </>
+          }
+        />
+      </List.Item>
+    );
+  };
+
   return (
     <MainLayout>
       <Content style={{ padding: '24px' }}>
@@ -329,6 +434,16 @@ const CoachDashboard = () => {
               dataSource={appointments.filter(a => a.status === 'cancelled' || a.status === 'rejected')}
               renderItem={renderAppointmentItem}
               locale={{ emptyText: <Empty description="暂无已取消/拒绝预约" /> }}
+            />
+          </TabPane>
+          
+          <TabPane tab="我发布的预约" key="published">
+            <List
+              loading={publishedLoading}
+              itemLayout="horizontal"
+              dataSource={publishedAppointments}
+              renderItem={renderPublishedAppointmentItem}
+              locale={{ emptyText: <Empty description="暂无发布的预约信息" /> }}
             />
           </TabPane>
         </Tabs>

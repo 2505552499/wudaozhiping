@@ -80,28 +80,45 @@ const MainLayout = ({ children }) => {
     navigate('/login');
   };
 
-  const userMenu = (
-    <Menu>
-      <Menu.Item key="username" disabled>
-        <UserOutlined /> {username}
-      </Menu.Item>
-      <Menu.Item key="role" disabled>
-        {role === 'coach' ? <TeamOutlined /> : <UserOutlined />} 
-        {role === 'coach' ? '教练员' : '普通用户'}
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item key="messages" onClick={() => navigate('/messages')}>
-        <MessageOutlined /> 消息中心
-        {unreadMessages > 0 && (
-          <Badge count={unreadMessages} style={{ marginLeft: 8 }} />
-        )}
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item key="logout" onClick={handleLogout}>
-        <LogoutOutlined /> 退出登录
-      </Menu.Item>
-    </Menu>
-  );
+  const userMenuItems = [
+    {
+      key: 'username',
+      disabled: true,
+      icon: <UserOutlined />,
+      label: username
+    },
+    {
+      key: 'role',
+      disabled: true,
+      icon: role === 'coach' ? <TeamOutlined /> : <UserOutlined />,
+      label: role === 'coach' ? '教练员' : '普通用户'
+    },
+    {
+      type: 'divider'
+    },
+    {
+      key: 'messages',
+      icon: <MessageOutlined />,
+      label: (
+        <span>
+          消息中心
+          {unreadMessages > 0 && (
+            <Badge count={unreadMessages} style={{ marginLeft: 8 }} />
+          )}
+        </span>
+      ),
+      onClick: () => navigate('/messages')
+    },
+    {
+      type: 'divider'
+    },
+    {
+      key: 'logout',
+      icon: <LogoutOutlined />,
+      label: '退出登录',
+      onClick: handleLogout
+    }
+  ];
 
   // 根据用户角色生成不同的菜单项
   const getMenuItems = () => {
@@ -133,15 +150,29 @@ const MainLayout = ({ children }) => {
       }
     ];
     
+    // 管理员特有的菜单项
+    if (role === 'admin') {
+      commonItems.push({
+        key: '/admin-review',
+        icon: <TeamOutlined />,
+        label: '预约审核',
+      });
+    }
     // 教练特有的菜单项
-    if (role === 'coach') {
+    else if (role === 'coach') {
       commonItems.push({
         key: '/coach-dashboard',
         icon: <TeamOutlined />,
         label: '教练管理',
       });
-    } else {
-      // 普通用户特有的菜单项
+      commonItems.push({
+        key: '/coach-appointment-create',
+        icon: <MessageOutlined />,
+        label: '发布预约',
+      });
+    } 
+    // 普通用户特有的菜单项
+    else {
       commonItems.push({
         key: '/coach-appointment',
         icon: <TeamOutlined />,
@@ -181,7 +212,7 @@ const MainLayout = ({ children }) => {
           onClick={() => navigate('/messages')}
           style={{ marginRight: 8 }}
         />
-        <Dropdown overlay={userMenu} placement="bottomRight">
+        <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
           <Button type="text" style={{ color: 'white' }}>
             <Avatar icon={<UserOutlined />} style={{ marginRight: 8 }} />
             {username}

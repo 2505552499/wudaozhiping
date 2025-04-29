@@ -15,6 +15,11 @@ import CoachAppointment from './pages/CoachAppointment';
 import CoachDashboard from './pages/CoachDashboard';
 import CoachProfile from './pages/CoachProfile';
 import MessageCenter from './pages/MessageCenter';
+import AdminAppointmentReview from './pages/AdminAppointmentReview';
+import CoachCreateAppointment from './pages/CoachCreateAppointment';
+import CoachDetail from './pages/CoachDetail';
+import CoachProfileEdit from './pages/CoachProfileEdit';
+import CoachAppointmentCreate from './pages/CoachAppointmentCreate';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -81,6 +86,39 @@ function App() {
             <Route path="/settings" element={
               <ProtectedRoute>
                 <Settings />
+              </ProtectedRoute>
+            } />
+            {/* 管理员预约审核页面 */}
+            <Route path="/admin-review" element={
+              <ProtectedRoute>
+                <AdminAppointmentReview />
+              </ProtectedRoute>
+            } />
+            {/* 教练创建预约页面 */}
+            <Route path="/coach-create-appointment" element={
+              <ProtectedRoute>
+                <CoachCreateAppointment />
+              </ProtectedRoute>
+            } />
+            
+            {/* 教练详情页面 */}
+            <Route path="/coach/:coachId" element={
+              <ProtectedRoute>
+                <CoachDetail />
+              </ProtectedRoute>
+            } />
+            
+            {/* 教练资料编辑页面 */}
+            <Route path="/coach-profile-edit" element={
+              <ProtectedRoute>
+                <CoachProfileEdit />
+              </ProtectedRoute>
+            } />
+            
+            {/* 教练发布预约页面 */}
+            <Route path="/coach-appointment-create" element={
+              <ProtectedRoute>
+                <CoachAppointmentCreate />
               </ProtectedRoute>
             } />
             <Route path="*" element={<Navigate to="/" replace />} />
