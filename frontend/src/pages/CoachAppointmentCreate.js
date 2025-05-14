@@ -101,7 +101,7 @@ const CoachAppointmentCreate = () => {
               layout="vertical"
               onFinish={handleSubmit}
               initialValues={{
-                price: 150
+                price: 120 // 默认价格为120元/小时
               }}
             >
               <Row gutter={16}>

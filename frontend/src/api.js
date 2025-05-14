@@ -127,6 +127,41 @@ export const adminAPI = {
   },
 };
 
+// 武友论坛相关API
+export const forumAPI = {
+  // 获取帖子列表（已审核通过的）
+  getPosts: (page = 1, perPage = 10) => 
+    api.get(`/api/forum/posts?page=${page}&per_page=${perPage}`),
+  
+  // 获取帖子详情
+  getPostDetail: (postId) => api.get(`/api/forum/posts/${postId}`),
+  
+  // 创建帖子
+  createPost: (data) => api.post('/api/forum/posts', data),
+  
+  // 获取用户自己发布的帖子
+  getUserPosts: (page = 1, perPage = 10) => 
+    api.get(`/api/forum/posts/user?page=${page}&per_page=${perPage}`),
+  
+  // 获取待审核的帖子（仅管理员可用）
+  getPendingPosts: (page = 1, perPage = 10) => 
+    api.get(`/api/forum/posts/pending?page=${page}&per_page=${perPage}`),
+  
+  // 审核帖子（仅管理员可用）
+  reviewPost: (postId, action, reason) => 
+    api.post(`/api/forum/posts/${postId}/review`, { action, reason }),
+  
+  // 添加评论
+  addComment: (postId, content) => 
+    api.post(`/api/forum/posts/${postId}/comments`, { content }),
+  
+  // 点赞帖子
+  likePost: (postId) => api.post(`/api/forum/posts/${postId}/like`),
+  
+  // 点赞评论
+  likeComment: (commentId) => api.post(`/api/forum/comments/${commentId}/like`)
+};
+
 // 通用的带认证的fetch函数，用于管理员审核等功能
 export const fetchWithAuth = async (url, options = {}) => {
   try {

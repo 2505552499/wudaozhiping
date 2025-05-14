@@ -1,0 +1,149 @@
+{
+    "mappings": [
+        {
+            "appointment_id": "5fffb00e-7a69-4fa4-aabb-15fcb9d17dd8",
+            "out_trade_no": "WD202505140337385a4042b7",
+            "created_at": "2025-05-14T03:37:38.612081"
+        },
+        {
+            "appointment_id": "5fffb00e-7a69-4fa4-aabb-15fcb9d17dd8",
+            "out_trade_no": "WD202505140342484739b2f4",
+            "created_at": "2025-05-14T03:42:48.990155"
+        },
+        {
+            "appointment_id": "6f636d3c-7ede-4da6-86f1-d130cd145b58",
+            "out_trade_no": "WD2025051403475023586208",
+            "created_at": "2025-05-14T03:47:50.488686"
+        },
+        {
+            "appointment_id": "1",
+            "out_trade_no": "WD20250514035020338b29ec",
+            "created_at": "2025-05-14T03:50:20.447560"
+        },
+        {
+            "appointment_id": "b6a04188-9a80-4cf3-bfc3-e76530127440",
+            "out_trade_no": "WD20250514035409bfbd9225",
+            "created_at": "2025-05-14T03:54:09.082304"
+        },
+        {
+            "appointment_id": "265f5f55-3482-426d-ac3e-922efae0fa79",
+            "out_trade_no": "WD202505140419411db2c6d6",
+            "created_at": "2025-05-14T04:19:41.414568"
+        },
+        {
+            "appointment_id": "c78cc1b6-36af-4657-a428-7b74c12f2539",
+            "out_trade_no": "WD20250514042717b80329e5",
+            "created_at": "2025-05-14T04:27:17.013195"
+        },
+        {
+            "appointment_id": "963ecf62-b81d-4246-9a31-1143d6a3cbeb",
+            "out_trade_no": "WD2025051404284231face75",
+            "created_at": "2025-05-14T04:28:42.663158"
+        },
+        {
+            "appointment_id": "21d4a034-a238-430f-92bb-d52a29223204",
+            "out_trade_no": "WD202505140432448c2853be",
+            "created_at": "2025-05-14T04:32:44.759646"
+        },
+        {
+            "appointment_id": "21d4a034-a238-430f-92bb-d52a29223204",
+            "out_trade_no": "WD2025051404335684c5f0cf",
+            "created_at": "2025-05-14T04:33:56.936035"
+        },
+        {
+            "appointment_id": "21d4a034-a238-430f-92bb-d52a29223204",
+            "out_trade_no": "WD20250514044225b2008ddf",
+            "created_at": "2025-05-14T04:42:25.931124"
+        },
+        {
+            "appointment_id": "3943e0e1-3954-46b5-a36b-7b0d5f04c95e",
+            "out_trade_no": "WD202505140443403383f135",
+            "created_at": "2025-05-14T04:43:40.262408"
+        },
+        {
+            "appointment_id": "21d4a034-a238-430f-92bb-d52a29223204",
+            "out_trade_no": "WD2025051404500458b312cd",
+            "created_at": "2025-05-14T04:50:04.574818"
+        },
+        {
+            "appointment_id": "ace51114-e067-4c16-bb50-f34f01f347e6",
+            "out_trade_no": "WD2025051404503708e343f7",
+            "created_at": "2025-05-14T04:50:37.036634"
+        },
+        {
+            "appointment_id": "21d4a034-a238-430f-92bb-d52a29223204",
+            "out_trade_no": "WD202505140457212938a90b",
+            "created_at": "2025-05-14T04:57:21.055409"
+        },
+        {
+            "appointment_id": "ace51114-e067-4c16-bb50-f34f01f347e6",
+            "out_trade_no": "WD202505140457379cd57888",
+            "created_at": "2025-05-14T04:57:37.843546"
+        },
+        {
+            "appointment_id": "21d4a034-a238-430f-92bb-d52a29223204",
+            "out_trade_no": "WD202505140857572ce0aca6",
+            "created_at": "2025-05-14T08:57:57.066592"
+        },
+        {
+            "appointment_id": "3249e7e9-8ef1-4357-9f1e-427e4a2e1bb1",
+            "out_trade_no": "WD202505140858249e2138a9",
+            "created_at": "2025-05-14T08:58:24.555715"
+        },
+        {
+            "appointment_id": "3249e7e9-8ef1-4357-9f1e-427e4a2e1bb1",
+            "out_trade_no": "WD20250514085928c1dbcc81",
+            "created_at": "2025-05-14T08:59:28.732129"
+        },
+        {
+            "appointment_id": "21d4a034-a238-430f-92bb-d52a29223204",
+            "out_trade_no": "WD202505140904555dcbb9a7",
+            "created_at": "2025-05-14T09:04:55.968713"
+        },
+        {
+            "appointment_id": "0ada9392-0972-4865-9232-160cff0b0b60",
+            "out_trade_no": "WD20250514090945934c5a80",
+            "created_at": "2025-05-14T09:09:45.277541"
+        },
+        {
+            "appointment_id": "0ada9392-0972-4865-9232-160cff0b0b60",
+            "out_trade_no": "WD2025051409275874adc1f5",
+            "created_at": "2025-05-14T09:27:58.130156"
+        },
+        {
+            "appointment_id": "0ada9392-0972-4865-9232-160cff0b0b60",
+            "out_trade_no": "WD202505140928263cf81228",
+            "created_at": "2025-05-14T09:28:26.299801"
+        },
+        {
+            "appointment_id": "116f7bbc-c903-4d0e-977d-a6a42c4d86cc",
+            "out_trade_no": "WD20250514093640ce1de758",
+            "created_at": "2025-05-14T09:36:41.002337"
+        },
+        {
+            "appointment_id": "21d4a034-a238-430f-92bb-d52a29223204",
+            "out_trade_no": "WD202505140946560517ed5f",
+            "created_at": "2025-05-14T09:46:56.398327"
+        },
+        {
+            "appointment_id": "39eea2e1-1924-48c0-bf5a-69b407c63a25",
+            "out_trade_no": "WD202505140947216c6ccd7c",
+            "created_at": "2025-05-14T09:47:21.637526"
+        },
+        {
+            "appointment_id": "ace51114-e067-4c16-bb50-f34f01f347e6",
+            "out_trade_no": "WD2025051409533026bb84de",
+            "created_at": "2025-05-14T09:53:30.209430"
+        },
+        {
+            "appointment_id": "21d4a034-a238-430f-92bb-d52a29223204",
+            "out_trade_no": "WD202505140953403e31e32b",
+            "created_at": "2025-05-14T09:53:40.167483"
+        },
+        {
+            "appointment_id": "da21dd6b-ce15-493f-8806-14487dfb87d5",
+            "out_trade_no": "WD202505140954062d9c02b5",
+            "created_at": "2025-05-14T09:54:06.709964"
+        }
+    ]
+}

@@ -132,6 +132,9 @@ const MessageCenter = () => {
           )
         );
         
+        // 强制刷新一次消息列表，确保未读状态正确更新
+        fetchMessages();
+        
         // 触发自定义事件，通知其他组件更新未读消息计数
         const event = new CustomEvent('unreadMessagesChanged');
         window.dispatchEvent(event);
@@ -147,11 +150,22 @@ const MessageCenter = () => {
     
     // 标记该联系人的所有未读消息为已读
     if (conversations[contactId]) {
-      conversations[contactId].forEach(msg => {
-        if (!msg.read) {
-          markAsRead(msg.id);
-        }
-      });
+      const unreadMessages = conversations[contactId].filter(msg => !msg.read);
+      
+      // 如果有未读消息，标记它们为已读
+      if (unreadMessages.length > 0) {
+        Promise.all(unreadMessages.map(msg => markAsRead(msg.id)))
+          .then(() => {
+            // 强制刷新未读消息计数
+            fetchMessages();
+            
+            // 请求完成后触发一个额外的事件来更新在所有地方的未读计数
+            setTimeout(() => {
+              const event = new CustomEvent('unreadMessagesChanged');
+              window.dispatchEvent(event);
+            }, 500); // 增加延时确保所有消息已被标记
+          });
+      }
     }
   };
 

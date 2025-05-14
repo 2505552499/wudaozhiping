@@ -20,6 +20,20 @@ import CoachCreateAppointment from './pages/CoachCreateAppointment';
 import CoachDetail from './pages/CoachDetail';
 import CoachProfileEdit from './pages/CoachProfileEdit';
 import CoachAppointmentCreate from './pages/CoachAppointmentCreate';
+// 支付结果页面
+import PaymentResult from './pages/PaymentResult';
+// 武友论坛页面
+import ForumList from './pages/ForumList';
+import ForumDetail from './pages/ForumDetail';
+import ForumCreate from './pages/ForumCreate';
+import ForumMyPosts from './pages/ForumMyPosts';
+import ForumReview from './pages/ForumReview';
+
+// 精品课程页面
+import CourseList from './pages/CourseList';
+import CourseDetail from './pages/CourseDetail';
+import AdminCourseManagement from './pages/AdminCourseManagement';
+import EnrollmentSuccess from './pages/EnrollmentSuccess';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -121,6 +135,58 @@ function App() {
                 <CoachAppointmentCreate />
               </ProtectedRoute>
             } />
+            
+            {/* 支付结果页面 */}
+            <Route path="/payment/result" element={
+              <ProtectedRoute>
+                <PaymentResult />
+              </ProtectedRoute>
+            } />
+            
+            {/* 武友论坛路由 */}
+            <Route path="/forum" element={
+              <ProtectedRoute>
+                <ForumList />
+              </ProtectedRoute>
+            } />
+            <Route path="/forum/post/:postId" element={
+              <ProtectedRoute>
+                <ForumDetail />
+              </ProtectedRoute>
+            } />
+            <Route path="/forum/create" element={
+              <ProtectedRoute>
+                <ForumCreate />
+              </ProtectedRoute>
+            } />
+            <Route path="/forum/my-posts" element={
+              <ProtectedRoute>
+                <ForumMyPosts />
+              </ProtectedRoute>
+            } />
+            <Route path="/forum/review" element={
+              <ProtectedRoute>
+                <ForumReview />
+              </ProtectedRoute>
+            } />
+            
+            {/* 精品课程路由 */}
+            <Route path="/courses" element={
+              <CourseList />
+            } />
+            <Route path="/courses/:courseId" element={
+              <CourseDetail />
+            } />
+            <Route path="/admin/courses" element={
+              <ProtectedRoute>
+                <AdminCourseManagement />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/enrollment-success" element={
+              <EnrollmentSuccess />
+            } />
+            
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>

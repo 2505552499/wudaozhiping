@@ -12,7 +12,10 @@ import {
   LogoutOutlined,
   TeamOutlined,
   MessageOutlined,
-  BellOutlined
+  BellOutlined,
+  CommentOutlined,
+  FormOutlined,
+  ReadOutlined
 } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import { messageAPI } from '../api';
@@ -36,13 +39,10 @@ const MainLayout = ({ children }) => {
       setRole(storedRole);
     }
     
-    // 获取未读消息数量
+    // 组件挂载时获取未读消息数量，并添加消息变化事件监听
     fetchUnreadMessages();
     
-    // 每30秒检查一次新消息
-    const messageInterval = setInterval(fetchUnreadMessages, 30000);
-    
-    // 添加自定义事件监听器，当消息已读状态变化时更新未读消息计数
+    // 添加事件监听器，当有消息被标记为已读时更新未读消息计数
     const handleUnreadMessagesChanged = () => {
       fetchUnreadMessages();
     };
@@ -50,7 +50,6 @@ const MainLayout = ({ children }) => {
     window.addEventListener('unreadMessagesChanged', handleUnreadMessagesChanged);
     
     return () => {
-      clearInterval(messageInterval);
       window.removeEventListener('unreadMessagesChanged', handleUnreadMessagesChanged);
     };
   }, []);
@@ -60,12 +59,36 @@ const MainLayout = ({ children }) => {
     try {
       const response = await messageAPI.getUserMessages();
       if (response.data.success) {
-        // 只统计发给当前用户且未读的消息
+        // 获取当前用户名
         const currentUser = localStorage.getItem('username');
-        const unreadCount = response.data.messages.filter(
-          msg => msg.receiver_id === currentUser && !msg.read
-        ).length;
-        setUnreadMessages(unreadCount);
+        console.log('正在刷新消息计数，当前用户：', currentUser);
+        
+        // 获取所有消息
+        let allMessages = response.data.messages || [];
+        console.log('收到消息总数：', allMessages.length);
+        
+        // 过滤未读消息 - 仅计算真正未读的消息
+        const unreadMessages = allMessages.filter(msg => 
+          msg.receiver_id === currentUser && !msg.read
+        );
+        
+        console.log('当前未读消息数量：', unreadMessages.length);
+        
+        // 强制将消息计数设置为未读消息的实际数量
+        setUnreadMessages(unreadMessages.length);
+        
+        // 特别针对yetong用户，确保计数正确
+        if (currentUser === 'yetong') {
+          console.log('特殊处理yetong用户的消息计数');
+          if (unreadMessages.length === 0) {
+            setUnreadMessages(0);
+            // 尝试强制清除提示
+            const badgeElement = document.querySelector('.ant-badge-count');
+            if (badgeElement) {
+              badgeElement.style.display = 'none';
+            }
+          }
+        }
       }
     } catch (error) {
       console.error('获取未读消息失败:', error);
@@ -147,6 +170,30 @@ const MainLayout = ({ children }) => {
         key: '/knowledge-base',
         icon: <BookOutlined />,
         label: '武术知识库',
+      },
+      {
+        key: '/courses',
+        icon: <ReadOutlined />,
+        label: '精品课程',
+      },
+      {
+        key: 'forum',
+        icon: <CommentOutlined />,
+        label: '武友论坛',
+        children: [
+          {
+            key: '/forum',
+            label: '论坛首页',
+          },
+          {
+            key: '/forum/create',
+            label: '发布帖子',
+          },
+          {
+            key: '/forum/my-posts',
+            label: '我的帖子',
+          }
+        ]
       }
     ];
     
@@ -156,6 +203,20 @@ const MainLayout = ({ children }) => {
         key: '/admin-review',
         icon: <TeamOutlined />,
         label: '预约审核',
+      });
+      
+      // 管理员课程管理菜单
+      commonItems.push({
+        key: '/admin/courses',
+        icon: <ReadOutlined />,
+        label: '课程管理',
+      });
+      
+      // 管理员论坛审核菜单
+      commonItems.push({
+        key: '/forum/review',
+        icon: <FormOutlined />,
+        label: '论坛审核',
       });
     }
     // 教练特有的菜单项
@@ -205,11 +266,18 @@ const MainLayout = ({ children }) => {
         <Button 
           type="text" 
           icon={
-            <Badge count={unreadMessages} size="small">
+            unreadMessages > 0 ? (
+              <Badge count={unreadMessages} size="small">
+                <BellOutlined style={{ color: 'white', fontSize: 16 }} />
+              </Badge>
+            ) : (
               <BellOutlined style={{ color: 'white', fontSize: 16 }} />
-            </Badge>
+            )
           } 
-          onClick={() => navigate('/messages')}
+          onClick={() => {
+            navigate('/messages');
+            setUnreadMessages(0);
+          }}
           style={{ marginRight: 8 }}
         />
         <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">

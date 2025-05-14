@@ -14,10 +14,17 @@ from werkzeug.utils import secure_filename
 import model
 from coordinate_master import *
 import web_model  # Import the new web_model module
+import forum_api  # Import the forum API module
+from payment_api import payment_api  # Import the payment API module
+from course_api import course_api  # Import the course API module
 
 # Initialize Flask app
 app = Flask(__name__, static_folder='frontend/build')
 CORS(app)
+
+# Register blueprints
+app.register_blueprint(payment_api)
+app.register_blueprint(course_api)
 
 # 配置静态文件路径
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -874,17 +881,28 @@ def filter_coaches():
 def get_user_appointments():
     """获取用户的所有预约"""
     current_user = get_jwt_identity()
+    print(f"查询用户 {current_user} 的预约")
     
     try:
+        if not os.path.exists(APPOINTMENTS_DATA_FILE):
+            print(f"预约文件不存在: {APPOINTMENTS_DATA_FILE}")
+            return jsonify({'appointments': []}), 200
+            
         with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
             appointments_data = json.load(f)
         
-        # 只返回审核通过且未被撤销的预约
+        if not isinstance(appointments_data, dict) or 'appointments' not in appointments_data:
+            print("预约数据格式错误")
+            return jsonify({'appointments': []}), 200
+            
+        # 返回该用户的所有预约，不论状态
         user_appointments = [a for a in appointments_data['appointments'] 
-                           if a.get('user_id') == current_user and 
-                           a.get('approval_status') == 'approved']
+                           if a.get('user_id') == current_user]
+                           
+        print(f"找到用户 {current_user} 的 {len(user_appointments)} 条预约记录")
         return jsonify({'appointments': user_appointments}), 200
     except Exception as e:
+        print(f"获取预约失败: {str(e)}")
         return jsonify({'success': False, 'message': f'获取预约失败: {str(e)}'}), 500
 
 @app.route('/api/appointments', methods=['POST'])
@@ -1444,11 +1462,14 @@ def get_pending_appointments():
             data = json.load(f)
             appointments = data.get('appointments', [])
             
-        # Filter appointments based on approval status
+        # 返回教练发布的预约信息（使用多种条件识别）
         status = request.args.get('status', 'pending')  # pending, approved, rejected
         filtered_appointments = [
             apt for apt in appointments 
-            if apt.get('approval_status', 'pending') == status
+            if apt.get('approval_status', 'pending') == status and 
+              # 教练发布的预约不应该有user_id（或为空），并且应该有coach_id
+              (apt.get('type') == 'coach' or 
+               (apt.get('user_id', '') == '' and apt.get('coach_id') is not None))
         ]
         
         return jsonify({
@@ -1830,18 +1851,27 @@ def user_create_appointment():
         return jsonify({'success': False, 'message': '请求数据无效'}), 400
     
     try:
-        # 验证教练是否存在
-        with open(COACHES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
-            coaches_data = json.load(f)
+        # 尝试获取教练信息，但即使教练不存在也不会阻止预约创建
+        coach_name = "未知教练"
+        coach_avatar = None
+        coach_location = {"city": "北京市", "districts": ["海淀区"]}
         
-        # 确保coaches_data是列表格式
-        coaches_list = coaches_data if isinstance(coaches_data, list) else coaches_data.get('coaches', [])
-        
-        coach = next((c for c in coaches_list if c['id'] == data['coach_id']), None)
-        if not coach:
-            error_msg = f'教练不存在: {data["coach_id"]}'
-            print(f"预约失败: {error_msg}")
-            return jsonify({'success': False, 'message': error_msg}), 404
+        try:
+            with open(COACHES_DATA_FILE, 'r', encoding='utf-8-sig') as f:
+                coaches_data = json.load(f)
+            
+            # 确保coaches_data是列表格式
+            coaches_list = coaches_data if isinstance(coaches_data, list) else coaches_data.get('coaches', [])
+            
+            coach = next((c for c in coaches_list if c['id'] == data['coach_id']), None)
+            if coach:
+                coach_name = coach['name']
+                coach_avatar = coach.get('avatar')
+                coach_location = coach.get('location', {"city": "北京市", "districts": ["海淀区"]})
+            else:
+                print(f"注意: 教练不存在: {data['coach_id']}, 但仍然允许创建预约")
+        except Exception as e:
+            print(f"警告: 获取教练信息时出错: {str(e)}, 但仍然允许创建预约")
         
         # 创建新预约
         try:
@@ -1861,18 +1891,27 @@ def user_create_appointment():
             import uuid
             appointment_id = str(uuid.uuid4())
             
+            # 使用默认位置或数据中提供的位置
+            location = data.get('location')
+            if not location and coach_location:
+                try:
+                    location = f"{coach_location['city']} {coach_location['districts'][0]}"
+                except:
+                    location = "未指定位置"
+            
             new_appointment = {
                 'id': appointment_id,
                 'user_id': current_user,
                 'coach_id': data['coach_id'],
-                'coach_name': coach['name'],
-                'coach_avatar': coach.get('avatar'),
+                'coach_name': coach_name,
+                'coach_avatar': coach_avatar,
                 'date': data['date'],
                 'time': data['time'],
-                'location': data.get('location', f"{coach['location']['city']} {coach['location']['districts'][0]}"),
-                'skill': data['skill'],
+                'location': location or "未指定位置",
+                'skill': data.get('skill', ''),
                 'duration': data.get('duration', 1),
                 'status': 'pending',
+                'payment_status': 'unpaid',  # 默认为未支付
                 'created_at': get_current_time()
             }
             
@@ -1882,7 +1921,12 @@ def user_create_appointment():
                 json.dump(appointments_data, f, indent=4, ensure_ascii=False)
             
             print(f"用户预约创建成功: {new_appointment}")
-            return jsonify({'success': True, 'message': '预约创建成功', 'appointment': new_appointment}), 201
+            return jsonify({
+                'success': True, 
+                'message': '预约创建成功', 
+                'appointment': new_appointment,
+                'appointment_id': appointment_id  # 明确返回appointment_id字段
+            }), 201
         except Exception as e:
             error_msg = f'创建预约时出错: {str(e)}'
             print(f"预约失败: {error_msg}")
@@ -2036,6 +2080,50 @@ def get_coach_published_appointments():
         })
     except Exception as e:
         return jsonify({'success': False, 'message': f'获取发布预约信息失败: {str(e)}'}), 500
+
+# 武友论坛API路由
+@app.route('/api/forum/posts', methods=['GET'])
+def api_get_forum_posts():
+    return forum_api.get_posts()
+
+@app.route('/api/forum/posts', methods=['POST'])
+@jwt_required()
+def api_create_forum_post():
+    return forum_api.create_post()
+
+@app.route('/api/forum/posts/pending', methods=['GET'])
+@jwt_required()
+def api_get_pending_forum_posts():
+    return forum_api.get_pending_posts()
+
+@app.route('/api/forum/posts/user', methods=['GET'])
+@jwt_required()
+def api_get_user_forum_posts():
+    return forum_api.get_user_posts()
+
+@app.route('/api/forum/posts/<post_id>', methods=['GET'])
+def api_get_forum_post_detail(post_id):
+    return forum_api.get_post_detail(post_id)
+
+@app.route('/api/forum/posts/<post_id>/review', methods=['POST'])
+@jwt_required()
+def api_review_forum_post(post_id):
+    return forum_api.review_post(post_id)
+
+@app.route('/api/forum/posts/<post_id>/comments', methods=['POST'])
+@jwt_required()
+def api_add_forum_comment(post_id):
+    return forum_api.add_comment(post_id)
+
+@app.route('/api/forum/posts/<post_id>/like', methods=['POST'])
+@jwt_required()
+def api_like_forum_post(post_id):
+    return forum_api.like_post(post_id)
+
+@app.route('/api/forum/comments/<comment_id>/like', methods=['POST'])
+@jwt_required()
+def api_like_forum_comment(comment_id):
+    return forum_api.like_comment(comment_id)
 
 # Serve frontend in production
 @app.route('/', defaults={'path': ''})

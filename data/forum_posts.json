@@ -1,0 +1,18 @@
+{
+    "posts": [
+        {
+            "id": "0cebc8d8-f3b3-46c6-b01f-93da4a47abc3",
+            "title": "测试",
+            "content": "论坛功能测试",
+            "author": "yetong",
+            "created_at": "2025-05-04T10:29:39.812305",
+            "updated_at": "2025-05-04T10:29:39.812305",
+            "status": "approved",
+            "likes": 2,
+            "views": 12,
+            "tags": [],
+            "review_by": "admin",
+            "review_at": "2025-05-04T10:30:13.035760"
+        }
+    ]
+}

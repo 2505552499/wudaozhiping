@@ -74,5 +74,24 @@
         "rating": 4.9,
         "bookable": true,
         "description": "专业游泳教练，曾获全国游泳比赛冠军，教学经验丰富。"
+    },
+    {
+        "id": "coach5",
+        "name": "coach5",
+        "gender": "male",
+        "avatar": "/img/coach_avatar_5.png",
+        "level": "Lv1",
+        "skills": ["足球", "羽毛球", "游泳"],
+        "price": 225,
+        "location": {
+            "city": "北京市",
+            "districts": ["东城区", "西城区", "朝阳区"]
+        },
+        "school": "河南大学",
+        "certification": "CSEA 体教联盟体育生身份认证",
+        "technical_level": "二级运动员",
+        "rating": 4.7,
+        "bookable": true,
+        "description": "多项运动专业教练，擅长足球和羽毛球训练，教学风格活泼。"
     }
 ]}

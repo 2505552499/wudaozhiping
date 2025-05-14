@@ -117,7 +117,7 @@ def start_frontend():
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
             )
-        print("✓ 前端服务已启动 (http://localhost:3000)")
+        print("✓ 前端服务已启动 (http://localhost:3001)")
         return frontend_process
     except Exception as e:
         print(f"✗ 启动前端服务失败: {e}")
@@ -127,7 +127,7 @@ def open_browser():
     """打开浏览器访问应用"""
     print("\n正在打开浏览器...")
     time.sleep(5)  # 等待服务启动
-    webbrowser.open("http://localhost:3000")
+    webbrowser.open("http://localhost:3001")
     print("✓ 已在浏览器中打开应用")
 
 def main():
@@ -162,7 +162,7 @@ def main():
     
     print("\n武道智评系统已启动！")
     print("- 后端API: http://localhost:5000")
-    print("- 前端界面: http://localhost:3000")
+    print("- 前端界面: http://localhost:3001")
     print("\n按Ctrl+C停止服务...\n")
     
     try:

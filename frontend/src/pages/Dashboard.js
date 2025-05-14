@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Button, Statistic } from 'antd';
-import { FileImageOutlined, VideoCameraOutlined, CameraOutlined, BookOutlined, TeamOutlined } from '@ant-design/icons';
+import { FileImageOutlined, VideoCameraOutlined, CameraOutlined, BookOutlined, TeamOutlined, ReadOutlined, TrophyOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '../components/MainLayout';
 
@@ -31,6 +31,13 @@ const Dashboard = () => {
       color: '#fff7e6',
     },
     {
+      title: '精品课程',
+      icon: <ReadOutlined style={{ fontSize: 48, color: '#f5222d' }} />,
+      description: '浏览太极、防身术等精品班课程，拥有专业教练团队指导，提升武术技能。',
+      route: '/courses',
+      color: '#fff1f0',
+    },
+    {
       title: '武术知识库',
       icon: <BookOutlined style={{ fontSize: 48, color: '#722ed1' }} />,
       description: '浏览各种武术动作的标准姿势、要点和技巧，提高您的武术水平。',
@@ -43,6 +50,13 @@ const Dashboard = () => {
       description: '预约专业武术教练进行一对一指导，提升训练效果，获得个性化指导。',
       route: '/coach-appointment',
       color: '#fff0f6',
+    },
+    {
+      title: '武友论坛',
+      icon: <TrophyOutlined style={{ fontSize: 48, color: '#faad14' }} />,
+      description: '加入武友论坛，分享学习经验，交流武术心得，结交志同道合的武友。',
+      route: '/forum',
+      color: '#fffbe6',
     },
   ];
 

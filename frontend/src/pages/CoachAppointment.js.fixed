@@ -1,0 +1,938 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Layout, Typography, Card, Row, Col, Button, Select, 
+  Input, Tag, Avatar, Rate, Modal, Form, DatePicker, 
+  TimePicker, message, Tabs, List, Badge, Divider, Space, Empty, Spin
+} from 'antd';
+import { 
+  UserOutlined, EnvironmentOutlined, CalendarOutlined, 
+  ClockCircleOutlined, SearchOutlined, FilterOutlined
+} from '@ant-design/icons';
+import MainLayout from '../layouts/MainLayout';
+import { useNavigate, useLocation } from 'react-router-dom';
+import moment from 'moment';
+
+// 撖澆�API�滚𦛚
+import coachAPI from '../api/coachAPI';
+import appointmentAPI from '../api/appointmentAPI';
+import paymentService from '../services/paymentService';
+
+// 撖澆��芸�銋厩�隞?import AppointmentListItem from '../components/AppointmentListItem';
+
+const { Content } = Layout;
+const { Title, Text } = Typography;
+const { Option } = Select;
+const { TabPane } = Tabs;
+
+// �舀���悌蝏�★�桅�厰★
+const skillOptions = [
+  '憭芣��?, '�怠㩋�?, '�𤩺坾�?, '敶Ｘ��?, '�急��?,
+  '���', '頝�箲�?, '蝛箸��?, '甇行钟憟𡑒楝', '�嗡�'
+];
+
+function CoachAppointment() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // �嗆���銋?  const [activeTab, setActiveTab] = useState('1');
+  const [loading, setLoading] = useState(false);
+  const [coaches, setCoaches] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+  const [appointmentLoading, setAppointmentLoading] = useState(false);
+  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+  const [showCoachDetailModal, setShowCoachDetailModal] = useState(false);
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [selectedCoach, setSelectedCoach] = useState(null);
+  const [appointmentFormData, setAppointmentFormData] = useState(null);
+  const [paymentData, setPaymentData] = useState(null);
+  const [cities, setCities] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [paymentAppointmentId, setPaymentAppointmentId] = useState(null);
+  
+  // 蝑偦�㗇辺隞?  const [filters, setFilters] = useState({
+    city: undefined,
+    district: undefined,
+    skill: undefined
+  });
+  
+  // 璉��冊RL��㺭嚗���𨀣�tab��㺭嚗諹䌊�典��Ｗ������倌
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tab = params.get('tab');
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [location]);
+  
+  // �瑕��嗵��𡑒”
+  const fetchCoaches = async () => {
+    setLoading(true);
+    try {
+      const response = await coachAPI.getCoaches();
+      setCoaches(response.data.coaches || []);
+    } catch (error) {
+      console.error('�瑕��嗵��𡑒”憭梯揖:', error);
+      message.error('�瑕��嗵��𡑒”憭梯揖嚗諹窈蝔滚��滩�');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // �瑕��𤾸��𡑒”
+  const fetchCities = async () => {
+    try {
+      const response = await coachAPI.getCities();
+      setCities(response.data.cities || []);
+    } catch (error) {
+      console.error('�瑕��𤾸��𡑒”憭梯揖:', error);
+    }
+  };
+
+  // �瑕��箏��𡑒”
+  const fetchDistricts = async (city) => {
+    if (!city) {
+      setDistricts([]);
+      return;
+    }
+    
+    try {
+      const response = await coachAPI.getDistricts(city);
+      setDistricts(response.data.districts || []);
+    } catch (error) {
+      console.error('�瑕��箏��𡑒”憭梯揖:', error);
+    }
+  };
+
+  // �瑕��冽�憸�漲�𡑒”
+  const fetchUserAppointments = async () => {
+    setAppointmentLoading(true);
+    try {
+      const response = await appointmentAPI.getUserAppointments();
+      setAppointments(response.data.appointments || []);
+    } catch (error) {
+      console.error('�瑕�憸�漲�𡑒”憭梯揖:', error);
+      message.error('�瑕�憸�漲�𡑒”憭梯揖嚗諹窈蝔滚��滩�');
+    } finally {
+      setAppointmentLoading(false);
+    }
+  };
+
+  // �滨蔭蝑偦�㗇辺隞?  const handleResetFilters = () => {
+    setFilters({
+      city: undefined,
+      district: undefined,
+      skill: undefined
+    });
+    setDistricts([]);
+  };
+
+  // 憭���𤾸��䀹凒
+  const handleCityChange = (value) => {
+    setFilters({
+      ...filters,
+      city: value,
+      district: undefined
+    });
+    fetchDistricts(value);
+  };
+
+  // 憭���箏��䀹凒
+  const handleDistrictChange = (value) => {
+    setFilters({
+      ...filters,
+      district: value
+    });
+  };
+
+  // 憭�����賢��?  const handleSkillChange = (value) => {
+    setFilters({
+      ...filters,
+      skill: value
+    });
+  };
+
+  // �枏�憸�漲璅⊥���
+  const openAppointmentModal = (coach) => {
+    setSelectedCoach(coach);
+    setShowAppointmentModal(true);
+    setShowCoachDetailModal(false);
+  };
+
+  // �喲𡡒憸�漲璅⊥���
+  const closeAppointmentModal = () => {
+    setShowAppointmentModal(false);
+    setSelectedCoach(null);
+  };
+
+  // �曄內�嗵�霂行�璅⊥���
+  const openCoachDetailModal = (coach) => {
+    setSelectedCoach(coach);
+    setShowCoachDetailModal(true);
+  };
+
+  // �喲𡡒�嗵�霂行�璅⊥���
+  const closeCoachDetailModal = () => {
+    setShowCoachDetailModal(false);
+  };
+
+  // �枏��煾����舀芋��� - �冽�蝏�祕��芋���銝凋蝙�?  const handleOpenMessageModal = (coach) => {
+    setSelectedCoach(coach);
+    setShowMessageModal(true);
+    setShowCoachDetailModal(false);
+  };
+
+  // �喲𡡒�煾����舀芋���
+  const closeMessageModal = () => {
+    setShowMessageModal(false);
+  };
+  // �煾����舐��嗵�
+  const handleSendMessage = async (values) => {
+    try {
+      const response = await coachAPI.sendMessage({
+        coach_id: selectedCoach.id,
+        message: values.message
+      });
+      
+      if (response.data.success) {
+        message.success('瘨���煾����?);
+        closeMessageModal();
+      } else {
+        message.error(response.data.message || '�煾����臬仃韐?);
+      }
+    } catch (error) {
+      console.error('�煾����臬仃韐?', error);
+      message.error('�煾����臬仃韐伐�霂瑞��𡡞�霂?);
+    }
+  };
+
+  // 颲�𨭌�賣㺭嚗𡁶＆靽脲�蝏�D銝滩◤靽格㺿嚗�耨憭㷼oach4_4�桅�嚗?  const normalizeCoachId = (id) => {
+    // 憒��ID��鉄銝见�蝥選��航��航◤�躰秤靽格㺿��D
+    if (typeof id === 'string' && id.includes('_')) {
+      // �瑕��箸𧋦ID嚗�縧�劐��垍瑪�𠹺��𡒊��典�嚗?      const baseId = id.split('_')[0];
+      console.log(`靽桀��嗵�ID: 隞?${id} 靽格迤銝?${baseId}`);
+      return baseId;
+    }
+    return id;
+  };
+
+  // �𣂷漱憸�漲 - �啣銁�臭誑�㗇𥋘憸�漲�擧糓�衣��單𣈲隞?  const handleSubmitAppointment = async (values) => {
+    try {
+      // 霂衣�霈啣�selectedCoach��𠶖�?      console.log('�𣂷漱憸�漲�嗥�selectedCoach:', JSON.stringify(selectedCoach));
+      console.log('�𣂷漱憸�漲�嗥��嗵�ID蝐餃�:', typeof selectedCoach.id, '�嗵�ID�?', selectedCoach.id);
+      
+      // 閫���𡝗�蝏�D嚗𣬚＆靽苷���鉄�誩�瘛餃����蝻�
+      const normalizedCoachId = normalizeCoachId(selectedCoach.id);
+      console.log('閫���硋����蝏�D:', normalizedCoachId);
+      
+      // 靽嘥�憸�漲銵典��唳旿嚗𣬚鍂鈭𤾸�撱粹�蝥?      const appointmentData = {
+        coach_id: normalizedCoachId, // 雿輻鍂閫���𣇉�ID
+        date: values.date.format('YYYY-MM-DD'),
+        time: values.time.format('HH:mm'),
+        location: selectedCoach.location.city + ' ' + selectedCoach.location.districts[0], // 雿輻鍂�嗵����蝵?        skill: values.training_type, // 撠�raining_type�惩��酒kill
+        duration: values.duration // 瘛餃�duration摮埈挾
+      };
+      
+      // �齿活璉��交�蝏��coach_id
+      console.log('憸�漲�唳旿:', appointmentData); 
+      console.log('��蝏��鈭斤��嗵�ID蝐餃�:', typeof appointmentData.coach_id, '�?', appointmentData.coach_id);
+      
+      // 靽嘥�憸�漲�唳旿
+      setAppointmentFormData(appointmentData);
+      
+      // 霂ａ䔮�冽��臬炏閬���單𣈲隞?      Modal.confirm({
+        title: '憸�漲撌脫�鈭?,
+        content: '�典��𤤿緵�冽𣈲隞㗛�蝥西晶�剁�餈䀹糓蝔滚��臭�嚗?,
+        okText: '蝡见朖�臭�',
+        cancelText: '蝔滚��臭�',
+        onOk: () => {
+          // �枏��臭�璅⊥���
+          setShowPaymentModal(true);
+        },
+        onCancel: async () => {
+          // �湔𦻖�𥕦遣憸�漲嚗䔶�隞䁅晶
+          await createAppointmentWithoutPayment(appointmentData);
+        }
+      });
+      
+      // �喲𡡒憸�漲璅⊥���
+      setShowAppointmentModal(false);
+    } catch (error) {
+      console.error('憭��憸�漲憭梯揖:', error);
+      message.error('憭��憸�漲憭梯揖嚗諹窈蝔滚��滩�');
+    }
+  };
+  
+  // �𥕦遣憸�漲雿��蝡见朖�臭�
+  const createAppointmentWithoutPayment = async (appointmentData) => {
+    try {
+      // �钅�銝�隞賣㺭�桀僎蝖桐��嗵�ID甇�＆嚗屸��滚��券䔮憸?      const appointmentDataToSend = {
+        ...appointmentData,
+        coach_id: normalizeCoachId(appointmentData.coach_id) // �齿活蝖桐�ID甇�＆
+      };
+      console.log('�𥕦遣憸�漲雿���臭�嚗����㺭�?', JSON.stringify(appointmentDataToSend));
+      
+      const appointmentResponse = await appointmentAPI.createAppointment(appointmentDataToSend);
+      console.log('憸�漲�𥕦遣�滚�:', appointmentResponse.data);
+      
+      if (appointmentResponse.data.success) {
+        message.success('憸�漲�𥕦遣�𣂼�嚗峕��臭誑蝔滚��?�𤑳�憸�漲"銝剖��鞉𣈲隞?);
+        // �瑟鰵憸�漲�𡑒”
+        fetchUserAppointments();
+        // ��揢�唳����蝥行�蝑?        setActiveTab('2');
+      } else {
+        message.error(appointmentResponse.data.message || '�𥕦遣憸�漲憭梯揖');
+      }
+    } catch (error) {
+      console.error('�𥕦遣憸�漲憭梯揖:', error);
+      message.error('�𥕦遣憸�漲憭梯揖嚗諹窈蝔滚��滩�');
+    }
+  };
+  
+  // 憭���臭�瘚��
+  const handlePayment = async () => {
+    if (!appointmentFormData && !paymentAppointmentId) {
+      message.error('憸�漲�唳旿銝滚��湛�霂琿��圈�蝥?);
+      setShowPaymentModal(false);
+      return;
+    }
+    
+    setPaymentLoading(true);
+    
+    try {
+      let appointmentId = paymentAppointmentId;
+      
+      if (!appointmentId) {
+        // 璉��交𣈲隞睃���㺭�桃𠶖�?        console.log('�臭��滨�selectedCoach:', JSON.stringify(selectedCoach));
+        console.log('�臭��滨�appointmentFormData:', JSON.stringify(appointmentFormData));
+        console.log('�臭��滨��嗵�ID蝐餃�:', typeof appointmentFormData.coach_id, '�嗵�ID�?', appointmentFormData.coach_id);
+        
+        // ���撱粹�蝥?        console.log('�煾���蝥血�撱箄窈瘙?', appointmentFormData);
+        // �钅�銝�隞賣㺭�桀僎蝖桐��嗵�ID甇�＆嚗屸��滚��券䔮憸?        const appointmentDataToSend = {
+          ...appointmentFormData,
+          coach_id: normalizeCoachId(appointmentFormData.coach_id) // �齿活蝖桐�ID甇�＆
+        };
+        console.log('摰鮋��煾���憸�漲�唳旿:', JSON.stringify(appointmentDataToSend));
+        
+        const appointmentResponse = await appointmentAPI.createAppointment(appointmentDataToSend);
+        console.log('憸�漲�𥕦遣�滚�:', appointmentResponse.data);
+        
+        if (!appointmentResponse.data.success) {
+          message.error(appointmentResponse.data.message || '�𥕦遣憸�漲憭梯揖');
+          setPaymentLoading(false);
+          return;
+        }
+        
+        appointmentId = appointmentResponse.data.appointment_id;
+        console.log('�瑕��啁�憸�漲ID:', appointmentId);
+        
+        if (!appointmentId) {
+          message.error('�䭾��瑕�憸�漲ID嚗諹窈�滩�');
+          setPaymentLoading(false);
+          return;
+        }
+      }
+      
+      // �𥕦遣�臭�霈Ｗ�
+      console.log('�煾��𣈲隞睃�撱箄窈瘙? appointment_id=', appointmentId, 
+        appointmentFormData ? ', duration=' + appointmentFormData.duration : '');
+      
+      let paymentResponse;
+      if (paymentAppointmentId) {
+        // 銝箏歇�厰�蝥行𣈲隞?        paymentResponse = await paymentService.payForExistingAppointment(appointmentId);
+      } else {
+        // 銝箸鰵憸�漲�臭�
+        paymentResponse = await paymentService.createPayment(
+          appointmentId,
+          appointmentFormData.duration
+        );
+      }
+      console.log('�臭��𥕦遣�滚�:', paymentResponse);
+      
+      if (paymentResponse.success) {
+        // 靽嘥��臭��唳旿
+        setPaymentData(paymentResponse.data);
+        
+        // �枏��臭�摰脲𣈲隞㗛△�?        paymentService.openAlipayPage(paymentResponse.data.pay_url);
+        
+        message.success('撌脫�撘��臭�憿菟𢒰嚗諹窈摰峕��臭�');
+        // 皜�膄�臭�憸�漲ID
+        setPaymentAppointmentId(null);
+      } else {
+        message.error(paymentResponse.message || '�𥕦遣�臭�霈Ｗ�憭梯揖');
+      }
+    } catch (error) {
+      console.error('�臭�憭��憭梯揖:', error);
+      message.error('�臭�憭��憭梯揖嚗諹窈蝔滚��滩�');
+    } finally {
+      setPaymentLoading(false);
+      setShowPaymentModal(false);
+    }
+  };
+  
+  // �喲𡡒�臭�璅⊥���
+  const closePaymentModal = () => {
+    setShowPaymentModal(false);
+    setPaymentAppointmentId(null);
+    // �瑟鰵憸�漲�𡑒”
+    fetchUserAppointments();
+    // ��揢�唳����蝥行�蝑?    setActiveTab('2');
+  };
+
+  // �𡝗�憸�漲
+  const handleCancelAppointment = async (appointmentId) => {
+    Modal.confirm({
+      title: '蝖株恕�𡝗�憸�漲',
+      content: '�函＆摰朞��𡝗�餈嗘葵憸�漲�梹�',
+      okText: '蝖株恕',
+      cancelText: '�𡝗�',
+      onOk: async () => {
+        try {
+          const response = await appointmentAPI.cancelAppointment(appointmentId);
+          
+          if (response.data.success) {
+            message.success('憸�漲撌脣�瘨?);
+            // �瑟鰵憸�漲�𡑒”
+            fetchUserAppointments();
+          } else {
+            message.error(response.data.message || '�𡝗�憸�漲憭梯揖');
+          }
+        } catch (error) {
+          console.error('�𡝗�憸�漲憭梯揖:', error);
+          message.error('�𡝗�憸�漲憭梯揖嚗諹窈蝔滚��滩�');
+        }
+      }
+    });
+  };
+
+  // �嘥��𡝗㺭�?  useEffect(() => {
+    fetchCoaches();
+    fetchCities();
+    fetchUserAppointments();
+    
+    // 璉��冊RL��㺭嚗���𨀣䔉�芣𣈲隞条��𣈯△�ｇ��芸𢆡��揢�唳����蝥行�蝑?    const params = new URLSearchParams(location.search);
+    const fromPayment = params.get('from');
+    if (fromPayment === 'payment') {
+      setActiveTab('2');
+    }
+  }, []);
+
+  // �瑕�憸�漲�嗆����?  const getStatusText = (status) => {
+    switch (status) {
+      case 'pending':
+        return '敺�＆霈?;
+      case 'confirmed':
+        return '撌脩＆霈?;
+      case 'completed':
+        return '撌脣��?;
+      case 'cancelled':
+        return '撌脣�瘨?;
+      default:
+        return '�芰䰻�嗆�?;
+    }
+  };
+
+  // �瑕�憸�漲�嗆���蝑暸��?  const getStatusColor = (status) => {
+    switch (status) {
+      case 'pending':
+        return 'blue';
+      case 'confirmed':
+        return 'green';
+      case 'completed':
+        return 'purple';
+      case 'cancelled':
+        return 'red';
+      default:
+        return 'default';
+    }
+  };
+
+  // 憭��蝡见朖�臭��蠘�
+  const handlePayNow = (appointment) => {
+    try {
+      // 霈曄蔭�劐葉���蝏�誑靘踵𣈲隞䀹�蝔贝�甇�虜餈𥡝�
+      // ��䰻�曉��湔�蝏�縑�?      const coach = coaches.find(c => c.id === appointment.coach_id);
+      if (coach) {
+        setSelectedCoach(coach);
+      } else {
+        // 憒���曆��唳�蝏�縑�荔�雿輻鍂憸�漲銝剔��厰�靽⊥���遣銝�銝芰��閧��嗵�撖寡情
+        setSelectedCoach({
+          id: appointment.coach_id,
+          name: appointment.coach_name || '�芰䰻�嗵�',
+          avatar: appointment.coach_avatar,
+          location: { 
+            city: appointment.location.split(' ')[0], 
+            districts: [appointment.location.split(' ')[1] || ''] 
+          }
+        });
+      }
+      
+      // 霈曄蔭憸�漲ID�其��臭�
+      setPaymentAppointmentId(appointment.id);
+      
+      // �枏��臭�璅⊥���
+      setShowPaymentModal(true);
+    } catch (error) {
+      console.error('憭��蝡见朖�臭�憭梯揖:', error);
+      message.error('憭���臭�霂瑟�憭梯揖嚗諹窈蝔滚��滩�');
+    }
+  };
+  // �瑕��臭��嗆����砍�憸𡏭𠧧
+  const getPaymentStatusText = (status) => {
+    if (!status || status === 'unpaid') return '�芣𣈲隞?;
+    if (status === 'paid') return '撌脫𣈲隞?;
+    return '�芰䰻�嗆�?;
+  };
+  
+  const getPaymentStatusColor = (status) => {
+    if (!status || status === 'unpaid') return 'orange';
+    if (status === 'paid') return 'green';
+    return 'default';
+  };
+  
+  // 皜脫��嗵��∠�
+  const renderCoachCard = (coach) => {
+    return (
+      <Card
+        key={coach.id}
+        hoverable
+        style={{ marginBottom: 16, cursor: 'pointer' }}
+        onClick={() => openCoachDetailModal(coach)} // �孵稬�∠��亦�霂行�
+        cover={
+          <div style={{ padding: 24, textAlign: 'center', background: '#f5f5f5' }}>
+            <Avatar src={coach.avatar} size={100} />
+          </div>
+        }
+        actions={[
+          <Button 
+            key="appointment" 
+            type="primary" 
+            onClick={(e) => {
+              e.stopPropagation(); // �餅迫�孵稬鈭衤辣�埝部�啣㨃�?              openAppointmentModal(coach);
+            }}
+          >
+            蝡见朖憸�漲
+          </Button>
+        ]}
+      >
+        <Card.Meta
+          title={
+            <div>
+              {coach.name}
+              <Rate 
+                disabled 
+                defaultValue={coach.rating} 
+                style={{ fontSize: 12, marginLeft: 8 }} 
+              />
+            </div>
+          }
+          description={
+            <>
+              <p>
+                <EnvironmentOutlined /> {coach.location.city} {coach.location.districts[0]}
+              </p>
+              <p>
+                {coach.skills.slice(0, 3).map(skill => (
+                  <Tag key={skill} color="blue" style={{ marginBottom: 4 }}>{skill}</Tag>
+                ))}
+                {coach.skills.length > 3 && <Tag>...</Tag>}
+              </p>
+              <div style={{ color: 'red', fontWeight: 'bold', marginTop: 8 }}>
+                {coach.price}�?撠𤩺𧒄
+              </div>
+            </>
+          }
+        />
+      </Card>
+    );
+  };
+
+  // 皜脫�憸�漲�𡑒”憿?  const renderAppointmentItem = (appointment) => {
+    return (
+      <List.Item
+        actions={[
+          // �曄內�𡝗��厰僼
+          appointment.status === 'pending' && (
+            <Button onClick={() => handleCancelAppointment(appointment.id)} type="text" danger>
+              �𡝗�憸�漲
+            </Button>
+          ),
+          // �曄內蝡见朖�臭��厰僼(憒���芣𣈲隞?
+          (!appointment.payment_status || appointment.payment_status === 'unpaid') && (
+            <Button onClick={() => handlePayNow(appointment)} type="primary" style={{ backgroundColor: '#1890ff' }}>
+              蝡见朖�臭�
+            </Button>
+          )
+        ]}
+      >
+        <List.Item.Meta
+          avatar={<Avatar icon={<UserOutlined />} />}
+          title={
+            <div>
+              <span>{appointment.coach_name || '�芰䰻�嗵�'}</span>
+              {/* �曄內憸�漲�嗆�?*/}
+              <Tag 
+                color={getStatusColor(appointment.status)} 
+                style={{ marginLeft: 8 }}
+              >
+                {getStatusText(appointment.status)}
+              </Tag>
+              {/* �曄內�臭��嗆�?*/}
+              <Tag 
+                color={getPaymentStatusColor(appointment.payment_status)} 
+                style={{ marginLeft: 8 }}
+              >
+                {getPaymentStatusText(appointment.payment_status)}
+              </Tag>
+            </div>
+          }
+          description={
+            <>
+              <p>
+                <CalendarOutlined style={{ marginRight: 8 }} />
+                憸�漲�交�: {appointment.date}
+              </p>
+              <p>
+                <ClockCircleOutlined style={{ marginRight: 8 }} />
+                憸�漲�園𡢿: {appointment.time}
+                {appointment.duration && `嚗峕𧒄�? ${appointment.duration}撠𤩺𧒄`}
+              </p>
+              <p>
+                霈剔�憿寧𤌍: {appointment.skill || '�芣�摰?}
+              </p>
+            </>
+          }
+        />
+      </List.Item>
+    );
+  };
+
+  // 餈�誘�嗵��𡑒”
+  const filteredCoaches = coaches.filter(coach => {
+    if (filters.city && coach.location.city !== filters.city) {
+      return false;
+    }
+    
+    if (filters.district && !coach.location.districts.includes(filters.district)) {
+      return false;
+    }
+    
+    if (filters.skill && !coach.skills.includes(filters.skill)) {
+      return false;
+    }
+    
+    return true;
+  });
+
+  return (
+    <MainLayout>
+      <Content style={{ padding: '24px' }}>
+        <Title level={2}>�嗵�憸�漲</Title>
+        
+        <Tabs activeKey={activeTab} onChange={setActiveTab}>
+          <TabPane tab="憸�漲�嗵�" key="1">
+            <Card style={{ marginBottom: 16 }}>
+              <Row gutter={[16, 16]} align="middle">
+                <Col xs={24} sm={6} md={5} lg={4}>
+                  <Select
+                    placeholder="�㗇𥋘�𤾸�"
+                    style={{ width: '100%' }}
+                    value={filters.city}
+                    onChange={handleCityChange}
+                    allowClear
+                  >
+                    {cities.map(city => (
+                      <Option key={city} value={city}>{city}</Option>
+                    ))}
+                  </Select>
+                </Col>
+                <Col xs={24} sm={6} md={5} lg={4}>
+                  <Select
+                    placeholder="�㗇𥋘�箏�"
+                    style={{ width: '100%' }}
+                    value={filters.district}
+                    onChange={handleDistrictChange}
+                    disabled={!filters.city}
+                    allowClear
+                  >
+                    {districts.map(district => (
+                      <Option key={district} value={district}>{district}</Option>
+                    ))}
+                  </Select>
+                </Col>
+                <Col xs={24} sm={6} md={5} lg={4}>
+                  <Select
+                    placeholder="霈剔�憿寧𤌍"
+                    style={{ width: '100%' }}
+                    value={filters.skill}
+                    onChange={handleSkillChange}
+                    allowClear
+                  >
+                    {skillOptions.map(skill => (
+                      <Option key={skill} value={skill}>{skill}</Option>
+                    ))}
+                  </Select>
+                </Col>
+                <Col xs={24} sm={6} md={9} lg={12}>
+                  <Button onClick={handleResetFilters} icon={<FilterOutlined />}>
+                    �滨蔭蝑偦�?                  </Button>
+                </Col>
+              </Row>
+            </Card>
+            
+            <Row gutter={[16, 16]}>
+              {loading ? (
+                <Col span={24} style={{ textAlign: 'center', padding: '40px 0' }}>
+                  <Spin size="large" />
+                </Col>
+              ) : filteredCoaches.length > 0 ? (
+                filteredCoaches.map(coach => (
+                  <Col xs={24} sm={12} md={8} lg={6} key={coach.id}>
+                    {renderCoachCard(coach)}
+                  </Col>
+                ))
+              ) : (
+                <Col span={24} style={{ textAlign: 'center', padding: '40px 0' }}>
+                  <Empty description="���蝚血��∩辣���蝏? />
+                </Col>
+              )}
+            </Row>
+          </TabPane>
+          
+          <TabPane 
+            tab={
+              <Badge count={appointments.filter(a => a.status === 'pending').length} offset={[10, 0]}>
+                �𤑳�憸�漲
+              </Badge>
+            } 
+            key="2"
+          >
+            <List
+              loading={appointmentLoading}
+              itemLayout="horizontal"
+              dataSource={appointments}
+              renderItem={renderAppointmentItem}
+              pagination={{
+                pageSize: 5,
+                showTotal: total => `�?${total} �⊿�蝥圳
+              }}
+              locale={{ emptyText: <Empty description="���憸�漲霈啣�" /> }}
+            />
+          </TabPane>
+        </Tabs>
+
+        {/* 憸�漲璅⊥��� */}
+        <Modal
+          title="憸�漲�嗵�"
+          visible={showAppointmentModal}
+          onCancel={closeAppointmentModal}
+          footer={null}
+          destroyOnClose
+        >
+          {selectedCoach && (
+            <>
+              <div style={{ textAlign: 'center', marginBottom: 24 }}>
+                <Avatar src={selectedCoach.avatar} size={64} />
+                <Title level={4} style={{ marginTop: 8, marginBottom: 0 }}>
+                  {selectedCoach.name}
+                </Title>
+              </div>
+              
+              <Form
+                layout="vertical"
+                onFinish={handleSubmitAppointment}
+                initialValues={{
+                  duration: 1
+                }}
+              >
+                <Form.Item
+                  label="霈剔�憿寧𤌍"
+                  name="training_type"
+                  rules={[{ required: true, message: '霂琿�㗇𥋘霈剔�憿寧𤌍' }]}
+                >
+                  <Select placeholder="�㗇𥋘霈剔�憿寧𤌍">
+                    {selectedCoach.skills.map(skill => (
+                      <Option key={skill} value={skill}>{skill}</Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                
+                <Form.Item
+                  label="憸�漲�交�"
+                  name="date"
+                  rules={[{ required: true, message: '霂琿�㗇𥋘憸�漲�交�' }]}
+                >
+                  <DatePicker style={{ width: '100%' }} disabledDate={current => current && current < moment().startOf('day')} />
+                </Form.Item>
+                
+                <Form.Item
+                  label="憸�漲�園𡢿"
+                  name="time"
+                  rules={[{ required: true, message: '霂琿�㗇𥋘憸�漲�園𡢿' }]}
+                >
+                  <TimePicker style={{ width: '100%' }} format="HH:mm" minuteStep={15} />
+                </Form.Item>
+                
+                <Form.Item
+                  label="霈剔��園鵭(撠𤩺𧒄)"
+                  name="duration"
+                  rules={[{ required: true, message: '霂琿�㗇𥋘霈剔��園鵭' }]}
+                >
+                  <Select placeholder="�㗇𥋘霈剔��園鵭">
+                    <Option value={1}>1撠𤩺𧒄</Option>
+                    <Option value={1.5}>1.5撠𤩺𧒄</Option>
+                    <Option value={2}>2撠𤩺𧒄</Option>
+                    <Option value={3}>3撠𤩺𧒄</Option>
+                  </Select>
+                </Form.Item>
+                
+                <Row justify="end">
+                  <Space>
+                    <Button onClick={closeAppointmentModal}>�𡝗�</Button>
+                    <Button type="primary" htmlType="submit">�𣂷漱憸�漲</Button>
+                  </Space>
+                </Row>
+              </Form>
+            </>
+          )}
+        </Modal>
+
+        {/* �嗵�霂行�璅⊥��� */}
+        <Modal
+          title="�嗵�霂行�"
+          visible={showCoachDetailModal}
+          onCancel={closeCoachDetailModal}
+          footer={[
+            <Button key="back" onClick={closeCoachDetailModal}>
+              �喲𡡒
+            </Button>,
+            <Button
+              key="message"
+              type="default"
+              onClick={() => handleOpenMessageModal(selectedCoach)}
+            >
+              �煾����?            </Button>,
+            <Button
+              key="appointment"
+              type="primary"
+              onClick={() => openAppointmentModal(selectedCoach)}
+            >
+              蝡见朖憸�漲
+            </Button>
+          ]}
+        >
+          {selectedCoach && (
+            <>
+              <div style={{ textAlign: 'center', marginBottom: 24 }}>
+                <Avatar src={selectedCoach.avatar} size={100} />
+                <Title level={3} style={{ marginTop: 16, marginBottom: 8 }}>
+                  {selectedCoach.name}
+                </Title>
+                <Rate disabled defaultValue={selectedCoach.rating} />
+              </div>
+              
+              <Divider />
+              
+              <div>
+                <p><strong>�啣躹嚗?/strong>{selectedCoach.location.city} {selectedCoach.location.districts.join(', ')}</p>
+                <p><strong>隞瑟聢嚗?/strong>{selectedCoach.price}�?撠𤩺𧒄</p>
+                <p>
+                  <strong>銝㯄鵭嚗?/strong>
+                  {selectedCoach.skills.map(skill => (
+                    <Tag key={skill} color="blue" style={{ margin: '4px' }}>{skill}</Tag>
+                  ))}
+                </p>
+                <p><strong>蝞�隞页�</strong>{selectedCoach.description || '���蝞�隞?}</p>
+              </div>
+            </>
+          )}
+        </Modal>
+
+        {/* �煾����舀芋��� */}
+        <Modal
+          title="�煾����舐��嗵�"
+          visible={showMessageModal}
+          onCancel={closeMessageModal}
+          footer={null}
+        >
+          {selectedCoach && (
+            <Form layout="vertical" onFinish={handleSendMessage}>
+              <Form.Item
+                label="�嗡辣鈭?
+              >
+                <Input value={selectedCoach.name} disabled />
+              </Form.Item>
+              
+              <Form.Item
+                label="瘨����捆"
+                name="message"
+                rules={[{ required: true, message: '霂瑁��交��臬�摰? }]}
+              >
+                <Input.TextArea rows={4} placeholder="颲枏��冽��煾���瘨��" />
+              </Form.Item>
+              
+              <Row justify="end">
+                <Space>
+                  <Button onClick={closeMessageModal}>�𡝗�</Button>
+                  <Button type="primary" htmlType="submit">�煾�?/Button>
+                </Space>
+              </Row>
+            </Form>
+          )}
+        </Modal>
+
+        {/* �臭�璅⊥��� */}
+        <Modal
+          title="蝖株恕�臭�"
+          visible={showPaymentModal}
+          onCancel={closePaymentModal}
+          footer={[
+            <Button key="back" onClick={closePaymentModal}>
+              �𡝗�
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              loading={paymentLoading}
+              onClick={handlePayment}
+            >
+              蝖株恕�臭�
+            </Button>
+          ]}
+        >
+          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+            <Title level={3} style={{ color: 'red' }}>
+              {selectedCoach ? selectedCoach.price + '�?撠𤩺𧒄' : '霈∠�銝?..'}
+            </Title>
+            
+            {appointmentFormData && (
+              <Text>
+                憸�漲�園鵭: {appointmentFormData.duration}撠𤩺𧒄, 
+                �嗵�: {selectedCoach?.name || '�芰䰻�嗵�'}
+              </Text>
+            )}
+            
+            {paymentAppointmentId && (
+              <Text>
+                �冽迤�其蛹撌脣�撱箇�憸�漲餈𥡝��臭�
+              </Text>
+            )}
+          </div>
+          
+          <div style={{ marginTop: 24 }}>
+            <p>霂瑞＆霈支誑銝衤縑�荔�</p>
+            <ul>
+              <li>�嗵�: {selectedCoach?.name || '�芰䰻�嗵�'}</li>
+              <li>憸�漲�交�: {appointmentFormData?.date || '憸�漲霈啣�銝剔��交�'}</li>
+              <li>霈剔�憿寧𤌍: {appointmentFormData?.skill || '憸�漲霈啣�銝剔�憿寧𤌍'}</li>
+            </ul>
+            <p>�孵稬"蝖株恕�臭�"撠�歲頧砍��臭�憿菟𢒰摰峕�隞䀹狡�?/p>
+          </div>
+        </Modal>
+      </Content>
+    </MainLayout>
+  );
+}
+
+export default CoachAppointment;
