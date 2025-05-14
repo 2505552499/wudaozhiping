@@ -212,6 +212,13 @@ const MainLayout = ({ children }) => {
         label: '课程管理',
       });
       
+      // 管理员报名管理菜单
+      commonItems.push({
+        key: '/admin/enrollments',
+        icon: <TeamOutlined />,
+        label: '报名管理',
+      });
+      
       // 管理员论坛审核菜单
       commonItems.push({
         key: '/forum/review',

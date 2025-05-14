@@ -1,0 +1,14 @@
+{
+  "enrollments": [
+    {
+      "id": "388e94bc-2f57-4223-9e21-fb8ccfb5a1de",
+      "course_id": "course1",
+      "course_title": "2024暑期自卫防身研学活动",
+      "user": "yetong",
+      "price": 1399,
+      "status": "已报名",
+      "enrollment_date": "2025-05-14 11:10:46",
+      "payment_method": "线下付款"
+    }
+  ]
+}

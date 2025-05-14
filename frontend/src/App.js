@@ -34,6 +34,7 @@ import CourseList from './pages/CourseList';
 import CourseDetail from './pages/CourseDetail';
 import AdminCourseManagement from './pages/AdminCourseManagement';
 import EnrollmentSuccess from './pages/EnrollmentSuccess';
+import AdminEnrollmentManagement from './pages/AdminEnrollmentManagement';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -180,6 +181,12 @@ function App() {
             <Route path="/admin/courses" element={
               <ProtectedRoute>
                 <AdminCourseManagement />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/admin/enrollments" element={
+              <ProtectedRoute>
+                <AdminEnrollmentManagement />
               </ProtectedRoute>
             } />
             

@@ -23,6 +23,8 @@ function CourseDetail() {
   const [course, setCourse] = useState(null);
   const [enrollLoading, setEnrollLoading] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [userEnrollment, setUserEnrollment] = useState(null);
+  const [checkingEnrollment, setCheckingEnrollment] = useState(false);
   
   // 加载课程详情
   const fetchCourseDetail = async () => {
@@ -43,10 +45,36 @@ function CourseDetail() {
     }
   };
   
+  // 检查用户是否已报名
+  const checkUserEnrollment = async () => {
+    if (!isAuthenticated) return;
+    
+    setCheckingEnrollment(true);
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/api/courses/${courseId}/check-enrollment`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      );
+      
+      if (response.data.success && response.data.enrolled) {
+        setUserEnrollment(response.data.enrollment);
+      }
+    } catch (error) {
+      console.error('检查报名状态出错:', error);
+    } finally {
+      setCheckingEnrollment(false);
+    }
+  };
+  
   // 初始加载
   useEffect(() => {
     if (courseId) {
       fetchCourseDetail();
+      checkUserEnrollment();
     }
   }, [courseId]);
   
@@ -235,16 +263,32 @@ function CourseDetail() {
                 </Descriptions>
                 
                 <div style={{ marginTop: 16 }}>
-                  <Button 
-                    type="primary" 
-                    block 
-                    size="large"
-                    loading={enrollLoading}
-                    disabled={course.status !== '开放报名'}
-                    onClick={handleEnroll}
-                  >
-                    {course.status === '开放报名' ? '立即报名' : '报名已结束'}
-                  </Button>
+                  {userEnrollment ? (
+                    <div>
+                      <Tag color="green" style={{ fontSize: 16, padding: '5px 10px', marginBottom: 10 }}>
+                        您已报名此课程 - {userEnrollment.status}
+                      </Tag>
+                      <Descriptions column={1} size="small">
+                        <Descriptions.Item label="报名时间">
+                          {userEnrollment.enrollment_date}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="付款方式">
+                          {userEnrollment.payment_method}
+                        </Descriptions.Item>
+                      </Descriptions>
+                    </div>
+                  ) : (
+                    <Button 
+                      type="primary" 
+                      block 
+                      size="large"
+                      loading={enrollLoading || checkingEnrollment}
+                      disabled={course.status !== '开放报名'}
+                      onClick={handleEnroll}
+                    >
+                      {course.status === '开放报名' ? '立即报名' : '报名已结束'}
+                    </Button>
+                  )}
                 </div>
               </Card>
             </Col>
