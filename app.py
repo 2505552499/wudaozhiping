@@ -20,7 +20,7 @@ from course_api import course_api  # Import the course API module
 
 # Initialize Flask app
 app = Flask(__name__, static_folder='frontend/build')
-CORS(app)
+CORS(app, resources={r"/*": {"origins": ["http://localhost:3001", "https://wudao.250555.xyz", "https://api.wudao.250555.xyz"], "supports_credentials": True}})
 
 # Register blueprints
 app.register_blueprint(payment_api)

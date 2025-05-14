@@ -1,0 +1,10 @@
+tunnel: wudao
+credentials-file: C:\Users\yetong\.cloudflared\81947118-61c4-4697-bfa9-4284c8225a24.json
+
+ingress:
+  - hostname: wudao.250555.xyz
+    service: http://localhost:3001
+  - hostname: wudao.250555.xyz
+    path: /api
+    service: http://localhost:5000
+  - service: http_status:404

@@ -12,11 +12,15 @@ class AlipayConfig:
         # 应用ID
         self.app_id = '2021000122600000'  # 这是一个示例应用ID
         
+        # 基础URL，直接设置为生产环境域名
+        self.base_url = 'https://wudao.250555.xyz'
+        print(f"DEBUG: 使用基础URL: {self.base_url}")
+        
         # 支付宝网关（模拟）
-        self.gateway_url = 'http://localhost:5000/api/payment/alipay/gateway'
+        self.gateway_url = f"{self.base_url}/api/payment/alipay/gateway"
         
         # 回调地址
-        self.notify_url = 'http://localhost:5000/api/payment/alipay/notify'
+        self.notify_url = f"{self.base_url}/api/payment/alipay/notify"
         # 使用标准浏览器路由格式，与前端使用的BrowserRouter匹配
         # 前端应用运行在端口3001上
         self.return_url = '/payment/result'
@@ -182,9 +186,10 @@ class AlipayService:
         # 生成模拟的支付URL
         print(f"DEBUG: 开始构造支付URL, payment_id={payment['id']}, out_trade_no={payment['out_trade_no']}, amount={amount}")
         
-        # 使用内部API端点而非前端路由
-        # 我们改为使用后端接口 /api/payment/alipay/gateway 来模拟支付页面
-        pay_url = f"http://localhost:5000/api/payment/alipay/gateway?out_trade_no={payment['out_trade_no']}&total_amount={amount}&subject={subject}"
+        # 使用配置中的网关URL，而不是硬编码的地址
+        # 这样可以根据环境变量动态调整基础URL
+        gateway_url = self.config.gateway_url
+        pay_url = f"{gateway_url}?out_trade_no={payment['out_trade_no']}&total_amount={amount}&subject={subject}"
         
         print(f"DEBUG: 生成的支付URL: {pay_url}")
         

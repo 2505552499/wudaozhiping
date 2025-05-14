@@ -488,10 +488,16 @@ def alipay_gateway():
     subject = request.args.get('subject')
 
     
-    # 生成成功和取消支付的URL - 使用后端API而非前端路由
+    # 生成成功和取消支付的URL - 使用完整域名路径而不是相对路径
     print(f"DEBUG: 构造支付成功和取消URL, out_trade_no={out_trade_no}")
-    success_url = f"/api/payment/alipay/return?out_trade_no={out_trade_no}&trade_status=TRADE_SUCCESS"
-    cancel_url = f"/api/payment/alipay/return?out_trade_no={out_trade_no}&trade_status=TRADE_CLOSED&cancel=true"
+    
+    # 从 alipay_utils 中获取基础URL
+    from alipay_utils import AlipayConfig
+    base_url = AlipayConfig().base_url
+    
+    # 使用完整的绝对URL
+    success_url = f"{base_url}/api/payment/alipay/return?out_trade_no={out_trade_no}&trade_status=TRADE_SUCCESS"
+    cancel_url = f"{base_url}/api/payment/alipay/return?out_trade_no={out_trade_no}&trade_status=TRADE_CLOSED&cancel=true"
     print(f"DEBUG: 支付成功URL: {success_url}")
     print(f"DEBUG: 取消支付URL: {cancel_url}")
     
@@ -550,8 +556,25 @@ def alipay_return():
         alipay_service.payment_manager.update_payment_status(out_trade_no, 'failed')
         result_status = "failed"
     
-    # 构造重定向URL - 不再使用未定义的amount和subject变量
-    redirect_url = f"http://localhost:3001/payment/result?out_trade_no={out_trade_no}&status={result_status}"
+    # 从 AlipayConfig 中获取基础URL
+    from alipay_utils import AlipayConfig
+    config = AlipayConfig()
+    
+    # 构造重定向URL - 使用基础URL而不是硬编码的localhost
+    # 注意：这里我们使用前端路由路径，不带/api前缀
+    # 如果基础URL中包含端口号，我们需要将其替换为前端端口
+    base_url = config.base_url
+    
+    # 如果是本地开发环境，则使用前端端口3001
+    if 'localhost' in base_url or '127.0.0.1' in base_url:
+        # 将端口5000替换为3001（前端端口）
+        import re
+        frontend_base_url = re.sub(r':\d+', ':3001', base_url)
+    else:
+        # 生产环境使用相同的基础URL
+        frontend_base_url = base_url
+    
+    redirect_url = f"{frontend_base_url}/payment/result?out_trade_no={out_trade_no}&status={result_status}"
     print(f"DEBUG: 重定向到: {redirect_url}")
     
     # 重定向到前端支付结果页面

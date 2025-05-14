@@ -129,7 +129,7 @@
             "skill": "陈氏太极拳",
             "duration": 1.5,
             "status": "pending",
-            "payment_status": "unpaid",
+            "payment_status": "paid",
             "created_at": "2025-05-14T04:32:44.409216"
         },
         {
@@ -221,6 +221,36 @@
             "status": "pending",
             "payment_status": "paid",
             "created_at": "2025-05-14T09:54:06.334627"
+        },
+        {
+            "id": "44b6f01f-b774-4f14-9d72-7b677a8dc5e1",
+            "user_id": "user3",
+            "coach_id": "coach2",
+            "coach_name": "zhangsan",
+            "coach_avatar": null,
+            "date": "2025-05-14",
+            "time": "17:00",
+            "location": "北京市 海淡区",
+            "skill": "陈氏太极拳",
+            "duration": 1,
+            "status": "pending",
+            "payment_status": "unpaid",
+            "created_at": "2025-05-14T17:00:16.657817"
+        },
+        {
+            "id": "05584b3e-f4bd-44eb-9390-fd76a0496281",
+            "user_id": "yetong",
+            "coach_id": "coach3",
+            "coach_name": "李四",
+            "coach_avatar": null,
+            "date": "2025-05-14",
+            "time": "17:45",
+            "location": "上海市 徐汇区",
+            "skill": "八极拳",
+            "duration": 2,
+            "status": "pending",
+            "payment_status": "unpaid",
+            "created_at": "2025-05-14T17:48:05.470320"
         }
     ]
 }

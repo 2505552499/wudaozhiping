@@ -9,6 +9,16 @@
       "status": "已报名",
       "enrollment_date": "2025-05-14 11:10:46",
       "payment_method": "线下付款"
+    },
+    {
+      "id": "d2e2c9e0-a816-41d0-a730-ee3d4995af3e",
+      "course_id": "course1",
+      "course_title": "2024暑期自卫防身研学活动",
+      "user": "user3",
+      "price": 1399,
+      "status": "已报名",
+      "enrollment_date": "2025-05-14 20:07:26",
+      "payment_method": "线下付款"
     }
   ]
 }
