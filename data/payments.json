@@ -809,6 +809,21 @@
             "appointment_date": "2025-05-14",
             "appointment_time": "04:30",
             "duration": 1.5
+        },
+        {
+            "id": "d4395e0b-cf53-4006-81a9-e4ea2e6168d0",
+            "out_trade_no": "WD20250515094117ba28bfd8",
+            "user_id": "yetong",
+            "appointment_id": "ec70e9f0-c492-4ac6-bef8-328b28ba2541",
+            "coach_id": "coach3",
+            "coach_name": "李四",
+            "amount": 150.0,
+            "status": "paid",
+            "created_at": "2025-05-15T09:41:17.449289",
+            "paid_at": "2025-05-15T09:41:24.781627",
+            "appointment_date": "2025-05-15",
+            "appointment_time": "09:30",
+            "duration": 1.0
         }
     ]
 }
