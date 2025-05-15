@@ -85,7 +85,7 @@ function CourseList() {
             <div style={{ height: 200, overflow: 'hidden' }}>
               <img 
                 alt={course.title} 
-                src={course.cover_image || '/img/default_course.jpg'} 
+                src={course.cover_image || 'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22600%22%20height%3D%22400%22%20viewBox%3D%220%200%20600%20400%22%20preserveAspectRatio%3D%22none%22%3E%3Crect%20width%3D%22600%22%20height%3D%22400%22%20fill%3D%22%235470c6%22%2F%3E%3Ctext%20x%3D%22300%22%20y%3D%22200%22%20fill%3D%22%23ffffff%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2236%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%3E%E8%AF%BE%E7%A8%8B%E5%9B%BE%E7%89%87%3C%2Ftext%3E%3C%2Fsvg%3E'} 
                 style={{ width: '100%', objectFit: 'cover' }}
               />
             </div>

@@ -2,4 +2,5 @@
 *.pyc
 *.png
 /uploads/images/*.jpg
-
+!fronted/public/img/*.png
+!fronted/public/img/*.jpg
