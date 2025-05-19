@@ -3,7 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale/zh_CN';
 
+// Layout
+import Layout from './components/layout/Layout';
+
 // Pages
+import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ImageAnalysis from './pages/ImageAnalysis';
@@ -46,14 +50,22 @@ function App() {
   return (
     <ConfigProvider locale={zhCN} theme={{
       token: {
-        colorPrimary: '#c62828',
+        colorPrimary: '#4F49FF', // XtalPi靛蓝色
       },
     }}>
       <Router>
         <div className="App">
           <Routes>
-            <Route path="/login" element={<Login />} />
+            {/* 首页路由 */}
             <Route path="/" element={
+              <Layout>
+                <HomePage />
+              </Layout>
+            } />
+            
+            {/* 登录页面（不使用布局组件，有自己的设计） */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
