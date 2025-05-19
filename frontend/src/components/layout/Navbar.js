@@ -54,6 +54,8 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState('');
   
   // 处理页面滚动时导航栏样式变化
   useEffect(() => {
@@ -70,6 +72,27 @@ const Navbar = () => {
     };
   }, [scrolled]);
   
+  // 检查用户登录状态
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      const token = localStorage.getItem('token');
+      const storedUsername = localStorage.getItem('username');
+      
+      if (token && storedUsername) {
+        setIsAuthenticated(true);
+        setUsername(storedUsername);
+      }
+    };
+    
+    checkAuthStatus();
+    
+    // 监听登录状态变化
+    window.addEventListener('storage', checkAuthStatus);
+    return () => {
+      window.removeEventListener('storage', checkAuthStatus);
+    };
+  }, []);
+  
   // 处理鼠标悬停时显示下拉菜单
   const handleMouseEnter = (index) => {
     setActiveMenu(index);
@@ -84,8 +107,21 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
   
+  const handleLogout = () => {
+    // 清除本地存储的认证信息
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    
+    // 更新状态
+    setIsAuthenticated(false);
+    setUsername('');
+    
+    // 重定向到首页
+    window.location.href = '/';
+  };
+  
   return (
-    <header className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-xtalpi-dark-blue/95 shadow-lg' : 'bg-gradient-to-r from-xtalpi-dark-blue to-blue-900'}`}>
+    <header className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-xtalpi-dark-blue/95 shadow-lg' : 'bg-xtalpi-dark-blue shadow-md'}`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -142,21 +178,50 @@ const Navbar = () => {
             ))}
           </nav>
           
-          {/* 桌面端登录/注册按钮 */}
+          {/* 登录/注册按钮或用户信息 */}
           <div className="hidden md:flex items-center space-x-2">
-            <GradientButton 
-              variant="outline"
-              className="text-sm"
-              onClick={() => window.location.href = '/login'}
-            >
-              登录
-            </GradientButton>
-            <GradientButton 
-              className="text-sm"
-              onClick={() => window.location.href = '/register'}
-            >
-              注册
-            </GradientButton>
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-3">
+                <div className="relative group">
+                  <button className="flex items-center space-x-1 text-white hover:text-xtalpi-cyan transition-colors">
+                    <span>{username}</span>
+                    <span>▾</span>
+                  </button>
+                  <div className="absolute right-0 z-50 w-48 mt-2 origin-top-right bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
+                    <div className="py-1 rounded-md bg-white shadow-xs">
+                      <Link to="/user-profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-xtalpi-indigo hover:text-white">
+                        个人中心
+                      </Link>
+                      <Link to="/my-courses" className="block px-4 py-2 text-sm text-gray-700 hover:bg-xtalpi-indigo hover:text-white">
+                        我的课程
+                      </Link>
+                      <Link to="/my-appointments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-xtalpi-indigo hover:text-white">
+                        我的预约
+                      </Link>
+                      <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-white">
+                        退出登录
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <>
+                <GradientButton 
+                  variant="outline"
+                  className="text-sm"
+                  onClick={() => window.location.href = '/login'}
+                >
+                  登录
+                </GradientButton>
+                <GradientButton 
+                  className="text-sm"
+                  onClick={() => window.location.href = '/register'}
+                >
+                  注册
+                </GradientButton>
+              </>
+            )}
           </div>
           
           {/* 移动端菜单按钮 */}
@@ -224,25 +289,63 @@ const Navbar = () => {
             ))}
             <div className="pt-4 pb-3 border-t border-white/20">
               <div className="flex justify-center items-center flex-col space-y-2">
-                <GradientButton 
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => {
-                    window.location.href = '/login';
-                    setIsMobileMenuOpen(false);
-                  }}
-                >
-                  登录
-                </GradientButton>
-                <GradientButton 
-                  className="w-full"
-                  onClick={() => {
-                    window.location.href = '/register';
-                    setIsMobileMenuOpen(false);
-                  }}
-                >
-                  注册
-                </GradientButton>
+                {isAuthenticated ? (
+                  <>
+                    <div className="text-white text-center mb-2">
+                      欢迎，{username}
+                    </div>
+                    <Link 
+                      to="/user-profile" 
+                      className="block w-full"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <GradientButton variant="outline" className="w-full">
+                        个人中心
+                      </GradientButton>
+                    </Link>
+                    <Link 
+                      to="/my-courses" 
+                      className="block w-full"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <GradientButton variant="outline" className="w-full">
+                        我的课程
+                      </GradientButton>
+                    </Link>
+                    <GradientButton 
+                      variant="outline"
+                      className="w-full text-red-500 border-red-500 hover:bg-red-500"
+                      onClick={() => {
+                        handleLogout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      退出登录
+                    </GradientButton>
+                  </>
+                ) : (
+                  <>
+                    <GradientButton 
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => {
+                        window.location.href = '/login';
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      登录
+                    </GradientButton>
+                    <GradientButton 
+                      className="w-full"
+                      onClick={() => {
+                        window.location.href = '/register';
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      注册
+                    </GradientButton>
+                  </>
+                )}
               </div>
             </div>
           </div>

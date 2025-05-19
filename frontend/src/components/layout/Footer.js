@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-r from-gray-900 to-xtalpi-dark-blue text-white">
+    <footer className="bg-gradient-to-r from-xtalpi-dark-blue to-black text-white">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* u5173u4e8eu6211u4eec */}
           <div className="col-span-1 md:col-span-1">
-            <h3 className="text-xl font-bold mb-4">u5173u4e8eu6211u4eec</h3>
-            <p className="text-gray-300 mb-4">u6b66u9053u667au8bc4u662fu4e00u4e2au4e13u4e1au7684u6b66u672fu52a8u4f5cu5206u6790u5e73u53f0uff0cu91c7u7528u4ebau5de5u667au80fdu548cu8ba1u7b97u673au89c6u89c9u6280u672fuff0cu5e2eu52a9u6b66u672fu7231u597du8005u548cu4e13u4e1au4ebau58ebu63d0u5347u6280u672fu6c34u5e73u3002</p>
+            <h3 className="text-xl font-bold mb-4">关于我们</h3>
+            <p className="text-gray-300 mb-4">武道智评是一个专业的武术动作分析平台，采用人工智能和计算机视觉技术，帮助武术爱好者和专业人士提升技术水平。</p>
             <div className="flex space-x-4">
               <a href="https://www.weixin.qq.com/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white">
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -36,54 +36,54 @@ const Footer = () => {
           
           {/* u5febu6377u94feu63a5 */}
           <div className="col-span-1 md:col-span-1">
-            <h3 className="text-xl font-bold mb-4">u5febu6377u94feu63a5</h3>
+            <h3 className="text-xl font-bold mb-4">快捷链接</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-300 hover:text-white transition-colors">u9996u9875</Link>
+                <Link to="/" className="text-gray-300 hover:text-white transition-colors">首页</Link>
               </li>
               <li>
-                <Link to="/image-analysis" className="text-gray-300 hover:text-white transition-colors">u56feu50cfu5206u6790</Link>
+                <Link to="/image-analysis" className="text-gray-300 hover:text-white transition-colors">图像分析</Link>
               </li>
               <li>
-                <Link to="/video-analysis" className="text-gray-300 hover:text-white transition-colors">u89c6u9891u5206u6790</Link>
+                <Link to="/video-analysis" className="text-gray-300 hover:text-white transition-colors">视频分析</Link>
               </li>
               <li>
-                <Link to="/coach-appointment" className="text-gray-300 hover:text-white transition-colors">u6559u7ec3u9884u7ea6</Link>
+                <Link to="/coach-appointment" className="text-gray-300 hover:text-white transition-colors">教练预约</Link>
               </li>
               <li>
-                <Link to="/courses" className="text-gray-300 hover:text-white transition-colors">u8bfeu7a0bu4e2du5fc3</Link>
+                <Link to="/courses" className="text-gray-300 hover:text-white transition-colors">课程中心</Link>
               </li>
               <li>
-                <Link to="/forum" className="text-gray-300 hover:text-white transition-colors">u6b66u53cbu8bbau575b</Link>
+                <Link to="/forum" className="text-gray-300 hover:text-white transition-colors">武友论坛</Link>
               </li>
             </ul>
           </div>
           
           {/* u5e38u89c1u95eeu9898 */}
           <div className="col-span-1 md:col-span-1">
-            <h3 className="text-xl font-bold mb-4">u5e38u89c1u95eeu9898</h3>
+            <h3 className="text-xl font-bold mb-4">常见问题</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">u5982u4f55u4f7fu7528u5206u6790u5de5u5177</Link>
+                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">如何使用分析工具</Link>
               </li>
               <li>
-                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">u4f1au5458u7b49u7ea7u4e0eu6743u76ca</Link>
+                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">会员等级与权益</Link>
               </li>
               <li>
-                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">u9884u7ea6u6d41u7a0bu8bf4u660e</Link>
+                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">预约流程说明</Link>
               </li>
               <li>
-                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">u652fu4ed8u65b9u5f0fu4e0eu9000u6b3e</Link>
+                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">支付方式与退款</Link>
               </li>
               <li>
-                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">u9690u79c1u4e0eu6570u636eu5b89u5168</Link>
+                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">隐私与数据安全</Link>
               </li>
             </ul>
           </div>
           
           {/* u8054u7cfbu6211u4eec */}
           <div className="col-span-1 md:col-span-1">
-            <h3 className="text-xl font-bold mb-4">u8054u7cfbu6211u4eec</h3>
+            <h3 className="text-xl font-bold mb-4">联系我们</h3>
             <ul className="space-y-2">
               <li className="flex items-start">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-xtalpi-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -102,28 +102,28 @@ const Footer = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <span className="text-gray-300">u5e7fu4e1cu7701u6df1u5733u5e02u5357u5c71u533au79d1u6280u56ed</span>
+                <span className="text-gray-300">广东省深圳市南山区科技园</span>
               </li>
             </ul>
             
             <div className="mt-6">
-              <h4 className="text-lg font-semibold mb-2">u8ba2u9605u6211u4eec</h4>
+              <h4 className="text-lg font-semibold mb-2">订阅我们</h4>
               <form className="flex">
                 <input 
                   type="email" 
-                  placeholder="u8f93u5165u60a8u7684u90aeu7bb1" 
+                  placeholder="输入您的邮箱" 
                   className="px-4 py-2 w-full rounded-l-md focus:outline-none text-gray-800"
                 />
                 <button type="submit" className="bg-gradient-to-r from-xtalpi-indigo to-xtalpi-purple px-4 py-2 rounded-r-md hover:opacity-90 transition-opacity">
-                  u8ba2u9605
+                  订阅
                 </button>
               </form>
             </div>
           </div>
         </div>
         
-        <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
-          <p>u00a9 {new Date().getFullYear()} u6b66u9053u667au8bc4u79d1u6280u6709u9650u516cu53f8. u6240u6709u6743u5229u5df2u4fddu7559.</p>
+        <div className="border-t border-gray-700 mt-12 pt-8 text-center">
+          <p className="text-white font-medium">© {new Date().getFullYear()} 武道智评科技有限公司. 所有权利已保留.</p>
         </div>
       </div>
     </footer>
