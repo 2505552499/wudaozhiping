@@ -1,23 +1,45 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import HeroSection from '../components/home/HeroSection';
 import StatsSection from '../components/home/StatsSection';
-import ServicesSection from '../components/home/ServicesSection';
+import FeaturesSection from '../components/home/FeaturesSection';
+import ProcessSection from '../components/home/ProcessSection';
 import GradientButton from '../components/ui/GradientButton';
 
 const HomePage = () => {
+  useEffect(() => {
+    // 设置页面标题
+    document.title = '武道智评 - AI助力武道动作评估';
+    
+    // 页面加载时滚动到顶部
+    window.scrollTo(0, 0);
+    
+    // 设置深色背景
+    document.body.classList.add('bg-dark-bg');
+    document.body.classList.add('text-text-primary');
+    
+    return () => {
+      // 清理函数
+      document.body.classList.remove('bg-dark-bg');
+      document.body.classList.remove('text-text-primary');
+    };
+  }, []);
+  
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
       {/* 英雄区域 */}
       <HeroSection />
+      
+      {/* 特性展示 */}
+      <FeaturesSection />
+      
+      {/* 使用流程 */}
+      <ProcessSection />
       
       {/* 数据统计 */}
       <StatsSection />
       
-      {/* 服务内容 */}
-      <ServicesSection />
-      
       {/* 行动号召 */}
-      <section className="py-16 md:py-24 bg-gradient-to-r from-xtalpi-dark-blue via-xtalpi-indigo to-xtalpi-purple text-white">
+      <section className="py-20 bg-gradient-to-r from-primary-500 to-accent text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 
             className="text-3xl md:text-4xl font-bold mb-6"
@@ -34,7 +56,7 @@ const HomePage = () => {
           
           <div>
             <GradientButton 
-              className="px-8 py-3 text-lg bg-white text-xtalpi-indigo hover:bg-gray-100"
+              className="px-8 py-3 text-lg bg-dark-bg border-none hover:bg-surface"
               onClick={() => window.location.href = '/login'}
             >
               立即加入
@@ -42,7 +64,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 };
 

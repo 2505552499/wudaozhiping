@@ -12,9 +12,10 @@ const GradientButton = ({
   const baseStyles = 'relative overflow-hidden rounded-lg transition-all duration-300 font-medium flex items-center justify-center';
   
   const variantStyles = {
-    default: 'text-white shadow-lg hover:shadow-xl active:shadow bg-gradient-to-r from-xtalpi-dark-blue via-xtalpi-indigo to-xtalpi-purple hover:scale-105',
-    outline: 'border-2 border-xtalpi-indigo text-xtalpi-indigo hover:text-white hover:border-transparent hover:bg-gradient-to-r hover:from-xtalpi-dark-blue hover:via-xtalpi-indigo hover:to-xtalpi-purple',
-    ghost: 'bg-transparent text-xtalpi-indigo hover:bg-opacity-10 hover:bg-xtalpi-indigo/10',
+    default: 'text-white shadow-lg hover:shadow-xl active:shadow bg-gradient-to-r from-primary-500 to-accent hover:scale-105',
+    outline: 'border-2 border-primary-500 text-primary-500 hover:text-white hover:border-transparent hover:bg-gradient-to-r hover:from-primary-500 hover:to-accent',
+    ghost: 'bg-transparent text-primary-500 hover:bg-opacity-10 hover:bg-primary-500/10',
+    dark: 'bg-dark-bg text-white border border-primary-500/40 hover:border-primary-500',
   };
 
   return (

@@ -28,7 +28,7 @@ const GradientTitle = ({
     let processedText = children;
     highlightWords.forEach(word => {
       const regex = new RegExp(`(${word})`, 'g');
-      processedText = processedText.replace(regex, `<span class="bg-gradient-to-r from-xtalpi-dark-blue via-xtalpi-indigo to-xtalpi-purple bg-clip-text text-transparent">$1</span>`);
+      processedText = processedText.replace(regex, `<span class="bg-gradient-to-r from-primary-500 to-accent bg-clip-text text-transparent">$1</span>`);
     });
     
     return (
@@ -42,7 +42,7 @@ const GradientTitle = ({
   // 普通版本，整个标题应用渐变
   return (
     <Tag 
-      className={`font-bold ${sizes[as]} ${alignment[align]} tracking-tight bg-gradient-to-r from-xtalpi-dark-blue via-xtalpi-indigo to-xtalpi-purple bg-clip-text text-transparent ${className}`}
+      className={`font-bold ${sizes[as]} ${alignment[align]} tracking-tight bg-gradient-to-r from-primary-500 to-accent bg-clip-text text-transparent ${className}`}
     >
       {children}
     </Tag>

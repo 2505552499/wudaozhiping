@@ -69,10 +69,10 @@ const StatCounter = ({
       ref={ref}
       className={`text-center transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} ${className}`}
     >
-      <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-xtalpi-dark-blue to-xtalpi-purple bg-clip-text text-transparent">
+      <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary-500 to-accent bg-clip-text text-transparent">
         {prefix}{count}{suffix}
       </div>
-      <div className="mt-2 text-gray-600 font-medium text-lg">{label}</div>
+      <div className="mt-2 text-text-secondary font-medium text-lg">{label}</div>
     </div>
   );
 };

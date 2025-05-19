@@ -121,7 +121,7 @@ const Navbar = () => {
   };
   
   return (
-    <header className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-xtalpi-dark-blue/95 shadow-lg' : 'bg-xtalpi-dark-blue shadow-md'}`}>
+    <header className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-dark-bg shadow-lg' : 'bg-dark-bg/80 backdrop-blur-md'}`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -167,7 +167,7 @@ const Navbar = () => {
                       <Link
                         key={childIndex}
                         to={child.path}
-                        className="block px-4 py-2 text-sm text-gray-800 hover:bg-xtalpi-indigo hover:text-white transition-colors"
+                        className="block px-4 py-2 text-sm text-gray-800 hover:bg-primary-500/10 hover:text-white transition-colors"
                       >
                         {child.title}
                       </Link>
@@ -189,13 +189,13 @@ const Navbar = () => {
                   </button>
                   <div className="absolute right-0 z-50 w-48 mt-2 origin-top-right bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
                     <div className="py-1 rounded-md bg-white shadow-xs">
-                      <Link to="/user-profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-xtalpi-indigo hover:text-white">
+                      <Link to="/user-profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-500/10 hover:text-white">
                         个人中心
                       </Link>
-                      <Link to="/my-courses" className="block px-4 py-2 text-sm text-gray-700 hover:bg-xtalpi-indigo hover:text-white">
+                      <Link to="/my-courses" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-500/10 hover:text-white">
                         我的课程
                       </Link>
-                      <Link to="/my-appointments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-xtalpi-indigo hover:text-white">
+                      <Link to="/my-appointments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-500/10 hover:text-white">
                         我的预约
                       </Link>
                       <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-white">
@@ -254,7 +254,7 @@ const Navbar = () => {
                 {item.children.length === 0 ? (
                   <Link
                     to={item.path}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-xtalpi-indigo hover:text-white"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-primary-500/10 hover:text-white"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {item.title}
@@ -262,7 +262,7 @@ const Navbar = () => {
                 ) : (
                   <div>
                     <button
-                      className="flex justify-between items-center w-full px-3 py-2 rounded-md text-base font-medium text-white hover:bg-xtalpi-indigo hover:text-white"
+                      className="flex justify-between items-center w-full px-3 py-2 rounded-md text-base font-medium text-white hover:bg-primary-500/10 hover:text-white"
                       onClick={() => setActiveMenu(activeMenu === index ? null : index)}
                     >
                       <span>{item.title}</span>
@@ -270,12 +270,12 @@ const Navbar = () => {
                     </button>
                     
                     {activeMenu === index && (
-                      <div className="pl-4 pr-2 py-1 space-y-1 bg-xtalpi-indigo/20 rounded-md mt-1">
+                      <div className="pl-4 pr-2 py-1 space-y-1 bg-primary-500/10 rounded-md mt-1">
                         {item.children.map((child, childIndex) => (
                           <Link
                             key={childIndex}
                             to={child.path}
-                            className="block px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-xtalpi-indigo hover:text-white"
+                            className="block px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-primary-500/10 hover:text-white"
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
                             {child.title}
