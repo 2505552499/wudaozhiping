@@ -64,15 +64,32 @@ const VideoAnnotation = (props) => {
     // 获取视频当前帧
     useEffect(() => {
         if (videoRef.current) {
+            // 增加空值检查，避免访问未加载视频的currentTime属性
             const updateCurrentFrame = () => {
-                setCurrentFrame(Math.floor(videoRef.current.currentTime * 1000));
-                setVideoTime(videoRef.current.currentTime);
+                // 仅在videoRef.current不为空且有currentTime属性时才更新
+                if (videoRef.current && typeof videoRef.current.currentTime !== 'undefined') {
+                    try {
+                        const time = videoRef.current.currentTime;
+                        setCurrentFrame(Math.floor(time * 1000));
+                        setVideoTime(time);
+                    } catch (error) {
+                        console.error('获取视频时间出错:', error);
+                    }
+                }
             };
             
-            videoRef.current.addEventListener('timeupdate', updateCurrentFrame);
-            return () => {
-                videoRef.current?.removeEventListener('timeupdate', updateCurrentFrame);
-            };
+            // 添加事件监听
+            const videoElement = videoRef.current;
+            if (videoElement) {
+                videoElement.addEventListener('timeupdate', updateCurrentFrame);
+                
+                // 清理函数
+                return () => {
+                    if (videoElement) {
+                        videoElement.removeEventListener('timeupdate', updateCurrentFrame);
+                    }
+                };
+            }
         }
     }, [videoRef]);
     
