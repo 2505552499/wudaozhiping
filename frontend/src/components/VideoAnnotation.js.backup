@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button, Input, List, Popover, message, Select, Tag, Tooltip, Modal } from 'antd';
 import { CommentOutlined, DeleteOutlined, EditOutlined, SaveOutlined, UndoOutlined, CameraOutlined, PauseOutlined } from '@ant-design/icons';
 import axios from 'axios';
@@ -15,20 +16,21 @@ const { Option } = Select;
  * @param {boolean} props.isAdmin - 是否为管理员
  * @param {function} props.onAnnotationSelected - 批注选中回调函数
  */
-const VideoAnnotation = (props) => {
-    const { videoUrl, videoId, videoRef, isAdmin = false, onAnnotationSelected } = props;
-    const [annotations, setAnnotations] = useState([]);
+const VideoAnnotation = ({ videoId, fileUrl, admin = true, onAddAnnotation, existingAnnotations }) => {
+    const [annotations, setAnnotations] = useState(existingAnnotations || []);
     const [loading, setLoading] = useState(false);
-    const [currentAnnotation, setCurrentAnnotation] = useState('');
     const canvasRef = useRef(null);
     const contextRef = useRef(null);
+    const videoRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
-    const [currentFrame, setCurrentFrame] = useState(0);
-    const [drawingHistory, setDrawingHistory] = useState([]);
-    const [currentColor, setCurrentColor] = useState('#ff0000');
-    const [lineWidth, setLineWidth] = useState(3);
-    const [capturedFrame, setCapturedFrame] = useState(null); // 存储截取的视频帧
-    const [isAnnotating, setIsAnnotating] = useState(false); // 是否正在批注模式
+    const [currentAnnotation, setCurrentAnnotation] = useState('');
+    const [currentFrame, setCurrentFrame] = useState(null);
+    const [currentColor, setCurrentColor] = useState('#FF0000'); // 默认红色
+    const [lineWidth, setLineWidth] = useState(3); // 默认线宽
+    const [capturedFrame, setCapturedFrame] = useState(null);
+    const [isAnnotating, setIsAnnotating] = useState(false);
+    // 添加一个状态来追踪绘图初始化
+    const [canvasInitialized, setCanvasInitialized] = useState(false); // 是否正在批注模式
     const [videoTime, setVideoTime] = useState(0); // 当前视频时间
 
     // 初始化Canvas
@@ -84,6 +86,9 @@ const VideoAnnotation = (props) => {
         }
         
         try {
+            // 首先重置画布初始化状态
+            setCanvasInitialized(false);
+            
             // 暂停视频
             videoRef.current.pause();
             
@@ -103,65 +108,92 @@ const VideoAnnotation = (props) => {
             // 将canvas内容转为数据地址
             const frameDataUrl = tempCanvas.toDataURL('image/jpeg');
             setCapturedFrame(frameDataUrl);
-            console.log('截取的视频帧 URL 长度:', frameDataUrl.length);
             
-            // 启用批注模式 在状态更新后立即初始化画布
-            setIsAnnotating(true);
-            
-            // 立即强制调用初始化 - 这里是全局调用，确保进入批注后立即生效
-            setTimeout(() => {
-                forceInitContext();
-                if (contextRef.current && canvasRef.current) {
-                    // 初始化后立即测试绘制一个点
-                    contextRef.current.fillStyle = currentColor;
-                    contextRef.current.fillRect(0, 0, 1, 1);  // 画一个1x1像素的点
-                    console.log('即时初始化并测试绘图器');
-                }
-            }, 100); // 稍微延时确保状态已经更新
-            
-            // 清空并初始化绘图画布
-            if (canvasRef.current && contextRef.current) {
-                // 设置画布尺寸与视频一致
-                canvasRef.current.width = videoRef.current.videoWidth || 640;
-                canvasRef.current.height = videoRef.current.videoHeight || 360;
+            // ************ 完全重构画布逻辑 ************
+            // 1. 首先创建新画布并替换现有画布，避免画布状态问题
+            if (canvasRef.current) {
+                const originalCanvas = canvasRef.current;
+                const canvasParent = originalCanvas.parentNode;
                 
-                // 重新设置绘图上下文样式，确保绘图可以立即开始
-                contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-                contextRef.current.lineCap = 'round';
-                contextRef.current.strokeStyle = currentColor;
-                contextRef.current.lineWidth = lineWidth;
+                // 创建新画布
+                const newCanvas = document.createElement('canvas');
+                newCanvas.width = videoRef.current.videoWidth || 640;
+                newCanvas.height = videoRef.current.videoHeight || 360;
+                newCanvas.style.width = '100%';
+                newCanvas.style.height = 'auto';
+                newCanvas.style.maxHeight = '500px';
+                newCanvas.style.cursor = 'crosshair';
+                newCanvas.style.position = 'relative';
+                newCanvas.style.zIndex = '2';
+                newCanvas.style.backgroundColor = 'transparent';
                 
-                // 在canvas上绘制视频帧
+                // 手动添加事件监听器
+                newCanvas.addEventListener('mousedown', startDrawing);
+                newCanvas.addEventListener('mousemove', draw);
+                newCanvas.addEventListener('mouseup', finishDrawing);
+                newCanvas.addEventListener('mouseleave', finishDrawing);
+                
+                // 替换原画布
+                canvasParent.replaceChild(newCanvas, originalCanvas);
+                canvasRef.current = newCanvas;
+                
+                // 重新初始化上下文
+                const context = newCanvas.getContext('2d');
+                context.lineCap = 'round';
+                context.lineJoin = 'round';
+                context.strokeStyle = currentColor;
+                context.lineWidth = lineWidth;
+                context.globalAlpha = 1.0;
+                contextRef.current = context;
+                
+                // 2. 在新画布上绘制视频帧
                 const img = new Image();
                 img.onload = () => {
-                    console.log('图片加载成功，尺寸:', img.width, 'x', img.height);
-                    contextRef.current.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
-                    
-                    // 强制初始化绘图上下文，确保立即可以绘图
-                    forceInitContext();
-                    // 将绘图模式设置为“源覆盖”，确保绘图在图片上方
-                    contextRef.current.globalCompositeOperation = 'source-over';
-                    // 指定1像素宽度的虚线 立即绘制来测试绘图是否正常
-                    contextRef.current.strokeStyle = 'rgba(255,0,0,0.01)';
-                    contextRef.current.beginPath();
-                    contextRef.current.moveTo(0, 0);
-                    contextRef.current.lineTo(1, 1);
-                    contextRef.current.stroke();
-                    // 重新设置回原始颜色
-                    contextRef.current.strokeStyle = currentColor;
-                    console.log('绘图上下文已强制初始化:', { 颜色: currentColor, 线宽: lineWidth });
-                };
-                img.onerror = (err) => {
-                    console.error('图片加载出错:', err);
+                    if (contextRef.current) {
+                        // 绘制背景图片
+                        contextRef.current.drawImage(img, 0, 0, newCanvas.width, newCanvas.height);
+                        
+                        // 初始化 - 更强大的强制激活方法
+                        contextRef.current.strokeStyle = currentColor;
+                        contextRef.current.lineWidth = lineWidth;
+                        contextRef.current.lineCap = 'round';
+                        contextRef.current.lineJoin = 'round';
+                        contextRef.current.globalAlpha = 1.0;
+                        
+                        // 重要: 使用多个不同的绘图操作来强制激活画布
+                        contextRef.current.fillStyle = 'rgba(255,0,0,0.01)';
+                        contextRef.current.fillRect(1, 1, 2, 2);
+                        
+                        contextRef.current.strokeStyle = 'rgba(0,0,255,0.01)';
+                        contextRef.current.beginPath();
+                        contextRef.current.moveTo(10, 10);
+                        contextRef.current.lineTo(20, 20);
+                        contextRef.current.stroke();
+                        
+                        contextRef.current.fillStyle = 'rgba(0,255,0,0.01)';
+                        contextRef.current.beginPath();
+                        contextRef.current.arc(30, 30, 5, 0, Math.PI * 2);
+                        contextRef.current.fill();
+                        
+                        // 重置回原始颜色和配置
+                        contextRef.current.strokeStyle = currentColor;
+                        contextRef.current.fillStyle = currentColor;
+                        
+                        console.log('新画布初始化完成，已绘制测试线条');
+                    }
                 };
                 img.src = frameDataUrl;
             }
             
-            message.success('视频帧截取成功');
+            // 3. 设置批注模式状态
+            setIsAnnotating(true);
+            
+            message.success('视频帧截取成功，可以开始批注');
         } catch (error) {
             console.error('视频帧截取失败:', error);
             message.error('视频帧截取失败: ' + error.message);
         }
+    };
     };
     
     // 取消批注模式
@@ -218,45 +250,8 @@ const VideoAnnotation = (props) => {
 
             // 添加画布数据和原始视频帧
             if (canvasRef.current) {
-                // 重要改动: 创建一个新的画布来合并帧图和绘图，确保保存完整的批注
-                const tempCanvas = document.createElement('canvas');
-                tempCanvas.width = canvasRef.current.width;
-                tempCanvas.height = canvasRef.current.height;
-                const tempContext = tempCanvas.getContext('2d');
-                
-                // 先绘制帧图作为背景
-                if (capturedFrame) {
-                    const img = new Image();
-                    img.src = capturedFrame;
-                    
-                    // 绘制同步处理
-                    if (img.complete) {
-                        tempContext.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
-                        // 再将当前画布内容绘制到新画布上
-                        tempContext.drawImage(canvasRef.current, 0, 0);
-                    } else {
-                        // 异步加载图片
-                        img.onload = () => {
-                            tempContext.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
-                            tempContext.drawImage(canvasRef.current, 0, 0);
-                        };
-                    }
-                } else {
-                    // 如果没有帧图，直接复制画布内容
-                    tempContext.drawImage(canvasRef.current, 0, 0);
-                }
-                
-                // 确保绘图内容可见 - 设置颜色和宽度
-                tempContext.strokeStyle = currentColor;
-                tempContext.lineWidth = lineWidth;
-                tempContext.globalAlpha = 1.0;
-                
-                // 保存合成的图像数据
-                annotationData.drawing_data = tempCanvas.toDataURL('image/png');
-                // 同时保存原始帧图
+                annotationData.drawing_data = canvasRef.current.toDataURL('image/png');
                 annotationData.frame_image = capturedFrame;
-                
-                console.log('保存绘图数据, 长度:', annotationData.drawing_data.length);
             }
 
             const response = await axios.post('/api/annotations', annotationData);
@@ -281,35 +276,16 @@ const VideoAnnotation = (props) => {
 
     // 删除批注
     const deleteAnnotation = async (annotationId) => {
-        // 显示确认对话框
-        Modal.confirm({
-            title: '确认删除',
-            content: '您确定要删除这条批注吗？此操作不可撤销。',
-            okText: '确认删除',
-            okType: 'danger',
-            cancelText: '取消',
-            onOk: async () => {
-                try {
-                    // 显示加载中提示
-                    const hideLoading = message.loading('正在删除批注...', 0);
-                    
-                    const response = await axios.delete(`/api/annotations/${annotationId}`);
-                    
-                    // 关闭加载提示
-                    hideLoading();
-                    
-                    if (response.data.success) {
-                        message.success('删除批注成功');
-                        fetchAnnotations();
-                    } else {
-                        message.error(response.data.message || '删除批注失败');
-                    }
-                } catch (error) {
-                    console.error('删除批注失败:', error);
-                    message.error('删除批注失败: ' + (error.response?.data?.message || error.message));
-                }
+        try {
+            const response = await axios.delete(`/api/annotations/${annotationId}`);
+            if (response.data.success) {
+                message.success('删除批注成功');
+                fetchAnnotations();
             }
-        });
+        } catch (error) {
+            console.error('删除批注失败:', error);
+            message.error('删除批注失败');
+        }
     };
 
     // 跳转到批注时间点
@@ -328,14 +304,25 @@ const VideoAnnotation = (props) => {
             // 重新设置画布和上下文属性
             canvasRef.current.style.opacity = '1'; // 确保画布可见
             
-            // 强制设置绘图上下文属性
-            contextRef.current.globalAlpha = 1.0;
-            contextRef.current.lineCap = 'round';
-            contextRef.current.lineJoin = 'round';
-            contextRef.current.strokeStyle = currentColor;
-            contextRef.current.lineWidth = lineWidth;
+            // 全新设置绘图上下文
+            const ctx = canvasRef.current.getContext('2d', { willReadFrequently: true });
+            ctx.globalAlpha = 1.0;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = currentColor;
+            ctx.lineWidth = lineWidth;
+            contextRef.current = ctx;
             
-            console.log('画布已强制初始化:', { 颜色: currentColor, 线宽: lineWidth });
+            // 立即激活绘图上下文
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(1, 1);
+            ctx.stroke();
+            
+            // 更新初始化状态
+            setCanvasInitialized(true);
+            
+            console.log('画布已强制初始化并激活:', { 颜色: currentColor, 线宽: lineWidth });
         }
     };
     
@@ -355,16 +342,29 @@ const VideoAnnotation = (props) => {
     const startDrawing = ({ nativeEvent }) => {
         if (!contextRef.current || !canvasRef.current) return;
         
+        // 如果是第一次绘图，先强制初始化画布
+        if (!canvasInitialized) {
+            forceInitContext();
+            console.log('开始绘图前强制初始化画布');
+        }
+        
         // 强制设置绘图样式，确保立即生效
         contextRef.current.lineCap = 'round';
         contextRef.current.strokeStyle = currentColor;
         contextRef.current.lineWidth = lineWidth;
+        contextRef.current.globalAlpha = 1.0;
         
         // 使用纠正后的坐标
         const { x, y } = getMousePosition(canvasRef.current, nativeEvent);
         contextRef.current.beginPath();
         contextRef.current.moveTo(x, y);
         setIsDrawing(true);
+
+        // 立即绘制一个点，确保画布引擎已激活
+        contextRef.current.lineTo(x+0.1, y+0.1);
+        contextRef.current.stroke();
+        contextRef.current.beginPath();
+        contextRef.current.moveTo(x, y);
 
         // 调试日志
         console.log('开始绘图坐标:', x, y, '当前样式:', { 颜色: currentColor, 线宽: lineWidth });
@@ -442,14 +442,16 @@ const VideoAnnotation = (props) => {
                             icon={<CommentOutlined />}
                         />
                     </Tooltip>,
-                    <Tooltip title="删除批注">
-                        <Button 
-                            type="link" 
-                            danger 
-                            onClick={() => deleteAnnotation(item.id)}
-                            icon={<DeleteOutlined />}
-                        />
-                    </Tooltip>
+                    isAdmin && (
+                        <Tooltip title="删除批注">
+                            <Button 
+                                type="link" 
+                                danger 
+                                onClick={() => deleteAnnotation(item.id)}
+                                icon={<DeleteOutlined />}
+                            />
+                        </Tooltip>
+                    )
                 ].filter(Boolean)}
             >
                 <List.Item.Meta
@@ -634,6 +636,7 @@ const VideoAnnotation = (props) => {
         );
     };
 
+    // 组件最终渲染 - 此处已在组件函数内部
     return (
         <div className="video-annotation-container">
             {renderAnnotationToolbar()}
