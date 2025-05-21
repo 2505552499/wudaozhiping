@@ -68,7 +68,8 @@ def add_annotation():
             'time_seconds': data['time_seconds'],
             'type': data['type'],
             'content': data.get('content', ''),
-            'drawing_data': data.get('drawing_data', None) if data['type'] == 'drawing' else None,
+            'drawing_data': data.get('drawing_data', None),  # 所有类型都支持保存绘图数据
+            'frame_image': data.get('frame_image', None),
             'created_at': int(time.time())
         }
         
