@@ -17,6 +17,7 @@ import web_model  # Import the new web_model module
 import forum_api  # Import the forum API module
 from payment_api import payment_api  # Import the payment API module
 from course_api import course_api  # Import the course API module
+from annotations_api import annotations_api  # Import the annotations API module
 
 # Initialize Flask app
 app = Flask(__name__, static_folder='frontend/build')
@@ -25,6 +26,7 @@ CORS(app, resources={r"/*": {"origins": ["http://localhost:3001", "https://wudao
 # Register blueprints
 app.register_blueprint(payment_api)
 app.register_blueprint(course_api)
+app.register_blueprint(annotations_api)
 
 # 配置静态文件路径
 app.config['UPLOAD_FOLDER'] = 'uploads'

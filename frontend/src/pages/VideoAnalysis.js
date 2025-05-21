@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Upload, Button, Select, Card, Spin, 
+  Upload, Button, Select, Card, Spin, Tabs, 
   message, Row, Col, Divider, List, Tag, Progress, Timeline 
 } from 'antd';
 import { UploadOutlined, CheckCircleOutlined, CloseCircleOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import MainLayout from '../components/MainLayout';
 import AngleDataVisualization from '../components/visualization/AngleDataVisualization';
+import VideoAnnotation from '../components/VideoAnnotation';
 
 const { Option } = Select;
+const { TabPane } = Tabs;
 
 const VideoAnalysis = () => {
   const [file, setFile] = useState(null);
@@ -18,6 +20,11 @@ const VideoAnalysis = () => {
   const [result, setResult] = useState(null);
   const [poses, setPoses] = useState([]);
   const [fileList, setFileList] = useState([]); // 新增：用于跟踪上传文件列表
+  const [videoUrl, setVideoUrl] = useState('');
+  const [videoId, setVideoId] = useState('');
+  const videoRef = useRef(null);
+  const [isAdmin, setIsAdmin] = useState(false); // 判断当前用户是否为管理员
+  const [activeTab, setActiveTab] = useState('1'); // 当前活动的标签页
 
   useEffect(() => {
     // Fetch available poses
@@ -33,7 +40,27 @@ const VideoAnalysis = () => {
       }
     };
 
+    // 检查用户角色
+    const checkUserRole = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const response = await axios.get('/api/user', {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          if (response.data.success) {
+            setIsAdmin(response.data.user.role === 'admin');
+          }
+        }
+      } catch (error) {
+        console.error('检查用户角色失败:', error);
+      }
+    };
+
     fetchPoses();
+    checkUserRole();
   }, []);
 
   // 完全重写文件上传处理函数
@@ -51,11 +78,22 @@ const VideoAnalysis = () => {
       // 设置文件状态
       if (latestFile.originFileObj) {
         setFile(latestFile.originFileObj);
+        
+        // 生成一个临时的唯一ID作为视频ID
+        const tempVideoId = `video_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+        setVideoId(tempVideoId);
+        
+        // 创建视频URL用于播放
+        const videoURL = URL.createObjectURL(latestFile.originFileObj);
+        setVideoUrl(videoURL);
+        
         message.success(`文件 "${latestFile.name}" 已选择`);
       }
     } else {
       // 当没有文件时
       setFile(null);
+      setVideoUrl('');
+      setVideoId('');
     }
   };
 
@@ -120,6 +158,17 @@ const VideoAnalysis = () => {
     return '#f5222d';
   };
 
+  const handleAnnotationSelected = (timestamp) => {
+    // 当用户点击批注时，跳转到对应时间点
+    if (videoRef.current) {
+      videoRef.current.currentTime = timestamp / 1000;
+    }
+  };
+
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+  };
+
   return (
     <MainLayout>
       <Card title="武术动作视频分析" bordered={false}>
@@ -128,101 +177,124 @@ const VideoAnalysis = () => {
         </p>
 
         <Row gutter={[16, 16]}>
-          <Col xs={24} md={12}>
+          <Col xs={24} md={8}>
             <Card title="上传视频" bordered={false}>
-              <div style={{ marginBottom: 16 }}>
-                <label style={{ marginRight: 8 }}>选择动作类型:</label>
-                <Select
-                  value={posture}
-                  onChange={handlePostureChange}
-                  style={{ width: 200 }}
-                >
-                  {poses.map(pose => (
-                    <Option key={pose} value={pose}>{pose}</Option>
-                  ))}
-                </Select>
-              </div>
-
               <Upload
                 name="video"
                 listType="picture"
-                maxCount={1}
-                beforeUpload={() => false}
+                fileList={fileList}
                 onChange={handleFileChange}
+                beforeUpload={() => false} // 阻止自动上传
                 accept="video/*"
-                fileList={fileList} // 新增：使用受控的文件列表
               >
-                <Button icon={<UploadOutlined />}>选择视频</Button>
+                <Button icon={<UploadOutlined />}>选择视频文件</Button>
               </Upload>
 
-              <div style={{ marginTop: 16 }}>
-                <Button
-                  type="primary"
-                  onClick={handleAnalyze}
-                  loading={analyzing}
-                  disabled={!file} // 恢复禁用条件，但确保文件状态正确设置
-                >
-                  开始分析
-                </Button>
-              </div>
+              {videoUrl && (
+                <div style={{ marginTop: 16 }}>
+                  <video 
+                    ref={videoRef} 
+                    src={videoUrl} 
+                    controls 
+                    style={{ width: '100%' }}
+                  />
+                </div>
+              )}
+
+              <Divider />
+
+              <Select
+                placeholder="选择标准姿势"
+                style={{ width: '100%', marginBottom: 16 }}
+                value={posture}
+                onChange={handlePostureChange}
+              >
+                {poses.map(pose => (
+                  <Option key={pose} value={pose}>{pose}</Option>
+                ))}
+              </Select>
+
+              <Button 
+                type="primary" 
+                onClick={handleAnalyze} 
+                disabled={!file || analyzing} 
+                loading={analyzing}
+                block
+              >
+                开始分析
+              </Button>
             </Card>
           </Col>
 
-          <Col xs={24} md={12}>
+          <Col xs={24} md={16}>
             {loading ? (
-              <div className="loading-container">
-                <Spin size="large" tip="正在分析视频..." />
-              </div>
-            ) : result ? (
-              <Card title="分析结果" bordered={false}>
-                <div className="result-container">
-                  <div 
-                    className="score-display" 
-                    style={{ color: getScoreColor(result.average_score) }}
-                  >
-                    {result.average_score.toFixed(1)}
-                    <span style={{ fontSize: '0.5em', marginLeft: 8 }}>/ 10</span>
-                  </div>
-
-                  <Progress 
-                    percent={result.average_score * 10} 
-                    status="active" 
-                    strokeColor={getScoreColor(result.average_score)}
-                  />
-
-                  <Tag 
-                    color={getScoreColor(result.average_score)} 
-                    style={{ fontSize: 16, padding: '4px 8px', margin: '8px 0' }}
-                  >
-                    {result.feedback.level}
-                  </Tag>
-
-                  <Divider>评价与建议</Divider>
-
-                  <List
-                    className="feedback-list"
-                    itemLayout="horizontal"
-                    dataSource={result.feedback.suggestions}
-                    renderItem={item => (
-                      <List.Item>
-                        <List.Item.Meta
-                          avatar={
-                            result.average_score >= 8 
-                              ? <CheckCircleOutlined style={{ color: '#52c41a', fontSize: 18 }} /> 
-                              : <CloseCircleOutlined style={{ color: '#f5222d', fontSize: 18 }} />
-                          }
-                          description={item}
-                        />
-                      </List.Item>
-                    )}
-                  />
+              <Card bordered={false}>
+                <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                  <Spin size="large" />
+                  <p style={{ marginTop: 16 }}>正在分析视频，请稍候...</p>
                 </div>
               </Card>
             ) : (
-              <Card title="分析结果" bordered={false}>
-                <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                  <p>请上传视频并点击"开始分析"按钮</p>
-                </div>
+              <Card bordered={false}>
+                <Tabs activeKey={activeTab} onChange={handleTabChange}>
+                  <TabPane tab="分析结果" key="1">
+                    {result ? (
+                      <div>
+                        <Progress 
+                          percent={result.average_score * 10} 
+                          status="active" 
+                          strokeColor={getScoreColor(result.average_score)}
+                        />
+
+                        <Tag 
+                          color={getScoreColor(result.average_score)} 
+                          style={{ fontSize: 16, padding: '4px 8px', margin: '8px 0' }}
+                        >
+                          {result.feedback.level}
+                        </Tag>
+
+                        <Divider>评价与建议</Divider>
+
+                        <List
+                          className="feedback-list"
+                          itemLayout="horizontal"
+                          dataSource={result.feedback.suggestions}
+                          renderItem={item => (
+                            <List.Item>
+                              <List.Item.Meta
+                                avatar={
+                                  result.average_score >= 8 
+                                    ? <CheckCircleOutlined style={{ color: '#52c41a', fontSize: 18 }} /> 
+                                    : <CloseCircleOutlined style={{ color: '#f5222d', fontSize: 18 }} />
+                                }
+                                description={item}
+                              />
+                            </List.Item>
+                          )}
+                        />
+                      </div>
+                    ) : (
+                      <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                        <p>请上传视频并点击"开始分析"按钮</p>
+                      </div>
+                    )}
+                  </TabPane>
+                  <TabPane tab="批注" key="2">
+                    {videoUrl ? (
+                      <VideoAnnotation 
+                        videoUrl={videoUrl}
+                        videoId={videoId}
+                        videoRef={videoRef}
+                        isAdmin={isAdmin}
+                        onAnnotationSelected={handleAnnotationSelected}
+                      />
+                    ) : (
+                      <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                        <p>请先上传视频文件</p>
+                      </div>
+                    )}
+                  </TabPane>
+                </Tabs>
               </Card>
             )}
           </Col>
