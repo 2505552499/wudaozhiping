@@ -4,3 +4,4 @@
 /uploads/images/*.jpg
 !frontend/public/img/*.png
 !frontend/public/img/*.jpg
+node_modules
