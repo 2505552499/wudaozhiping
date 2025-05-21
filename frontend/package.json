@@ -13,7 +13,7 @@
     "framer-motion": "^12.12.1",
     "gsap": "^3.13.0",
     "moment": "^2.30.1",
-    "postcss-import": "^16.1.0",
+    "postcss-import": "^12.0.1",
     "postcss-loader": "^8.1.1",
     "react": "^18.2.0",
     "react-countup": "^6.5.3",
