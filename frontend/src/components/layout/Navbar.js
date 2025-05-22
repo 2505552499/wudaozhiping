@@ -128,13 +128,9 @@ const Navbar = () => {
           <Link to="/" className="flex items-center">
             <div className="flex items-center">
               <img 
-                src="/logo.png" 
+                src="/img/logo.png" 
                 alt="武道智评" 
-                className="h-8 mr-2" 
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = 'https://via.placeholder.com/120x40?text=武道智评';
-                }}
+                className="h-8 mr-2"
               />
               <span className="text-white font-bold text-xl hidden md:block">武道智评</span>
             </div>
