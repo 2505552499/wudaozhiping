@@ -12,16 +12,6 @@ const HomePage = () => {
     
     // 页面加载时滚动到顶部
     window.scrollTo(0, 0);
-    
-    // 设置深色背景
-    document.body.classList.add('bg-dark-bg');
-    document.body.classList.add('text-text-primary');
-    
-    return () => {
-      // 清理函数
-      document.body.classList.remove('bg-dark-bg');
-      document.body.classList.remove('text-text-primary');
-    };
   }, []);
   
   return (
@@ -56,7 +46,7 @@ const HomePage = () => {
           
           <div>
             <GradientButton 
-              className="px-8 py-3 text-lg bg-dark-bg border-none hover:bg-surface"
+              className="px-8 py-3 text-lg bg-white/10 border-none hover:bg-white/20"
               onClick={() => window.location.href = '/login'}
             >
               立即加入

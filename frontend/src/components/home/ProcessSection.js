@@ -159,7 +159,7 @@ const ProcessSection = () => {
   ];
   
   return (
-    <section className="py-20 bg-dark-bg relative overflow-hidden">
+    <section className="py-20 relative overflow-hidden">
       {/* 背景装饰 */}
       <div className="absolute inset-0 z-0 opacity-5 pointer-events-none">
         <div className="absolute right-0 bottom-0 w-1/3 h-2/3" style={{

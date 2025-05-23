@@ -18,6 +18,15 @@ module.exports = {
           600: '#274CFF'
         },
         'accent': '#8B5CFF',
+        
+        // 现代渐变背景色彩方案
+        'modern-bg': {
+          'start': '#1a2332', // 深蓝色起点
+          'mid': '#2d3748',   // 中间过渡色
+          'end': '#4a5568'    // 浅灰色终点
+        },
+        
+        // 保留原配置以便渐进式迁移
         'dark-bg': '#0A0A0A',
         'surface': '#161616',
         'text': {
@@ -59,6 +68,10 @@ module.exports = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-accent': 'linear-gradient(to right, #165DFF, #8B5CFF)',
+        // 现代渐变背景方案
+        'gradient-modern': 'linear-gradient(135deg, #1a2332 0%, #2d3748 50%, #4a5568 100%)',
+        'gradient-modern-light': 'linear-gradient(135deg, #2d3748 0%, #4a5568 50%, #718096 100%)',
+        'gradient-modern-subtle': 'linear-gradient(180deg, #1a2332 0%, #2d3748 100%)',
       },
     },
   },
