@@ -158,7 +158,13 @@ def upload_training_video(appointment_id):
             return jsonify({'success': False, 'message': '只有已确认或已完成的预约才能上传训练视频'}), 400
 
         # 保存视频文件
-        filename = secure_filename(file.filename)
+        original_filename = file.filename or 'unknown_video.mp4'
+        filename = secure_filename(original_filename)
+
+        # 如果secure_filename过滤后文件名为空，使用默认名称
+        if not filename or filename == '':
+            filename = 'uploaded_video.mp4'
+
         # 生成唯一文件名
         if '.' in filename:
             file_extension = filename.rsplit('.', 1)[1].lower()
@@ -185,7 +191,7 @@ def upload_training_video(appointment_id):
             'user_id': current_user,
             'coach_id': appointment.get('coach_id'),
             'filename': unique_filename,
-            'original_filename': filename,
+            'original_filename': original_filename,  # 使用原始文件名
             'file_path': file_path,
             'description': description,
             'upload_time': int(time.time()),
