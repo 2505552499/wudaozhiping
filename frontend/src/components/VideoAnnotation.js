@@ -247,16 +247,29 @@ const VideoAnnotation = (props) => {
 
     // 获取批注列表
     useEffect(() => {
-        if (videoId) {
+        if (videoId || trainingVideoId) {
             fetchAnnotations();
         }
-    }, [videoId]);
+    }, [videoId, trainingVideoId]);
 
     // 获取批注列表
     const fetchAnnotations = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`/api/annotations/${videoId}`);
+            let response;
+            // 如果有trainingVideoId，使用训练视频专用API
+            if (trainingVideoId) {
+                const token = localStorage.getItem('token');
+                response = await axios.get(`/api/training-videos/${trainingVideoId}/annotations`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            } else {
+                // 否则使用通用批注API
+                response = await axios.get(`/api/annotations/${videoId}`);
+            }
+
             if (response.data.success) {
                 setAnnotations(response.data.annotations);
             }

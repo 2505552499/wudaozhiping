@@ -307,6 +307,50 @@ def get_coach_pending_videos():
         print(f"获取待标注视频错误: {e}")
         return jsonify({'success': False, 'message': f'获取失败: {str(e)}'}), 500
 
+@training_video_api.route('/api/training-videos/coach/all', methods=['GET'])
+@jwt_required()
+def get_coach_all_videos():
+    """教练获取所有相关的训练视频（包括待标注、已标注、已发布）"""
+    current_user = get_jwt_identity()
+    user_data = get_user_data(current_user)
+
+    # 检查是否是教练
+    if not user_data or user_data.get('role') != 'coach':
+        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
+
+    try:
+        training_videos = get_training_videos_data()
+
+        # 获取该教练的所有视频
+        coach_videos = [
+            video for video in training_videos
+            if video.get('coach_id') == current_user
+        ]
+
+        # 获取相关预约信息
+        appointments_data = get_appointments_data()
+        appointments_dict = {
+            apt.get('id'): apt for apt in appointments_data.get('appointments', [])
+        }
+
+        # 为每个视频添加预约信息
+        for video in coach_videos:
+            appointment_id = video.get('appointment_id')
+            if appointment_id in appointments_dict:
+                video['appointment_info'] = appointments_dict[appointment_id]
+
+        # 按上传时间倒序排序
+        coach_videos.sort(key=lambda x: x.get('upload_time', 0), reverse=True)
+
+        return jsonify({
+            'success': True,
+            'videos': coach_videos
+        })
+
+    except Exception as e:
+        print(f"获取教练视频错误: {e}")
+        return jsonify({'success': False, 'message': f'获取失败: {str(e)}'}), 500
+
 @training_video_api.route('/api/training-videos/<video_id>/annotate', methods=['POST'])
 @jwt_required()
 def save_video_annotation(video_id):

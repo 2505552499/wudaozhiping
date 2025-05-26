@@ -15,5 +15,20 @@
     "annotation_published": true,
     "annotation_time": 1748240976,
     "publish_time": 1748240981
+  },
+  {
+    "id": "2828905b-e8e1-47a7-9450-874efbfa80d7",
+    "appointment_id": "1",
+    "user_id": "yetong",
+    "coach_id": "coach2",
+    "filename": "training_1_1748246540.mp4",
+    "original_filename": "-.mp4",
+    "file_path": "uploads/training_videos/training_1_1748246540.mp4",
+    "description": "",
+    "upload_time": 1748246540,
+    "annotation_status": "pending",
+    "coach_score": null,
+    "coach_feedback": "",
+    "annotation_published": false
   }
 ]

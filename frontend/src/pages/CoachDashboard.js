@@ -37,7 +37,9 @@ const CoachDashboard = () => {
 
   // 训练视频相关状态
   const [pendingVideos, setPendingVideos] = useState([]);
+  const [allVideos, setAllVideos] = useState([]);
   const [videosLoading, setVideosLoading] = useState(false);
+  const [allVideosLoading, setAllVideosLoading] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [videoRefreshTrigger, setVideoRefreshTrigger] = useState(0);
@@ -111,11 +113,39 @@ const CoachDashboard = () => {
     }
   };
 
+  // 获取所有训练视频
+  const fetchAllVideos = async () => {
+    setAllVideosLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `${API_BASE_URL}/api/training-videos/coach/all`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        setAllVideos(response.data.videos || []);
+      } else {
+        message.error(response.data.message || '获取训练视频失败');
+      }
+    } catch (error) {
+      console.error('获取训练视频失败:', error);
+      message.error('获取训练视频失败，请稍后重试');
+    } finally {
+      setAllVideosLoading(false);
+    }
+  };
+
   // 初始加载
   useEffect(() => {
     fetchCoachAppointments();
     fetchPublishedAppointments();
     fetchPendingVideos();
+    fetchAllVideos();
   }, []);
 
   // 确认预约
@@ -221,6 +251,7 @@ const CoachDashboard = () => {
   const handleVideoAnnotationUpdate = () => {
     setVideoRefreshTrigger(prev => prev + 1);
     fetchPendingVideos(); // 刷新待标注视频列表
+    fetchAllVideos(); // 刷新所有视频列表
   };
 
   // 获取预约状态显示文本
@@ -287,7 +318,7 @@ const CoachDashboard = () => {
     }
   };
 
-  // 渲染训练视频列表项
+  // 渲染训练视频列表项（待标注）
   const renderVideoItem = (video) => {
     const formatTime = (timestamp) => {
       return new Date(timestamp * 1000).toLocaleString();
@@ -318,7 +349,7 @@ const CoachDashboard = () => {
             <>
               <div>
                 <Text type="secondary">学员: </Text>
-                <Text>{video.appointment_info?.user_name || '未知学员'}</Text>
+                <Text>{video.appointment_info?.user_name || video.appointment_info?.user_id || '未知学员'}</Text>
               </div>
               <div>
                 <Text type="secondary">预约日期: </Text>
@@ -332,6 +363,98 @@ const CoachDashboard = () => {
                 <Text type="secondary">上传时间: </Text>
                 <Text>{formatTime(video.upload_time)}</Text>
               </div>
+              {video.description && (
+                <div>
+                  <Text type="secondary">视频描述: </Text>
+                  <Text>{video.description}</Text>
+                </div>
+              )}
+            </>
+          }
+        />
+      </List.Item>
+    );
+  };
+
+  // 渲染所有训练视频列表项
+  const renderAllVideoItem = (video) => {
+    const formatTime = (timestamp) => {
+      return new Date(timestamp * 1000).toLocaleString();
+    };
+
+    const getStatusTag = (status) => {
+      switch (status) {
+        case 'pending':
+          return <Tag color="orange">待标注</Tag>;
+        case 'annotated':
+          return <Tag color="blue">已标注</Tag>;
+        case 'published':
+          return <Tag color="green">已发布</Tag>;
+        default:
+          return <Tag color="default">未知状态</Tag>;
+      }
+    };
+
+    const getActionButton = (video) => {
+      if (video.annotation_status === 'pending') {
+        return (
+          <Button
+            type="primary"
+            icon={<EyeOutlined />}
+            onClick={() => handleViewVideo(video)}
+          >
+            查看并标注
+          </Button>
+        );
+      } else {
+        return (
+          <Button
+            icon={<EyeOutlined />}
+            onClick={() => handleViewVideo(video)}
+          >
+            查看详情
+          </Button>
+        );
+      }
+    };
+
+    return (
+      <List.Item
+        key={video.id}
+        actions={[getActionButton(video)]}
+      >
+        <List.Item.Meta
+          avatar={<Avatar icon={<VideoCameraOutlined />} />}
+          title={
+            <Space>
+              <Text strong>{video.original_filename}</Text>
+              {getStatusTag(video.annotation_status)}
+            </Space>
+          }
+          description={
+            <>
+              <div>
+                <Text type="secondary">学员: </Text>
+                <Text>{video.appointment_info?.user_name || video.appointment_info?.user_id || '未知学员'}</Text>
+              </div>
+              <div>
+                <Text type="secondary">预约日期: </Text>
+                <Text>{video.appointment_info?.date || '未知日期'}</Text>
+              </div>
+              <div>
+                <Text type="secondary">训练项目: </Text>
+                <Tag color="blue">{video.appointment_info?.skill || '未知项目'}</Tag>
+              </div>
+              <div>
+                <Text type="secondary">上传时间: </Text>
+                <Text>{formatTime(video.upload_time)}</Text>
+              </div>
+              {video.annotation_status === 'published' && video.coach_score && (
+                <div>
+                  <Text type="secondary">评分: </Text>
+                  <Text strong style={{ color: '#1890ff' }}>{video.coach_score}/5</Text>
+                </div>
+              )}
               {video.description && (
                 <div>
                   <Text type="secondary">视频描述: </Text>
@@ -565,10 +688,10 @@ const CoachDashboard = () => {
             tab={
               <Badge count={pendingVideos.length} offset={[10, 0]}>
                 <VideoCameraOutlined style={{ marginRight: 4 }} />
-                训练视频标注
+                待标注视频
               </Badge>
             }
-            key="videos"
+            key="pending-videos"
           >
             <List
               loading={videosLoading}
@@ -576,6 +699,24 @@ const CoachDashboard = () => {
               dataSource={pendingVideos}
               renderItem={renderVideoItem}
               locale={{ emptyText: <Empty description="暂无待标注的训练视频" /> }}
+            />
+          </TabPane>
+
+          <TabPane
+            tab={
+              <span>
+                <VideoCameraOutlined style={{ marginRight: 4 }} />
+                所有训练视频
+              </span>
+            }
+            key="all-videos"
+          >
+            <List
+              loading={allVideosLoading}
+              itemLayout="horizontal"
+              dataSource={allVideos}
+              renderItem={renderAllVideoItem}
+              locale={{ emptyText: <Empty description="暂无训练视频" /> }}
             />
           </TabPane>
         </Tabs>
