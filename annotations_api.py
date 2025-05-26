@@ -16,7 +16,7 @@ def get_annotations_data():
         with open(ANNOTATIONS_FILE, 'w') as f:
             json.dump([], f)
         return []
-    
+
     try:
         with open(ANNOTATIONS_FILE, 'r', encoding='utf-8') as f:
             return json.load(f)
@@ -39,10 +39,10 @@ def save_annotations_data(data):
 def get_video_annotations(video_id):
     annotations = get_annotations_data()
     video_annotations = [anno for anno in annotations if anno.get('video_id') == video_id]
-    
+
     # 按时间戳排序
     video_annotations.sort(key=lambda x: x.get('timestamp', 0))
-    
+
     return jsonify({
         'success': True,
         'annotations': video_annotations
@@ -53,13 +53,13 @@ def get_video_annotations(video_id):
 def add_annotation():
     try:
         data = request.json
-        
+
         # 验证必要字段
         required_fields = ['video_id', 'timestamp', 'time_seconds', 'type']
         for field in required_fields:
             if field not in data:
                 return jsonify({'success': False, 'message': f'缺少必要字段: {field}'}), 400
-        
+
         # 创建新批注
         new_annotation = {
             'id': str(uuid.uuid4()),
@@ -70,19 +70,21 @@ def add_annotation():
             'content': data.get('content', ''),
             'drawing_data': data.get('drawing_data', None),  # 所有类型都支持保存绘图数据
             'frame_image': data.get('frame_image', None),
+            'author': data.get('author', '未知用户'),  # 批注作者
+            'author_role': data.get('author_role', 'user'),  # 批注作者角色
             'created_at': int(time.time())
         }
-        
+
         # 读取现有批注并添加新批注
         annotations = get_annotations_data()
         annotations.append(new_annotation)
-        
+
         # 保存更新后的批注
         if save_annotations_data(annotations):
             return jsonify({'success': True, 'annotation': new_annotation})
         else:
             return jsonify({'success': False, 'message': '保存批注失败'}), 500
-            
+
     except Exception as e:
         print(f"添加批注错误: {e}")
         return jsonify({'success': False, 'message': str(e)}), 500
@@ -93,20 +95,20 @@ def delete_annotation(annotation_id):
     try:
         # 读取现有批注
         annotations = get_annotations_data()
-        
+
         # 找到并删除指定批注
         updated_annotations = [anno for anno in annotations if anno.get('id') != annotation_id]
-        
+
         # 检查是否找到并删除了批注
         if len(updated_annotations) == len(annotations):
             return jsonify({'success': False, 'message': '未找到指定批注'}), 404
-        
+
         # 保存更新后的批注
         if save_annotations_data(updated_annotations):
             return jsonify({'success': True})
         else:
             return jsonify({'success': False, 'message': '删除批注失败'}), 500
-            
+
     except Exception as e:
         print(f"删除批注错误: {e}")
         return jsonify({'success': False, 'message': str(e)}), 500

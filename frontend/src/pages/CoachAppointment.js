@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Layout, Typography, Card, Row, Col, Button, Select, 
-  Input, Tag, Avatar, Rate, Modal, Form, DatePicker, 
+import {
+  Layout, Typography, Card, Row, Col, Button, Select,
+  Input, Tag, Avatar, Rate, Modal, Form, DatePicker,
   TimePicker, message, Tabs, List, Badge, Divider, Space, Empty, Spin
 } from 'antd';
-import { 
-  UserOutlined, EnvironmentOutlined, CalendarOutlined, 
-  ClockCircleOutlined, SearchOutlined, FilterOutlined
+import {
+  UserOutlined, EnvironmentOutlined, CalendarOutlined,
+  ClockCircleOutlined, SearchOutlined, FilterOutlined,
+  VideoCameraOutlined, UploadOutlined, EyeOutlined
 } from '@ant-design/icons';
 import MainLayout from '../layouts/MainLayout';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -19,6 +20,8 @@ import paymentService from '../services/paymentService';
 
 // 导入自定义组件
 import AppointmentListItem from '../components/AppointmentListItem';
+import TrainingVideoUpload from '../components/TrainingVideoUpload';
+import TrainingVideoList from '../components/TrainingVideoList';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
@@ -36,10 +39,10 @@ console.log('[DEBUG] 加载 CoachAppointment 组件');
 
 function CoachAppointment() {
   console.log('[DEBUG] 初始化 CoachAppointment 组件');
-  
+
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   // 状态管理 - 磁盘为所有状态提供默认空值
   const [activeTab, setActiveTab] = useState('1');
   const [loading, setLoading] = useState(false);
@@ -57,18 +60,24 @@ function CoachAppointment() {
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [paymentAppointmentId, setPaymentAppointmentId] = useState(null);
-  
+
+  // 训练视频相关状态
+  const [showVideoUploadModal, setShowVideoUploadModal] = useState(false);
+  const [showVideoListModal, setShowVideoListModal] = useState(false);
+  const [selectedAppointmentForVideo, setSelectedAppointmentForVideo] = useState(null);
+  const [videoRefreshTrigger, setVideoRefreshTrigger] = useState(0);
+
   // 调试打印当前组件状态
   console.log('[DEBUG] 组件初始状态 coaches类型:', typeof coaches);
   console.log('[DEBUG] 组件初始状态 appointments类型:', typeof appointments);
-  
+
   // 筛选条件
   const [filters, setFilters] = useState({
     city: undefined,
     district: undefined,
     skill: undefined
   });
-  
+
   // 解析URL参数，设置tab参数，通常是从其他页面跳转而来
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -77,7 +86,7 @@ function CoachAppointment() {
       setActiveTab(tab);
     }
   }, [location]);
-  
+
   // 获取教练列表
   const fetchCoaches = async () => {
     setLoading(true);
@@ -108,7 +117,7 @@ function CoachAppointment() {
       setDistricts([]);
       return;
     }
-    
+
     try {
       const response = await coachAPI.getDistricts(city);
       setDistricts(response.data.districts || []);
@@ -126,19 +135,19 @@ function CoachAppointment() {
       console.log('[DEBUG] 获取预约响应:', response);
       console.log('[DEBUG] 预约数据类型:', typeof response.data);
       console.log('[DEBUG] 预约数据:', response.data);
-      
+
       // 确保 appointments 是数组
-      const appointmentsData = Array.isArray(response.data.appointments) 
-        ? response.data.appointments 
+      const appointmentsData = Array.isArray(response.data.appointments)
+        ? response.data.appointments
         : [];
-      
+
       console.log('[DEBUG] 解析后的预约数组:', appointmentsData);
       console.log('[DEBUG] 预约数量:', appointmentsData.length);
-      
+
       // 过滤掉所有的 null 和 undefined 值
       const filteredAppointments = appointmentsData.filter(item => item !== null && item !== undefined);
       console.log('[DEBUG] 过滤后的预约数量:', filteredAppointments.length);
-      
+
       setAppointments(filteredAppointments);
     } catch (error) {
       console.error('[ERROR] 获取预约列表失败:', error);
@@ -222,7 +231,7 @@ function CoachAppointment() {
   const closeMessageModal = () => {
     setShowMessageModal(false);
   };
-  
+
   // 发送消息给教练
   const handleSendMessage = async (values) => {
     try {
@@ -230,7 +239,7 @@ function CoachAppointment() {
         coach_id: selectedCoach.id,
         message: values.message
       });
-      
+
       if (response.data.success) {
         message.success('发送消息成功');
         closeMessageModal();
@@ -241,6 +250,32 @@ function CoachAppointment() {
       console.error('发送消息失败', error);
       message.error('发送消息失败，请稍后重试');
     }
+  };
+
+  // 训练视频相关处理函数
+  const handleUploadVideo = (appointment) => {
+    setSelectedAppointmentForVideo(appointment);
+    setShowVideoUploadModal(true);
+  };
+
+  const handleViewVideos = (appointment) => {
+    setSelectedAppointmentForVideo(appointment);
+    setShowVideoListModal(true);
+  };
+
+  const handleVideoUploadSuccess = () => {
+    setVideoRefreshTrigger(prev => prev + 1);
+    fetchUserAppointments(); // 刷新预约列表
+  };
+
+  const closeVideoUploadModal = () => {
+    setShowVideoUploadModal(false);
+    setSelectedAppointmentForVideo(null);
+  };
+
+  const closeVideoListModal = () => {
+    setShowVideoListModal(false);
+    setSelectedAppointmentForVideo(null);
   };
 
   // 处理ID格式问题，确保教练ID不会被格式化，避免出现coach4_4这种情况
@@ -264,47 +299,47 @@ function CoachAppointment() {
         message.error('教练信息不存在，请重新选择教练');
         return;
       }
-      
+
       // 确保 selectedCoach.location 存在
       if (!selectedCoach.location) {
         console.error('提交预约时教练位置信息缺失');
         selectedCoach.location = { city: '', districts: [] };
       }
-      
+
       console.log('提交预约时的selectedCoach:', JSON.stringify(selectedCoach));
       console.log('提交预约时的教练ID类型:', typeof selectedCoach.id, '教练ID为', selectedCoach.id);
-      
+
       // 确保教练ID存在
       if (!selectedCoach.id) {
         console.error('教练ID不存在');
         message.error('教练信息不完整，请重新选择教练');
         return;
       }
-      
+
       // 规范化教练ID，确保格式正确避免后续处理问题
       const normalizedCoachId = normalizeCoachId(selectedCoach.id);
       console.log('规范化后的教练ID:', normalizedCoachId);
-      
+
       // 构建预约数据对象，准备发送到后端
       const appointmentData = {
         coach_id: normalizedCoachId, // 使用规范化的ID
         date: values.date.format('YYYY-MM-DD'),
         time: values.time.format('HH:mm'),
         // 安全地获取教练位置信息，避免 districts 是 undefined 的情况
-        location: (selectedCoach.location?.city || '') + ' ' + 
-                 ((selectedCoach.location?.districts && Array.isArray(selectedCoach.location.districts) && selectedCoach.location.districts.length > 0) ? 
+        location: (selectedCoach.location?.city || '') + ' ' +
+                 ((selectedCoach.location?.districts && Array.isArray(selectedCoach.location.districts) && selectedCoach.location.districts.length > 0) ?
                    selectedCoach.location.districts[0] : ''),  // 确保 districts 是数组并且有元素
         skill: values.training_type, // 将training_type作为技能
         duration: values.duration // 预约duration字段
       };
-      
+
       // 再次检查和确认coach_id
-      console.log('预约数据:', appointmentData); 
+      console.log('预约数据:', appointmentData);
       console.log('最终确认的教练ID类型:', typeof appointmentData.coach_id, '值', appointmentData.coach_id);
-      
+
       // 保存预约数据
       setAppointmentFormData(appointmentData);
-      
+
       // 询问用户是否需要立即支付
       Modal.confirm({
         title: '预约已准备好',
@@ -320,7 +355,7 @@ function CoachAppointment() {
           await createAppointmentWithoutPayment(appointmentData);
         }
       });
-      
+
       // 关闭预约对话框
       setShowAppointmentModal(false);
     } catch (error) {
@@ -328,7 +363,7 @@ function CoachAppointment() {
       message.error('提交预约失败，请稍后重试');
     }
   };
-  
+
   // 创建预约而不立即支付
   const createAppointmentWithoutPayment = async (appointmentData) => {
     try {
@@ -338,10 +373,10 @@ function CoachAppointment() {
         coach_id: normalizeCoachId(appointmentData.coach_id) // 再次规范化ID
       };
       console.log('创建预约而不支付，发送数据:', JSON.stringify(appointmentDataToSend));
-      
+
       const appointmentResponse = await appointmentAPI.createAppointment(appointmentDataToSend);
       console.log('预约创建响应:', appointmentResponse.data);
-      
+
       if (appointmentResponse.data.success) {
         message.success('预约创建成功，您可以稍后在“我的预约”中完成支付');
         // 刷新预约列表
@@ -356,7 +391,7 @@ function CoachAppointment() {
       message.error('创建预约失败，请稍后重试');
     }
   };
-  
+
   // 处理支付流程
   const handlePayment = async () => {
     if (!appointmentFormData && !paymentAppointmentId) {
@@ -364,23 +399,23 @@ function CoachAppointment() {
       setShowPaymentModal(false);
       return;
     }
-    
+
     // 记录详细日志以便调试
     console.log('支付流程开始，appointmentFormData:', appointmentFormData);
     console.log('支付流程开始，paymentAppointmentId:', paymentAppointmentId);
     console.log('支付流程开始，selectedCoach:', selectedCoach);
-    
+
     setPaymentLoading(true);
-    
+
     try {
       let appointmentId = paymentAppointmentId;
-      
+
       if (!appointmentId) {
         // 检查支付必要的数据存在
         console.log('支付时的selectedCoach:', JSON.stringify(selectedCoach));
         console.log('支付时的appointmentFormData:', JSON.stringify(appointmentFormData));
         console.log('支付时的教练ID类型:', typeof appointmentFormData.coach_id, '教练ID为', appointmentFormData.coach_id);
-        
+
         // 准备数据
         console.log('发送请求前检查:', appointmentFormData);
         // 这里再次确保我们使用正确的教练ID格式，避免任何问题
@@ -389,44 +424,44 @@ function CoachAppointment() {
           coach_id: normalizeCoachId(appointmentFormData.coach_id) // 再次规范化ID
         };
         console.log('最终发送的预约数据:', JSON.stringify(appointmentDataToSend));
-        
+
         const appointmentResponse = await appointmentAPI.createAppointment(appointmentDataToSend);
         console.log('预约创建响应:', appointmentResponse.data);
-        
+
         if (!appointmentResponse.data.success) {
           message.error(appointmentResponse.data.message || '创建预约失败');
           setPaymentLoading(false);
           return;
         }
-        
+
         appointmentId = appointmentResponse.data.appointment_id;
         console.log('获取到新预约ID:', appointmentId);
-        
+
         if (!appointmentId) {
           message.error('无法获取预约ID，请重试');
           setPaymentLoading(false);
           return;
         }
       }
-      
+
       // 创建支付请求
-      console.log('发送支付请求检查: appointment_id=', appointmentId, 
+      console.log('发送支付请求检查: appointment_id=', appointmentId,
         appointmentFormData ? ', duration=' + appointmentFormData.duration : '');
-      
+
       // 获取支付对话框中计算的总价
       // 使用与支付对话框中相同的价格计算逻辑
       let totalPrice = 0;
-      
+
       if (paymentAppointmentId) {
         // 如果是已有预约的支付
         // 注意：这里应该使用paymentAppointmentId而不是appointmentId
-        const appointment = Array.isArray(appointments) ? 
+        const appointment = Array.isArray(appointments) ?
           appointments.find(a => a && a.id === paymentAppointmentId) : null;
-        
+
         if (appointment) {
           // 从预约中获取价格和时长
           let price = 0;
-          
+
           // 从教练列表中找到对应教练的价格
           if (appointment.coach_id && Array.isArray(coaches)) {
             const coach = coaches.find(c => c && c.id === appointment.coach_id);
@@ -434,25 +469,25 @@ function CoachAppointment() {
               price = parseFloat(coach.price);
             }
           }
-          
+
           // 如果预约中有价格信息，优先使用
           if (appointment.price) {
             price = parseFloat(appointment.price);
           }
-          
+
           // 如果价格仍然为0，使用教练的默认价格
           if (price === 0 && selectedCoach && selectedCoach.price) {
             price = parseFloat(selectedCoach.price);
           }
-          
+
           // 如果价格仍然为0，使用默认价格
           if (price === 0) {
             price = 225; // 使用图片中显示的价格作为默认值
           }
-          
+
           // 获取预约时长
           const duration = appointment.duration ? parseFloat(appointment.duration) : 1;
-          
+
           // 计算总价
           totalPrice = price * duration;
         } else {
@@ -467,14 +502,14 @@ function CoachAppointment() {
         const duration = appointmentFormData && appointmentFormData.duration ? parseFloat(appointmentFormData.duration) : 1;
         totalPrice = price * duration;
       }
-      
+
       // 确保总价不为0
       if (totalPrice === 0) {
         totalPrice = 225; // 使用图片中显示的价格作为默认值
       }
-      
+
       console.log('[DEBUG] 将发送给后端的总价:', totalPrice);
-      
+
       let paymentResponse;
       if (paymentAppointmentId) {
         // 为现有预约付款，传递计算好的总价
@@ -488,7 +523,7 @@ function CoachAppointment() {
           setPaymentLoading(false);
           return;
         }
-        
+
         // 传递计算好的总价
         paymentResponse = await paymentService.createPayment(
           appointmentId,
@@ -497,14 +532,14 @@ function CoachAppointment() {
         );
       }
       console.log('支付创建响应:', paymentResponse);
-      
+
       if (paymentResponse.success) {
         // 保存支付数据
         setPaymentData(paymentResponse.data);
-        
+
         // 打开支付宝支付页面
         paymentService.openAlipayPage(paymentResponse.data.pay_url);
-        
+
         message.success('已准备好支付界面，请完成您的支付');
         // 清空支付预约ID
         setPaymentAppointmentId(null);
@@ -519,7 +554,7 @@ function CoachAppointment() {
       setShowPaymentModal(false);
     }
   };
-  
+
   // 关闭支付对话框
   const closePaymentModal = () => {
     setShowPaymentModal(false);
@@ -540,7 +575,7 @@ function CoachAppointment() {
       onOk: async () => {
         try {
           const response = await appointmentAPI.cancelAppointment(appointmentId);
-          
+
           if (response.data.success) {
             message.success('预约已取消');
             // 刷新预约列表
@@ -559,18 +594,18 @@ function CoachAppointment() {
   // 初始化加载
   useEffect(() => {
     console.log('[DEBUG] 组件初始化加载');
-    
+
     // 确保在所有状态变量都有初始值
     setCoaches([]);
     setCities([]);
     setDistricts([]);
     setAppointments([]);
-    
+
     // 按顺序加载数据
     fetchCoaches();
     fetchCities();
     fetchUserAppointments();
-    
+
     // 检查URL参数，如果是从支付页面跳转回来的，自动切换到我的预约标签页
     const params = new URLSearchParams(location.search);
     const fromPayment = params.get('from');
@@ -626,43 +661,43 @@ function CoachAppointment() {
         message.error('预约ID缺失，无法进行支付');
         return;
       }
-      
+
       console.log('处理立即支付，预约数据:', JSON.stringify(appointment));
-      
+
       // 防止coaches为空或undefined导致的错误
       const coachesList = Array.isArray(coaches) ? coaches : [];
-      
+
       // 尝试查找完整的教练对象以便进行支付（这样可以获取价格等信息）
-      const coach = coachesList.length > 0 && appointment.coach_id ? 
-                    coachesList.find(c => c && c.id === appointment.coach_id) : 
+      const coach = coachesList.length > 0 && appointment.coach_id ?
+                    coachesList.find(c => c && c.id === appointment.coach_id) :
                     null;
-      
+
       if (coach) {
         console.log('找到对应教练:', coach.name);
         setSelectedCoach(coach);
       } else {
         // 如果找不到完整的教练对象，使用预约中的教练信息构建一个简化版的教练对象
         console.log('未找到对应教练，使用预约数据构建简化教练对象');
-        
+
         // 确保 location 存在，否则提供默认值
         const locationString = appointment.location || '';
         const locationParts = typeof locationString === 'string' ? locationString.split(' ') : [];
-        
+
         // 获取教练实际价格，首先从预约数据中获取，如果没有再从教练列表中查找
         // 使用预约中记录的原始价格，避免硬编码默认值
         let actualPrice = appointment.price || 0;
         console.log('[DEBUG] 预约的coach_id:', appointment.coach_id);
         console.log('[DEBUG] 预约中记录的原始价格:', appointment.price);
-        
+
         // 显示所有教练信息，帮助调试
         if (Array.isArray(coaches)) {
           console.log('[DEBUG] 教练列表中的所有ID:', coaches.map(c => c?.id).join(', '));
         }
-        
+
         if (appointment.coach_id) {
           // 先检查精确匹配
           const matchedCoach = Array.isArray(coaches) && coaches.find(c => c && c.id === appointment.coach_id);
-          
+
           if (matchedCoach && matchedCoach.price) {
             actualPrice = matchedCoach.price;
             console.log('[DEBUG] 从教练数据中找到实际价格:', actualPrice);
@@ -680,7 +715,7 @@ function CoachAppointment() {
             }
           }
         }
-        
+
         // 创建简化教练对象，添加价格信息
         const simplifiedCoach = {
           id: appointment.coach_id || 'unknown',
@@ -688,7 +723,7 @@ function CoachAppointment() {
           avatar: appointment.coach_avatar || '',
           // 优先级: 1. 预约中的价格 2. 更准确的教练实际价格 3. 教练实际价格
           price: appointment.price || actualPrice || (appointment.duration ? (appointment.total_price / appointment.duration) : 0), // 确保使用预约中的原始价格
-          
+
           // 输出详细的价格跟踪信息，方便调试
           priceDebug: {
             fromAppointment: appointment.price,
@@ -697,26 +732,26 @@ function CoachAppointment() {
             finalPrice: appointment.price || appointment.coach_price || 100
           },
           rating: appointment.coach_rating || 5,
-          location: { 
-            city: locationParts[0] || '', 
-            districts: locationParts.length > 1 ? [locationParts[1]] : [] 
+          location: {
+            city: locationParts[0] || '',
+            districts: locationParts.length > 1 ? [locationParts[1]] : []
           },
           skills: appointment.skill ? [appointment.skill] : []
         };
-        
+
         console.log('[DEBUG] 构建的简化教练对象已包含价格:', simplifiedCoach.price + '元');
         console.log('[DEBUG] 价格获取详情:', JSON.stringify(simplifiedCoach.priceDebug));
         console.log('[DEBUG] 预约时长:', appointment.duration, '小时');
         console.log('[DEBUG] 预期总价:', simplifiedCoach.price * appointment.duration, '元');
-        
+
         console.log('构建的简化教练对象:', simplifiedCoach);
         setSelectedCoach(simplifiedCoach);
       }
-      
+
       // 设置预约ID用于支付
       console.log('设置支付预约ID:', appointment.id);
       setPaymentAppointmentId(appointment.id);
-      
+
       // 打开支付对话框
       setShowPaymentModal(true);
     } catch (error) {
@@ -724,20 +759,20 @@ function CoachAppointment() {
       message.error('准备支付出现错误，请稍后重试');
     }
   };
-  
+
   // 获取支付状态文本和对应颜色
   const getPaymentStatusText = (status) => {
     if (!status || status === 'unpaid') return '未支付';
     if (status === 'paid') return '已支付';
     return '未知状态';
   };
-  
+
   const getPaymentStatusColor = (status) => {
     if (!status || status === 'unpaid') return 'orange';
     if (status === 'paid') return 'green';
     return 'default';
   };
-  
+
   // 渲染教练卡片
   const renderCoachCard = (coach) => {
     // 安全获取 skills，默认为空数组
@@ -757,9 +792,9 @@ function CoachAppointment() {
           </div>
         }
         actions={[
-          <Button 
-            key="appointment" 
-            type="primary" 
+          <Button
+            key="appointment"
+            type="primary"
             onClick={(e) => {
               e.stopPropagation(); // 阻止点击事件冒泡，避免触发卡片点击
               openAppointmentModal(coach);
@@ -773,10 +808,10 @@ function CoachAppointment() {
           title={
             <div>
               {coach.name}
-              <Rate 
-                disabled 
-                defaultValue={coach.rating} 
-                style={{ fontSize: 12, marginLeft: 8 }} 
+              <Rate
+                disabled
+                defaultValue={coach.rating}
+                style={{ fontSize: 12, marginLeft: 8 }}
               />
             </div>
           }
@@ -804,7 +839,7 @@ function CoachAppointment() {
   // 渲染预约列表项
   const renderAppointmentItem = (appointment) => {
     console.log('[DEBUG] renderAppointmentItem开始处理预约项:', appointment);
-    
+
     try {
       // 安全检查
       if (!appointment) {
@@ -820,41 +855,41 @@ function CoachAppointment() {
 
       console.log('[DEBUG] 预约状态:', appointment.status);
       console.log('[DEBUG] 支付状态:', appointment.payment_status);
-      
+
       // 构建操作按钮列表，先创建数组元素，然后过滤非空值
       const actions = [];
-      
+
       // 安全检查待确认状态
       if (appointment.status === 'pending' && appointment.id) {
         console.log('[DEBUG] 添加取消预约按钮');
         actions.push(
-          <Button 
+          <Button
             key="cancel"
             onClick={() => {
               console.log('[DEBUG] 点击取消预约按钮, id:', appointment.id);
               handleCancelAppointment(appointment.id);
-            }} 
-            type="text" 
+            }}
+            type="text"
             danger
           >
             取消预约
           </Button>
         );
       }
-      
+
       // 安全检查未支付状态
       if ((!appointment.payment_status || appointment.payment_status === 'unpaid') && appointment.id) {
         console.log('[DEBUG] 添加立即支付按钮');
         actions.push(
-          <Button 
+          <Button
             key="pay"
             onClick={() => {
               console.log('[DEBUG] 点击立即支付按钮, id:', appointment.id);
               // 深复制预约对象，避免引用问题
               const appointmentCopy = JSON.parse(JSON.stringify(appointment));
               handlePayNow(appointmentCopy);
-            }} 
-            type="primary" 
+            }}
+            type="primary"
             style={{ backgroundColor: '#1890ff' }}
           >
             立即支付
@@ -862,18 +897,44 @@ function CoachAppointment() {
         );
       }
 
+      // 添加训练视频相关按钮（只有已确认或已完成的预约才能上传视频）
+      // 暂时允许pending状态用于测试
+      if (appointment.status === 'confirmed' || appointment.status === 'completed' || appointment.status === 'pending') {
+        actions.push(
+          <Button
+            key="upload-video"
+            onClick={() => handleUploadVideo(appointment)}
+            type="default"
+            icon={<UploadOutlined />}
+          >
+            上传训练视频
+          </Button>
+        );
+
+        actions.push(
+          <Button
+            key="view-videos"
+            onClick={() => handleViewVideos(appointment)}
+            type="default"
+            icon={<EyeOutlined />}
+          >
+            查看训练视频
+          </Button>
+        );
+      }
+
       console.log('[DEBUG] 构建的操作按钮数量:', actions.length);
-      
+
       // 构建描述内容，避免访问 undefined 属性
       const descriptionItems = [];
-      
+
       // 安全添加预约日期
       if (appointment.date) {
         descriptionItems.push(
           <p key="date"><CalendarOutlined style={{ marginRight: 8 }} />预约日期: {appointment.date}</p>
         );
       }
-      
+
       // 安全添加预约时间
       if (appointment.time) {
         let timeText = `预约时间: ${appointment.time}`;
@@ -884,7 +945,7 @@ function CoachAppointment() {
           <p key="time"><ClockCircleOutlined style={{ marginRight: 8 }} />{timeText}</p>
         );
       }
-      
+
       // 安全添加训练项目
       descriptionItems.push(
         <p key="skill">训练项目: {appointment.skill || '未指定'}</p>
@@ -926,18 +987,18 @@ function CoachAppointment() {
     console.log('[DEBUG] coaches类型:', typeof coaches);
     console.log('[DEBUG] coaches是否数组:', Array.isArray(coaches));
     console.log('[DEBUG] coaches长度:', coaches ? coaches.length : 'undefined');
-    
+
     try {
       // 确保 coaches 是数组
       if (!coaches || !Array.isArray(coaches)) {
         console.log('[DEBUG] coaches不是有效数组，返回空数组');
         return [];
       }
-      
+
       // 清理空值
       const validCoaches = coaches.filter(coach => coach !== null && coach !== undefined);
       console.log('[DEBUG] 有效教练数量:', validCoaches.length);
-      
+
       // 应用过滤条件
       return validCoaches.filter(coach => {
         // 基本的 coach 对象检查
@@ -945,7 +1006,7 @@ function CoachAppointment() {
           console.log('[DEBUG] 过滤时发现空教练对象');
           return false;
         }
-        
+
         // 安全检查 location
         if (!coach.location) {
           console.log('[DEBUG] 教练没有location属性:', coach.id || 'unknown');
@@ -958,13 +1019,13 @@ function CoachAppointment() {
         if (filters.city && coach.location.city !== filters.city) {
           return false;
         }
-        
+
         // 安全检查 districts
         const coachDistricts = Array.isArray(coach.location.districts) ? coach.location.districts : [];
         if (filters.district && !coachDistricts.includes(filters.district)) {
           return false;
         }
-        
+
         // 安全检查 skills
         if (!coach.skills) {
           coach.skills = [];
@@ -973,7 +1034,7 @@ function CoachAppointment() {
         if (filters.skill && !coachSkills.includes(filters.skill)) {
           return false;
         }
-        
+
         return true;
       });
     } catch (e) {
@@ -981,7 +1042,7 @@ function CoachAppointment() {
       return [];
     }
   };
-  
+
   // 在每次渲染时重新计算过滤后的教练列表
   const filteredCoaches = getFilteredCoaches();
 
@@ -989,7 +1050,7 @@ function CoachAppointment() {
     <MainLayout>
       <Content style={{ padding: '24px' }}>
         <Title level={2}>教练预约</Title>
-        
+
         <Tabs activeKey={activeTab} onChange={setActiveTab}>
           <TabPane tab="预约教练" key="1">
             <Card style={{ marginBottom: 16 }}>
@@ -1008,7 +1069,7 @@ function CoachAppointment() {
                         console.log('[DEBUG] 城市选项不是数组，返回空数组');
                         return [];
                       }
-                      
+
                       // 安全地过滤和渲染城市选项
                       try {
                         return cities.filter(city => city && city.value && city.label).map(city => (
@@ -1036,7 +1097,7 @@ function CoachAppointment() {
                         console.log('[DEBUG] 区域选项不是数组，返回空数组');
                         return [];
                       }
-                      
+
                       // 安全地过滤和渲染区域选项
                       try {
                         return districts.filter(district => district && district.value && district.label).map(district => (
@@ -1063,7 +1124,7 @@ function CoachAppointment() {
                         console.log('[DEBUG] 训练项目选项不是数组，返回空数组');
                         return [];
                       }
-                      
+
                       // 安全地过滤和渲染训练项目选项
                       try {
                         return skillOptions.filter(Boolean).map(skill => (
@@ -1083,14 +1144,14 @@ function CoachAppointment() {
                 </Col>
               </Row>
             </Card>
-            
+
             <Row gutter={[16, 16]}>
               {(() => {
                 console.log('[DEBUG] 开始渲染教练卡片');
                 console.log('[DEBUG] filteredCoaches 类型:', typeof filteredCoaches);
                 console.log('[DEBUG] filteredCoaches 是否数组:', Array.isArray(filteredCoaches));
                 console.log('[DEBUG] filteredCoaches 长度:', filteredCoaches ? filteredCoaches.length : 'N/A');
-                
+
                 if (loading) {
                   return (
                     <Col span={24} style={{ textAlign: 'center', padding: '40px 0' }}>
@@ -1098,7 +1159,7 @@ function CoachAppointment() {
                     </Col>
                   );
                 }
-                
+
                 // 安全检查filteredCoaches
                 if (!filteredCoaches || !Array.isArray(filteredCoaches) || filteredCoaches.length === 0) {
                   console.log('[DEBUG] 没有教练数据，显示空状态');
@@ -1108,7 +1169,7 @@ function CoachAppointment() {
                     </Col>
                   );
                 }
-                
+
                 // 安全渲染教练卡片
                 try {
                   return filteredCoaches.map((coach, index) => {
@@ -1116,7 +1177,7 @@ function CoachAppointment() {
                       console.log('[DEBUG] 渲染教练卡片时遇到空教练对象');
                       return null;
                     }
-                    
+
                     return (
                       <Col xs={24} sm={12} md={8} lg={6} key={coach.id || `coach-${index}`}>
                         {renderCoachCard(coach)}
@@ -1134,10 +1195,10 @@ function CoachAppointment() {
               })()}
             </Row>
           </TabPane>
-          
-          <TabPane 
+
+          <TabPane
             tab={
-              <Badge 
+              <Badge
                 count={
                   (()=>{
                     console.log('[DEBUG] Badge 组件 appointments 类型:', typeof appointments);
@@ -1152,19 +1213,19 @@ function CoachAppointment() {
                       return 0;
                     }
                   })()
-                } 
+                }
                 offset={[10, 0]}
               >
                 我的预约
               </Badge>
-            } 
+            }
             key="2"
           >
             {(()=>{
               console.log('[DEBUG] 渲染预约列表前 appointments 类型:', typeof appointments);
               console.log('[DEBUG] 渲染预约列表前 appointments 是否数组:', Array.isArray(appointments));
               console.log('[DEBUG] 渲染预约列表前 appointments:', appointments);
-              
+
               // 安全准备列表数据
               let safeAppointments = [];
               try {
@@ -1176,7 +1237,7 @@ function CoachAppointment() {
                 console.error('[ERROR] 准备预约列表数据错误:', e);
                 safeAppointments = [];
               }
-              
+
               return(
                 <List
                   loading={appointmentLoading}
@@ -1218,7 +1279,7 @@ function CoachAppointment() {
                   {selectedCoach.name}
                 </Title>
               </div>
-              
+
               <Form
                 layout="vertical"
                 onFinish={handleSubmitAppointment}
@@ -1232,14 +1293,14 @@ function CoachAppointment() {
                   rules={[{ required: true, message: '请选择训练项目' }]}
                 >
                   <Select placeholder="选择训练项目">
-                    {selectedCoach && selectedCoach.skills && selectedCoach.skills.length > 0 ? 
+                    {selectedCoach && selectedCoach.skills && selectedCoach.skills.length > 0 ?
                       selectedCoach.skills.map(skill => (
                         <Option key={skill} value={skill}>{skill}</Option>
                       ))
                     : null}
                   </Select>
                 </Form.Item>
-                
+
                 <Form.Item
                   label="预约日期"
                   name="date"
@@ -1247,7 +1308,7 @@ function CoachAppointment() {
                 >
                   <DatePicker style={{ width: '100%' }} disabledDate={current => current && current < moment().startOf('day')} />
                 </Form.Item>
-                
+
                 <Form.Item
                   label="预约时间"
                   name="time"
@@ -1255,7 +1316,7 @@ function CoachAppointment() {
                 >
                   <TimePicker style={{ width: '100%' }} format="HH:mm" minuteStep={15} />
                 </Form.Item>
-                
+
                 <Form.Item
                   label="训练时长(小时)"
                   name="duration"
@@ -1268,7 +1329,7 @@ function CoachAppointment() {
                     <Option value={3}>3小时</Option>
                   </Select>
                 </Form.Item>
-                
+
                 <Row justify="end">
                   <Space>
                     <Button onClick={closeAppointmentModal}>取消</Button>
@@ -1314,20 +1375,20 @@ function CoachAppointment() {
                 </Title>
                 <Rate disabled defaultValue={selectedCoach.rating} />
               </div>
-              
+
               <Divider />
-              
+
               <div>
                 <p><strong>位置：</strong>
-                  {selectedCoach.location?.city || ''} 
-                  {Array.isArray(selectedCoach.location?.districts) 
-                    ? selectedCoach.location.districts.join(', ') 
+                  {selectedCoach.location?.city || ''}
+                  {Array.isArray(selectedCoach.location?.districts)
+                    ? selectedCoach.location.districts.join(', ')
                     : ''}
                 </p>
                 <p><strong>价格：</strong>{selectedCoach.price || 0}元/小时</p>
                 <p>
                   <strong>擅长：</strong>
-                  {Array.isArray(selectedCoach.skills) 
+                  {Array.isArray(selectedCoach.skills)
                     ? selectedCoach.skills.map(skill => (
                         <Tag key={skill} color="blue" style={{ margin: '4px' }}>{skill}</Tag>
                       ))
@@ -1353,7 +1414,7 @@ function CoachAppointment() {
               >
                 <Input value={selectedCoach.name} disabled />
               </Form.Item>
-              
+
               <Form.Item
                 label="消息内容"
                 name="message"
@@ -1361,7 +1422,7 @@ function CoachAppointment() {
               >
                 <Input.TextArea rows={4} placeholder="请输入您想发送的消息" />
               </Form.Item>
-              
+
               <Row justify="end">
                 <Space>
                   <Button onClick={closeMessageModal}>取消</Button>
@@ -1397,22 +1458,22 @@ function CoachAppointment() {
                 console.log('[DEBUG] 支付对话框中的教练信息:', selectedCoach);
                 console.log('[DEBUG] 预约表单数据:', appointmentFormData);
                 console.log('[DEBUG] 支付预约ID:', paymentAppointmentId);
-                
+
                 let totalPrice = 0;
-                
+
                 // 如果是已有预约的支付（通过paymentAppointmentId判断）
                 if (paymentAppointmentId) {
                   // 尝试从appointments数组中找到对应的预约
-                  const appointment = Array.isArray(appointments) ? 
+                  const appointment = Array.isArray(appointments) ?
                     appointments.find(a => a && a.id === paymentAppointmentId) : null;
-                  
+
                   console.log('[DEBUG] 找到的预约信息:', appointment);
-                  
+
                   if (appointment) {
                     // 首先检查预约中是否有教练信息
                     const coachId = appointment.coach_id;
                     let price = 0;
-                    
+
                     // 从教练列表中找到对应教练的价格
                     if (coachId && Array.isArray(coaches)) {
                       const coach = coaches.find(c => c && c.id === coachId);
@@ -1421,29 +1482,29 @@ function CoachAppointment() {
                         console.log('[DEBUG] 从教练列表中找到价格:', price);
                       }
                     }
-                    
+
                     // 如果预约中有价格信息，优先使用
                     if (appointment.price) {
                       price = parseFloat(appointment.price);
                       console.log('[DEBUG] 使用预约中的价格:', price);
                     }
-                    
+
                     // 如果价格仍然为0，使用教练的默认价格
                     if (price === 0 && selectedCoach && selectedCoach.price) {
                       price = parseFloat(selectedCoach.price);
                       console.log('[DEBUG] 使用selectedCoach中的价格:', price);
                     }
-                    
+
                     // 如果价格仍然为0，使用默认价格
                     if (price === 0) {
                       price = 225; // 使用图片中显示的价格作为默认值
                       console.log('[DEBUG] 使用默认价格:', price);
                     }
-                    
+
                     // 获取预约时长
                     const duration = appointment.duration ? parseFloat(appointment.duration) : 1;
                     console.log('[DEBUG] 预约时长:', duration);
-                    
+
                     // 计算总价
                     totalPrice = price * duration;
                     console.log('[DEBUG] 计算总价:', price, '×', duration, '=', totalPrice);
@@ -1461,32 +1522,32 @@ function CoachAppointment() {
                   totalPrice = price * duration;
                   console.log('[DEBUG] 新预约计算总价:', price, '×', duration, '=', totalPrice);
                 }
-                
+
                 // 确保总价不为0
                 if (totalPrice === 0) {
                   totalPrice = 225; // 使用图片中显示的价格作为默认值
                   console.log('[DEBUG] 总价为0，使用默认价格:', totalPrice);
                 }
-                
+
                 console.log('[DEBUG] 最终显示的总价:', totalPrice);
                 return totalPrice + '元';
               })()}
             </Title>
-            
+
             {appointmentFormData && (
               <Text>
-                预约时长: {appointmentFormData.duration || 1}小时, 
+                预约时长: {appointmentFormData.duration || 1}小时,
                 教练: {selectedCoach?.name || '未知教练'}
               </Text>
             )}
-            
+
             {paymentAppointmentId && (
               <Text>
                 您将为之前创建的预约进行支付
               </Text>
             )}
           </div>
-          
+
           <div style={{ marginTop: 24 }}>
             <p>请确认以下信息：</p>
             <ul>
@@ -1496,6 +1557,41 @@ function CoachAppointment() {
             </ul>
             <p>点击"确认支付"将跳转到第三方支付平台完成付款</p>
           </div>
+        </Modal>
+
+        {/* 训练视频上传模态框 */}
+        <TrainingVideoUpload
+          appointmentId={selectedAppointmentForVideo?.id}
+          onUploadSuccess={handleVideoUploadSuccess}
+          visible={showVideoUploadModal}
+          onCancel={closeVideoUploadModal}
+        />
+
+        {/* 训练视频列表模态框 */}
+        <Modal
+          title="训练视频"
+          open={showVideoListModal}
+          onCancel={closeVideoListModal}
+          footer={null}
+          width={1200}
+          destroyOnClose
+        >
+          {selectedAppointmentForVideo && (
+            <div>
+              <div style={{ marginBottom: 16 }}>
+                <h4>预约信息</h4>
+                <p>教练: {selectedAppointmentForVideo.coach_name}</p>
+                <p>日期: {selectedAppointmentForVideo.date}</p>
+                <p>项目: {selectedAppointmentForVideo.skill}</p>
+              </div>
+
+              <TrainingVideoList
+                appointmentId={selectedAppointmentForVideo.id}
+                userRole="user"
+                refreshTrigger={videoRefreshTrigger}
+              />
+            </div>
+          )}
         </Modal>
       </Content>
     </MainLayout>

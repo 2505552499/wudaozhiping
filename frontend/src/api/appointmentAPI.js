@@ -25,30 +25,45 @@ const appointmentAPI = {
   createAppointment: (data) => {
     return api.post('/api/user/create_appointment', data);
   },
-  
+
   // 获取用户的预约列表
   getUserAppointments: () => {
     return api.get('/api/user/appointments');
   },
-  
+
   // 取消预约
   cancelAppointment: (appointmentId) => {
     return api.delete(`/api/appointments/${appointmentId}`);
   },
-  
+
   // 教练确认预约
   confirmAppointment: (appointmentId) => {
     return api.post(`/api/coach/confirm_appointment/${appointmentId}`);
   },
-  
+
   // 教练获取预约列表
   getCoachAppointments: () => {
     return api.get('/api/coach/appointments');
   },
-  
+
   // 完成预约
   completeAppointment: (appointmentId) => {
     return api.post(`/api/complete_appointment/${appointmentId}`);
+  },
+
+  // 获取教练发布的预约信息
+  getCoachPublishedAppointments: () => {
+    return api.get('/api/coach/published_appointments');
+  },
+
+  // 更新预约状态
+  updateAppointmentStatus: (appointmentId, status) => {
+    return api.put(`/api/appointments/${appointmentId}`, { status });
+  },
+
+  // 发送消息
+  sendMessage: (data) => {
+    return api.post('/api/messages', data);
   }
 };
 

@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Typography, Tabs, List, Avatar, Tag, Button, Modal, Form, Input, message, Badge, Divider, Space, Empty } from 'antd';
-import { 
-  UserOutlined, 
-  CalendarOutlined, 
-  ClockCircleOutlined, 
+import {
+  UserOutlined,
+  CalendarOutlined,
+  ClockCircleOutlined,
   EnvironmentOutlined,
   CheckOutlined,
   CloseOutlined,
   MessageOutlined,
   CheckCircleOutlined,
-  EditOutlined
+  EditOutlined,
+  VideoCameraOutlined,
+  EyeOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '../components/MainLayout';
-import { appointmentAPI } from '../api';
+import appointmentAPI from '../api/appointmentAPI';
+import TrainingVideoList from '../components/TrainingVideoList';
+import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
@@ -29,7 +34,14 @@ const CoachDashboard = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [messageForm] = Form.useForm();
   const navigate = useNavigate();
-  
+
+  // 训练视频相关状态
+  const [pendingVideos, setPendingVideos] = useState([]);
+  const [videosLoading, setVideosLoading] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [videoRefreshTrigger, setVideoRefreshTrigger] = useState(0);
+
   // 检查用户是否为教练
   useEffect(() => {
     const role = localStorage.getItem('role');
@@ -53,7 +65,7 @@ const CoachDashboard = () => {
       setLoading(false);
     }
   };
-  
+
   // 获取教练发布的预约信息和审核状态
   const fetchPublishedAppointments = async () => {
     setPublishedLoading(true);
@@ -72,10 +84,38 @@ const CoachDashboard = () => {
     }
   };
 
+  // 获取待标注的训练视频
+  const fetchPendingVideos = async () => {
+    setVideosLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `${API_BASE_URL}/api/training-videos/coach/pending`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        setPendingVideos(response.data.videos || []);
+      } else {
+        message.error(response.data.message || '获取待标注视频失败');
+      }
+    } catch (error) {
+      console.error('获取待标注视频失败:', error);
+      message.error('获取待标注视频失败，请稍后重试');
+    } finally {
+      setVideosLoading(false);
+    }
+  };
+
   // 初始加载
   useEffect(() => {
     fetchCoachAppointments();
     fetchPublishedAppointments();
+    fetchPendingVideos();
   }, []);
 
   // 确认预约
@@ -149,7 +189,7 @@ const CoachDashboard = () => {
         content: values.message,
         appointment_id: selectedAppointment.id
       });
-      
+
       if (response.data.success) {
         message.success('消息发送成功');
         closeMessageModal();
@@ -165,6 +205,22 @@ const CoachDashboard = () => {
   // 跳转到资料管理页面
   const goToProfilePage = () => {
     navigate('/coach-profile');
+  };
+
+  // 训练视频相关处理函数
+  const handleViewVideo = (video) => {
+    setSelectedVideo(video);
+    setShowVideoModal(true);
+  };
+
+  const closeVideoModal = () => {
+    setShowVideoModal(false);
+    setSelectedVideo(null);
+  };
+
+  const handleVideoAnnotationUpdate = () => {
+    setVideoRefreshTrigger(prev => prev + 1);
+    fetchPendingVideos(); // 刷新待标注视频列表
   };
 
   // 获取预约状态显示文本
@@ -231,21 +287,79 @@ const CoachDashboard = () => {
     }
   };
 
+  // 渲染训练视频列表项
+  const renderVideoItem = (video) => {
+    const formatTime = (timestamp) => {
+      return new Date(timestamp * 1000).toLocaleString();
+    };
+
+    return (
+      <List.Item
+        key={video.id}
+        actions={[
+          <Button
+            type="primary"
+            icon={<EyeOutlined />}
+            onClick={() => handleViewVideo(video)}
+          >
+            查看并标注
+          </Button>
+        ]}
+      >
+        <List.Item.Meta
+          avatar={<Avatar icon={<VideoCameraOutlined />} />}
+          title={
+            <Space>
+              <Text strong>{video.original_filename}</Text>
+              <Tag color="orange">待标注</Tag>
+            </Space>
+          }
+          description={
+            <>
+              <div>
+                <Text type="secondary">学员: </Text>
+                <Text>{video.appointment_info?.user_name || '未知学员'}</Text>
+              </div>
+              <div>
+                <Text type="secondary">预约日期: </Text>
+                <Text>{video.appointment_info?.date || '未知日期'}</Text>
+              </div>
+              <div>
+                <Text type="secondary">训练项目: </Text>
+                <Tag color="blue">{video.appointment_info?.skill || '未知项目'}</Tag>
+              </div>
+              <div>
+                <Text type="secondary">上传时间: </Text>
+                <Text>{formatTime(video.upload_time)}</Text>
+              </div>
+              {video.description && (
+                <div>
+                  <Text type="secondary">视频描述: </Text>
+                  <Text>{video.description}</Text>
+                </div>
+              )}
+            </>
+          }
+        />
+      </List.Item>
+    );
+  };
+
   // 渲染预约列表项
   const renderAppointmentItem = (appointment) => {
     // 安全地获取用户头像，如果不存在则使用默认头像
     const userAvatar = appointment.user && appointment.user.avatar ? appointment.user.avatar : null;
     // 安全地获取用户名，如果不存在则使用用户ID
     const userName = appointment.user && appointment.user.name ? appointment.user.name : appointment.user_id;
-    
+
     return (
       <List.Item
         key={appointment.id}
         actions={[
           appointment.status === 'pending' && (
-            <Button 
-              type="primary" 
-              icon={<CheckOutlined />} 
+            <Button
+              type="primary"
+              icon={<CheckOutlined />}
               onClick={() => handleConfirmAppointment(appointment.id)}
               style={{ marginRight: 8 }}
             >
@@ -253,9 +367,9 @@ const CoachDashboard = () => {
             </Button>
           ),
           appointment.status === 'pending' && (
-            <Button 
-              danger 
-              icon={<CloseOutlined />} 
+            <Button
+              danger
+              icon={<CloseOutlined />}
               onClick={() => handleRejectAppointment(appointment.id)}
               style={{ marginRight: 8 }}
             >
@@ -263,9 +377,9 @@ const CoachDashboard = () => {
             </Button>
           ),
           appointment.status === 'confirmed' && (
-            <Button 
-              type="primary" 
-              icon={<CheckCircleOutlined />} 
+            <Button
+              type="primary"
+              icon={<CheckCircleOutlined />}
               onClick={() => handleCompleteAppointment(appointment.id)}
               style={{ marginRight: 8 }}
             >
@@ -273,8 +387,8 @@ const CoachDashboard = () => {
             </Button>
           ),
           (appointment.status === 'pending' || appointment.status === 'confirmed') && (
-            <Button 
-              icon={<MessageOutlined />} 
+            <Button
+              icon={<MessageOutlined />}
               onClick={() => openMessageModal(appointment)}
             >
               发消息
@@ -380,22 +494,22 @@ const CoachDashboard = () => {
       <Content style={{ padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <Title level={2}>教练管理中心</Title>
-          <Button 
-            type="primary" 
-            icon={<EditOutlined />} 
+          <Button
+            type="primary"
+            icon={<EditOutlined />}
             onClick={goToProfilePage}
           >
             编辑个人资料
           </Button>
         </div>
-        
+
         <Tabs defaultActiveKey="pending">
-          <TabPane 
+          <TabPane
             tab={
               <Badge count={appointments.filter(a => a.status === 'pending').length} offset={[10, 0]}>
                 待处理预约
               </Badge>
-            } 
+            }
             key="pending"
           >
             <List
@@ -406,7 +520,7 @@ const CoachDashboard = () => {
               locale={{ emptyText: <Empty description="暂无待处理预约" /> }}
             />
           </TabPane>
-          
+
           <TabPane tab="已确认预约" key="confirmed">
             <List
               loading={loading}
@@ -416,7 +530,7 @@ const CoachDashboard = () => {
               locale={{ emptyText: <Empty description="暂无已确认预约" /> }}
             />
           </TabPane>
-          
+
           <TabPane tab="已完成预约" key="completed">
             <List
               loading={loading}
@@ -426,7 +540,7 @@ const CoachDashboard = () => {
               locale={{ emptyText: <Empty description="暂无已完成预约" /> }}
             />
           </TabPane>
-          
+
           <TabPane tab="已取消/拒绝预约" key="cancelled">
             <List
               loading={loading}
@@ -436,7 +550,7 @@ const CoachDashboard = () => {
               locale={{ emptyText: <Empty description="暂无已取消/拒绝预约" /> }}
             />
           </TabPane>
-          
+
           <TabPane tab="我发布的预约" key="published">
             <List
               loading={publishedLoading}
@@ -446,8 +560,26 @@ const CoachDashboard = () => {
               locale={{ emptyText: <Empty description="暂无发布的预约信息" /> }}
             />
           </TabPane>
+
+          <TabPane
+            tab={
+              <Badge count={pendingVideos.length} offset={[10, 0]}>
+                <VideoCameraOutlined style={{ marginRight: 4 }} />
+                训练视频标注
+              </Badge>
+            }
+            key="videos"
+          >
+            <List
+              loading={videosLoading}
+              itemLayout="horizontal"
+              dataSource={pendingVideos}
+              renderItem={renderVideoItem}
+              locale={{ emptyText: <Empty description="暂无待标注的训练视频" /> }}
+            />
+          </TabPane>
         </Tabs>
-        
+
         {/* 发送消息模态框 */}
         <Modal
           title="发送消息"
@@ -461,9 +593,9 @@ const CoachDashboard = () => {
                 <Text strong>发送给: </Text>
                 <Text>{selectedAppointment.user ? selectedAppointment.user.name : selectedAppointment.user_id}</Text>
               </div>
-              
+
               <Divider />
-              
+
               <Form.Item
                 name="message"
                 label="消息内容"
@@ -471,7 +603,7 @@ const CoachDashboard = () => {
               >
                 <TextArea rows={4} placeholder="请输入消息内容" />
               </Form.Item>
-              
+
               <Form.Item style={{ marginBottom: 0, textAlign: 'right' }}>
                 <Space>
                   <Button onClick={closeMessageModal}>取消</Button>
@@ -479,6 +611,37 @@ const CoachDashboard = () => {
                 </Space>
               </Form.Item>
             </Form>
+          )}
+        </Modal>
+
+        {/* 训练视频查看和标注模态框 */}
+        <Modal
+          title="训练视频标注"
+          open={showVideoModal}
+          onCancel={closeVideoModal}
+          footer={null}
+          width={1200}
+          destroyOnClose
+        >
+          {selectedVideo && (
+            <div>
+              <div style={{ marginBottom: 16 }}>
+                <h4>视频信息</h4>
+                <p>文件名: {selectedVideo.original_filename}</p>
+                <p>学员: {selectedVideo.appointment_info?.user_name || '未知学员'}</p>
+                <p>预约日期: {selectedVideo.appointment_info?.date || '未知日期'}</p>
+                <p>训练项目: {selectedVideo.appointment_info?.skill || '未知项目'}</p>
+                {selectedVideo.description && (
+                  <p>视频描述: {selectedVideo.description}</p>
+                )}
+              </div>
+
+              <TrainingVideoList
+                appointmentId={selectedVideo.appointment_id}
+                userRole="coach"
+                refreshTrigger={videoRefreshTrigger}
+              />
+            </div>
           )}
         </Modal>
       </Content>
