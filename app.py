@@ -4,6 +4,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 import os
 import json
 import hashlib
+import time
 from datetime import timedelta
 import cv2
 import numpy as np
@@ -20,461 +21,71 @@ from course_api import course_api  # Import the course API module
 from annotations_api import annotations_api  # Import the annotations API module
 from training_video_api import training_video_api  # Import the training video API module
 
-# Initialize Flask app
-app = Flask(__name__, static_folder='frontend/build')
-CORS(app, resources={r"/*": {"origins": ["http://localhost:3001", "https://wudao.250555.xyz", "https://api.wudao.250555.xyz"], "supports_credentials": True}})
+# Import new modular APIs
+from api.auth_api import auth_api, init_auth_api
+from api.pose_api import pose_api
+from api.static_files_api import static_files_api
+from api.location_api import location_api
+from api.coach_api import coach_api, init_coach_api
 
-# Register blueprints
+# Import configuration and utilities
+from config.settings import Config, get_data_file_paths, REQUIRED_DIRECTORIES
+from utils.file_utils import ensure_data_file_exists, ensure_directories_exist
+from utils.auth_utils import get_user_data
+
+# Initialize Flask app
+app = Flask(__name__, static_folder=Config.STATIC_FOLDER)
+CORS(app, resources={r"/*": {"origins": Config.CORS_ORIGINS, "supports_credentials": True}})
+
+# Configure app
+app.config.from_object(Config)
+
+# Get data file paths
+data_files = get_data_file_paths(app.root_path)
+USERS_DATA_FILE = data_files['USERS_DATA_FILE']
+COACHES_DATA_FILE = data_files['COACHES_DATA_FILE']
+APPOINTMENTS_DATA_FILE = data_files['APPOINTMENTS_DATA_FILE']
+MESSAGES_DATA_FILE = data_files['MESSAGES_DATA_FILE']
+
+# Initialize directories and data files
+ensure_directories_exist(REQUIRED_DIRECTORIES)
+ensure_data_file_exists(USERS_DATA_FILE, {})
+ensure_data_file_exists(COACHES_DATA_FILE, {"coaches": []})
+ensure_data_file_exists(APPOINTMENTS_DATA_FILE, {"appointments": []})
+ensure_data_file_exists(MESSAGES_DATA_FILE, {"messages": []})
+
+# Configure JWT
+jwt = JWTManager(app)
+
+# Initialize API modules
+init_auth_api(USERS_DATA_FILE)
+init_coach_api(USERS_DATA_FILE, COACHES_DATA_FILE, APPOINTMENTS_DATA_FILE)
+
+# Register existing blueprints
 app.register_blueprint(payment_api)
 app.register_blueprint(course_api)
 app.register_blueprint(annotations_api)
 app.register_blueprint(training_video_api)
 
-# 配置静态文件路径
-app.config['UPLOAD_FOLDER'] = 'uploads'
-app.config['PROCESSED_FOLDER'] = 'img'
+# Register new modular blueprints
+app.register_blueprint(auth_api)
+app.register_blueprint(pose_api)
+app.register_blueprint(static_files_api)
+app.register_blueprint(location_api)
+app.register_blueprint(coach_api)
 
-# 添加静态文件路由
-@app.route('/uploads/<path:filename>')
-def uploaded_file(filename):
-    return send_from_directory('uploads', filename)
+# Note: Static file routes are now handled by static_files_api blueprint
 
-@app.route('/uploads/training_videos/<path:filename>')
-def training_video_file(filename):
-    response = send_from_directory('uploads/training_videos', filename)
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-    return response
+# Import file utilities from new modules
+from utils.file_utils import allowed_image_file, allowed_video_file, allowed_file
+from utils.auth_utils import hash_password, get_current_time
 
-@app.route('/img/<path:filename>')
-def processed_file(filename):
-    return send_from_directory('img', filename)
+# Note: File type definitions, utility functions, and data file initialization
+# are now handled by the new modular system
 
-# Configure JWT
-app.config['JWT_SECRET_KEY'] = 'wudao-zhi-ping-secret-key'  # Change this in production
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
-jwt = JWTManager(app)
+# Note: Authentication routes are now handled by auth_api blueprint
 
-# Ensure necessary directories exist
-os.makedirs('uploads/images', exist_ok=True)
-os.makedirs('uploads/videos', exist_ok=True)
-os.makedirs('uploads/training_videos', exist_ok=True)
-os.makedirs('img', exist_ok=True)
-
-# 允许的文件类型
-ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp'}
-ALLOWED_VIDEO_EXTENSIONS = {'mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv'}
-
-# 检查文件是否允许上传
-def allowed_file(filename, allowed_extensions=None):
-    if allowed_extensions is None:
-        allowed_extensions = {'png', 'jpg', 'jpeg'}
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in allowed_extensions
-
-def allowed_image_file(filename):
-    """检查文件是否为允许的图像类型"""
-    return allowed_file(filename, ALLOWED_IMAGE_EXTENSIONS)
-
-def allowed_video_file(filename):
-    """检查文件是否为允许的视频类型"""
-    return allowed_file(filename, ALLOWED_VIDEO_EXTENSIONS)
-
-# 用户数据文件
-USERS_DATA_FILE = os.path.join(app.root_path, 'data', 'users.json')
-COACHES_DATA_FILE = os.path.join(app.root_path, 'data', 'coaches.json')
-APPOINTMENTS_DATA_FILE = os.path.join(app.root_path, 'data', 'appointments.json')
-
-# Ensure user data file exists
-if not os.path.exists(USERS_DATA_FILE):
-    with open(USERS_DATA_FILE, 'w', encoding='utf-8') as f:
-        json.dump({}, f)
-
-# Ensure coaches data file exists
-if not os.path.exists(COACHES_DATA_FILE):
-    with open(COACHES_DATA_FILE, 'w', encoding='utf-8') as f:
-        json.dump({
-            "coaches": []
-        }, f)
-
-# Ensure appointments data file exists
-if not os.path.exists(APPOINTMENTS_DATA_FILE):
-    with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
-        json.dump({
-            "appointments": []
-        }, f)
-
-# Utility functions
-def hash_password(password):
-    """Hash a password for storing."""
-    return hashlib.sha256(password.encode()).hexdigest()
-
-def get_current_time():
-    """Get current time in ISO format."""
-    from datetime import datetime
-    return datetime.now().isoformat()
-
-# 获取用户数据
-def get_user_data(username):
-    """从用户数据文件中获取特定用户的信息"""
-    if not os.path.exists(USERS_DATA_FILE):
-        return None
-
-    try:
-        with open(USERS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
-            users = json.load(f)
-
-        # 检查users是否为字典类型（对象）
-        if isinstance(users, dict):
-            # 如果是字典，直接通过键获取用户数据
-            if username in users:
-                user_data = users[username]
-                # 确保用户数据包含username字段
-                if 'username' not in user_data:
-                    user_data['username'] = username
-                return user_data
-        # 如果users是列表类型（数组）
-        elif isinstance(users, list):
-            # 如果是列表，遍历查找匹配的用户名
-            for user in users:
-                if isinstance(user, dict) and user.get('username') == username:
-                    return user
-
-        print(f"未找到用户: {username}")
-        return None
-    except Exception as e:
-        print(f"获取用户数据失败: {str(e)}")
-        return None
-
-# Authentication routes
-@app.route('/api/auth/register', methods=['POST'])
-def register():
-    data = request.get_json()
-    username = data.get('username', '').strip()
-    password = data.get('password', '')
-    role = data.get('role', 'user')  # 默认为普通用户，可以是'user'或'coach'
-
-    # Validate input
-    if not username or not password:
-        return jsonify({'success': False, 'message': '用户名和密码不能为空'}), 400
-
-    # Username validation
-    if len(username) < 4 or len(username) > 20:
-        return jsonify({'success': False, 'message': '用户名长度必须在4-20个字符之间'}), 400
-
-    # Password validation
-    if len(password) < 8:
-        return jsonify({'success': False, 'message': '密码长度必须至少为8个字符'}), 400
-
-    # Check if username already exists
-    with open(USERS_DATA_FILE, 'r', encoding='utf-8') as f:
-        users = json.load(f)
-
-    if username in users:
-        return jsonify({'success': False, 'message': '用户名已存在'}), 400
-
-    # Hash password and store user
-    hashed_password = hash_password(password)
-    users[username] = {
-        'password': hashed_password,
-        'role': role,
-        'created_at': get_current_time(),
-        'last_login': None,
-        'login_count': 0
-    }
-
-    with open(USERS_DATA_FILE, 'w', encoding='utf-8') as f:
-        json.dump(users, f, indent=4)
-
-    # Create access token
-    access_token = create_access_token(identity=username)
-
-    return jsonify({
-        'success': True,
-        'message': '注册成功',
-        'access_token': access_token,
-        'username': username,
-        'role': role
-    }), 201
-
-@app.route('/api/auth/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    username = data.get('username', '').strip()
-    password = data.get('password', '')
-
-    # Guest login
-    if username == 'guest' and password == 'guest':
-        access_token = create_access_token(identity='guest')
-        return jsonify({
-            'success': True,
-            'message': '游客登录成功',
-            'access_token': access_token,
-            'username': 'guest',
-            'role': 'user'
-        }), 200
-
-    # Regular login
-    with open(USERS_DATA_FILE, 'r', encoding='utf-8') as f:
-        users = json.load(f)
-
-    if username not in users:
-        return jsonify({'success': False, 'message': '用户名或密码错误'}), 401
-
-    stored_password = users[username]['password']
-    if hash_password(password) != stored_password:
-        return jsonify({'success': False, 'message': '用户名或密码错误'}), 401
-
-    # Update user login info
-    users[username]['last_login'] = get_current_time()
-    users[username]['login_count'] += 1
-
-    with open(USERS_DATA_FILE, 'w', encoding='utf-8') as f:
-        json.dump(users, f, indent=4)
-
-    # Create access token
-    access_token = create_access_token(identity=username)
-
-    return jsonify({
-        'success': True,
-        'message': '登录成功',
-        'access_token': access_token,
-        'username': username,
-        'role': users[username].get('role', 'user')  # 返回用户角色
-    }), 200
-
-@app.route('/api/auth/user', methods=['GET'])
-@jwt_required()
-def get_user():
-    current_user = get_jwt_identity()
-    return jsonify({
-        'success': True,
-        'username': current_user
-    }), 200
-
-# Pose data routes
-@app.route('/api/poses', methods=['GET'])
-def get_poses():
-    poses = [
-        '弓步冲拳', '猛虎出洞', '五花坐山',
-        '滚身冲拳', '猿猴纳肘', '马步推掌',
-        '并步崩拳', '狮子张嘴', '马步扣床',
-        '罗汉张掌'
-    ]
-    return jsonify({'success': True, 'poses': poses}), 200
-
-@app.route('/api/angles/<pose_name>', methods=['GET'])
-def get_angle_data(pose_name):
-    """
-    获取特定姿势的关节角度数据，用于可视化
-    """
-    # 习武者关节角度数据
-    practitioner_angles = {
-        '弓步冲拳': [
-            {'joint': '0-2 和 2-4夹角为', 'angle': 171.24},
-            {'joint': '1-3 和 3-5夹角为', 'angle': 144.74},
-            {'joint': '2-0 和 0-6夹角为', 'angle': 134.20},
-            {'joint': '3-1 和 1-7夹角为', 'angle': 122.39},
-            {'joint': '0-6 和 6-8夹角为', 'angle': 150.97},
-            {'joint': '1-7 和 7-9夹角为', 'angle': 134.10},
-            {'joint': '7-6 和 6-8夹角为', 'angle': 160.55},
-            {'joint': '6-7 和 7-9夹角为', 'angle': 125.62},
-            {'joint': '6-8 和 8-10夹角为', 'angle': 155.33},
-            {'joint': '7-9 和 9-11夹角为', 'angle': 131.23}
-        ],
-        '猛虎出洞': [
-            {'joint': '0-2 和 2-4夹角为', 'angle': 165.32},
-            {'joint': '1-3 和 3-5夹角为', 'angle': 163.45},
-            {'joint': '2-0 和 0-6夹角为', 'angle': 140.21},
-            {'joint': '3-1 和 1-7夹角为', 'angle': 142.67},
-            {'joint': '0-6 和 6-8夹角为', 'angle': 155.78},
-            {'joint': '1-7 和 7-9夹角为', 'angle': 156.90},
-            {'joint': '7-6 和 6-8夹角为', 'angle': 145.23},
-            {'joint': '6-7 和 7-9夹角为', 'angle': 146.78},
-            {'joint': '6-8 和 8-10夹角为', 'angle': 160.45},
-            {'joint': '7-9 和 9-11夹角为', 'angle': 159.87}
-        ],
-        '五花坐山': [
-            {'joint': '0-2 和 2-4夹角为', 'angle': 110.45},
-            {'joint': '1-3 和 3-5夹角为', 'angle': 112.67},
-            {'joint': '2-0 和 0-6夹角为', 'angle': 90.23},
-            {'joint': '3-1 和 1-7夹角为', 'angle': 91.45},
-            {'joint': '0-6 和 6-8夹角为', 'angle': 135.67},
-            {'joint': '1-7 和 7-9夹角为', 'angle': 134.89},
-            {'joint': '7-6 和 6-8夹角为', 'angle': 95.34},
-            {'joint': '6-7 和 7-9夹角为', 'angle': 94.56},
-            {'joint': '6-8 和 8-10夹角为', 'angle': 125.78},
-            {'joint': '7-9 和 9-11夹角为', 'angle': 126.90}
-        ]
-    }
-
-    # 传承人关节角度数据
-    master_angles = {
-        '弓步冲拳': [
-            {'joint': '0-2 和 2-4夹角为', 'angle': 155.60},
-            {'joint': '1-3 和 3-5夹角为', 'angle': 159.79},
-            {'joint': '2-0 和 0-6夹角为', 'angle': 115.97},
-            {'joint': '3-1 和 1-7夹角为', 'angle': 68.88},
-            {'joint': '0-6 和 6-8夹角为', 'angle': 151.87},
-            {'joint': '1-7 和 7-9夹角为', 'angle': 176.27},
-            {'joint': '7-6 和 6-8夹角为', 'angle': 134.59},
-            {'joint': '6-7 和 7-9夹角为', 'angle': 135.88},
-            {'joint': '6-8 和 8-10夹角为', 'angle': 150.69},
-            {'joint': '7-9 和 9-11夹角为', 'angle': 162.30}
-        ],
-        '猛虎出洞': [
-            {'joint': '0-2 和 2-4夹角为', 'angle': 175.45},
-            {'joint': '1-3 和 3-5夹角为', 'angle': 174.67},
-            {'joint': '2-0 和 0-6夹角为', 'angle': 130.23},
-            {'joint': '3-1 和 1-7夹角为', 'angle': 131.45},
-            {'joint': '0-6 和 6-8夹角为', 'angle': 165.67},
-            {'joint': '1-7 和 7-9夹角为', 'angle': 166.89},
-            {'joint': '7-6 和 6-8夹角为', 'angle': 155.34},
-            {'joint': '6-7 和 7-9夹角为', 'angle': 154.56},
-            {'joint': '6-8 和 8-10夹角为', 'angle': 170.78},
-            {'joint': '7-9 和 9-11夹角为', 'angle': 169.90}
-        ],
-        '五花坐山': [
-            {'joint': '0-2 和 2-4夹角为', 'angle': 90.45},
-            {'joint': '1-3 和 3-5夹角为', 'angle': 92.67},
-            {'joint': '2-0 和 0-6夹角为', 'angle': 95.23},
-            {'joint': '3-1 和 1-7夹角为', 'angle': 96.45},
-            {'joint': '0-6 和 6-8夹角为', 'angle': 125.67},
-            {'joint': '1-7 和 7-9夹角为', 'angle': 124.89},
-            {'joint': '7-6 和 6-8夹角为', 'angle': 90.34},
-            {'joint': '6-7 和 7-9夹角为', 'angle': 89.56},
-            {'joint': '6-8 和 8-10夹角为', 'angle': 135.78},
-            {'joint': '7-9 和 9-11夹角为', 'angle': 136.90}
-        ]
-    }
-
-    if pose_name in practitioner_angles and pose_name in master_angles:
-        return jsonify({
-            'success': True,
-            'practitioner_angles': practitioner_angles[pose_name],
-            'master_angles': master_angles[pose_name]
-        }), 200
-    else:
-        return jsonify({'success': False, 'message': '未找到该姿势的角度数据'}), 404
-
-@app.route('/api/pose_keypoints/<pose_name>', methods=['GET'])
-def get_pose_keypoints(pose_name):
-    """
-    获取特定姿势的关键点数据，用于可视化
-    """
-    # 传承人姿势关键点数据
-    master_keypoints = {
-        '弓步冲拳': {
-            'keypoints': [
-                [320, 100],  # 0: 鼻子
-                [300, 130],  # 1: 左肩
-                [340, 130],  # 2: 右肩
-                [280, 180],  # 3: 左肘
-                [360, 180],  # 4: 右肘
-                [250, 230],  # 5: 左手腕
-                [390, 230],  # 6: 右手腕
-                [310, 220],  # 7: 左髋
-                [330, 220],  # 8: 右髋
-                [280, 320],  # 9: 左膝
-                [380, 280],  # 10: 右膝
-                [260, 420],  # 11: 左踝
-                [380, 380]   # 12: 右踝
-            ],
-            'connections': [
-                [0, 1], [0, 2],  # 鼻子到肩膀
-                [1, 3], [2, 4],  # 肩膀到肘部
-                [3, 5], [4, 6],  # 肘部到手腕
-                [1, 7], [2, 8],  # 肩膀到髋部
-                [7, 9], [8, 10], # 髋部到膝盖
-                [9, 11], [10, 12] # 膝盖到踝部
-            ]
-        },
-        '猛虎出洞': {
-            'keypoints': [
-                [320, 120],  # 0: 鼻子
-                [290, 150],  # 1: 左肩
-                [350, 150],  # 2: 右肩
-                [240, 170],  # 3: 左肘
-                [400, 170],  # 4: 右肘
-                [200, 200],  # 5: 左手腕
-                [440, 200],  # 6: 右手腕
-                [310, 230],  # 7: 左髋
-                [330, 230],  # 8: 右髋
-                [290, 330],  # 9: 左膝
-                [350, 330],  # 10: 右膝
-                [290, 430],  # 11: 左踝
-                [350, 430]   # 12: 右踝
-            ],
-            'connections': [
-                [0, 1], [0, 2],  # 鼻子到肩膀
-                [1, 3], [2, 4],  # 肩膀到肘部
-                [3, 5], [4, 6],  # 肘部到手腕
-                [1, 7], [2, 8],  # 肩膀到髋部
-                [7, 9], [8, 10], # 髋部到膝盖
-                [9, 11], [10, 12] # 膝盖到踝部
-            ]
-        },
-        '五花坐山': {
-            'keypoints': [
-                [320, 100],  # 0: 鼻子
-                [290, 130],  # 1: 左肩
-                [350, 130],  # 2: 右肩
-                [250, 180],  # 3: 左肘
-                [390, 180],  # 4: 右肘
-                [290, 230],  # 5: 左手腕
-                [350, 230],  # 6: 右手腕
-                [300, 220],  # 7: 左髋
-                [340, 220],  # 8: 右髋
-                [300, 280],  # 9: 左膝
-                [340, 280],  # 10: 右膝
-                [300, 320],  # 11: 左踝
-                [340, 320]   # 12: 右踝
-            ],
-            'connections': [
-                [0, 1], [0, 2],  # 鼻子到肩膀
-                [1, 3], [2, 4],  # 肩膀到肘部
-                [3, 5], [4, 6],  # 肘部到手腕
-                [1, 7], [2, 8],  # 肩膀到髋部
-                [7, 9], [8, 10], # 髋部到膝盖
-                [9, 11], [10, 12] # 膝盖到踝部
-            ]
-        }
-    }
-
-    if pose_name in master_keypoints:
-        return jsonify({
-            'success': True,
-            'keypoints': master_keypoints[pose_name]
-        }), 200
-    else:
-        return jsonify({'success': False, 'message': '未找到该姿势的关键点数据'}), 404
-
-@app.route('/api/poses/<pose_name>', methods=['GET'])
-def get_pose_details(pose_name):
-    pose_details = {
-        '弓步冲拳': {
-            'name': '弓步冲拳',
-            'description': '弓步冲拳是武术中最基本的招式之一，要求前腿弯曲，后腿伸直，上身挺直，拳头有力向前冲出。',
-            'key_points': ['前腿膝盖应在脚尖上方', '拳头应与肩同高', '后腿需绷直', '重心应在前腿']
-        },
-        '猛虎出洞': {
-            'name': '猛虎出洞',
-            'description': '猛虎出洞是武术中的一种攻击招式，模仿猛虎出洞扑食的动作，要求双手成虎爪状，有力向前推出。',
-            'key_points': ['虎爪五指张开，指尖用力', '手臂伸展有力', '步伐稳健有力', '身体重心保持稳定']
-        },
-        '五花坐山': {
-            'name': '五花坐山',
-            'description': '五花坐山是一种稳定的坐姿招式，上身保持挺直，手臂做五花环绕动作，下肢稳固盘坐。',
-            'key_points': ['下肢稳固盘坐', '上身保持挺直', '手臂动作协调', '呼吸与动作结合']
-        },
-        # 添加其他招式的详细信息
-    }
-
-    if pose_name in pose_details:
-        return jsonify({'success': True, 'pose': pose_details[pose_name]}), 200
-    else:
-        return jsonify({'success': False, 'message': '未找到该招式信息'}), 404
+# Note: Pose data routes are now handled by pose_api blueprint
 
 # Image analysis route
 @app.route('/api/analysis/image', methods=['POST'])
@@ -1066,54 +677,9 @@ def cancel_appointment(appointment_id):
     except Exception as e:
         return jsonify({'success': False, 'message': f'取消预约失败: {str(e)}'}), 500
 
-@app.route('/api/cities', methods=['GET'])
-def get_city_list():
-    """获取支持的城市列表"""
-    cities = [
-        "北京市", "上海市", "广州市", "深圳市", "天津市", "重庆市", "成都市", "杭州市", "武汉市", "西安市",
-        "南京市", "郑州市", "长沙市", "济南市", "青岛市", "大连市", "宁波市", "厦门市", "福州市", "哈尔滨市"
-    ]
-    return jsonify({'cities': cities}), 200
+# Note: Cities and districts routes are now handled by location_api blueprint
 
-@app.route('/api/districts/<city>', methods=['GET'])
-def get_district_list(city):
-    """获取指定城市的区域列表"""
-    districts_map = {
-        "北京市": ["海淀区", "朝阳区", "西城区", "东城区", "丰台区", "石景山区", "通州区", "顺义区"],
-        "上海市": ["浦东新区", "黄浦区", "徐汇区", "长宁区", "静安区", "普陀区", "虹口区", "杨浦区"],
-        "广州市": ["天河区", "越秀区", "海珠区", "荔湾区", "白云区", "黄埔区", "番禺区", "花都区"],
-        "深圳市": ["南山区", "福田区", "罗湖区", "盐田区", "龙岗区", "宝安区", "龙华区", "坪山区"],
-        "郑州市": ["中原区", "二七区", "管城回族区", "金水区", "上街区", "惠济区", "郑东新区"]
-    }
-
-    if city in districts_map:
-        return jsonify({'districts': districts_map[city]}), 200
-    else:
-        # 如果没有特定城市的区域数据，返回空列表
-        return jsonify({'districts': []}), 200
-
-# 教练预约管理API
-@app.route('/api/coach/appointments', methods=['GET'])
-@jwt_required()
-def get_coach_appointments():
-    """获取教练的所有预约"""
-    current_user = get_jwt_identity()
-
-    # 验证用户是否为教练
-    with open(USERS_DATA_FILE, 'r', encoding='utf-8') as f:
-        users = json.load(f)
-
-    if current_user not in users or users[current_user].get('role') != 'coach':
-        return jsonify({'success': False, 'message': '无权访问此资源'}), 403
-
-    try:
-        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
-            appointments_data = json.load(f)
-
-        coach_appointments = [a for a in appointments_data['appointments'] if a['coach_id'] == current_user]
-        return jsonify({'success': True, 'appointments': coach_appointments}), 200
-    except Exception as e:
-        return jsonify({'success': False, 'message': f'获取预约失败: {str(e)}'}), 500
+# Note: Coach appointments route is now handled by coach_api blueprint
 
 # 消息系统API
 @app.route('/api/messages', methods=['POST'])
@@ -1222,242 +788,11 @@ def mark_message_as_read(message_id):
     except Exception as e:
         return jsonify({'success': False, 'message': f'操作失败: {str(e)}'}), 500
 
-# 获取教练个人资料
-@app.route('/api/coach/profile', methods=['GET'])
-@jwt_required()
-def get_coach_profile():
-    current_user = get_jwt_identity()
+# Note: Coach profile GET route is now handled by coach_api blueprint
 
-    # 检查用户是否是教练
-    user_data = get_user_data(current_user)
-    if not user_data or user_data.get('role') != 'coach':
-        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
+# Note: Coach profile PUT route is now handled by coach_api blueprint
 
-    # 从coaches.json文件中读取教练信息
-    coaches_file = os.path.join(app.root_path, 'data', 'coaches.json')
-    if os.path.exists(coaches_file):
-        try:
-            with open(coaches_file, 'r', encoding='utf-8-sig') as f:
-                coaches = json.load(f)
-
-            # 查找当前教练的资料
-            coach_profile = None
-            for coach in coaches:
-                if coach.get('id') == current_user:
-                    coach_profile = coach
-                    break
-
-            if coach_profile:
-                return jsonify({
-                    'success': True,
-                    'profile': coach_profile
-                })
-
-        except json.JSONDecodeError:
-            # 如果文件为空或格式不正确，初始化为空列表
-            coaches = []
-
-    # 如果没有找到教练资料或文件不存在，返回默认资料
-    default_profile = {
-        'id': current_user,
-        'name': user_data.get('username', ''),
-        'gender': 'male',
-        'avatar': None,
-        'location': {
-            'city': '',
-            'districts': []
-        },
-        'school': '',
-        'technical_level': '',
-        'certification': '',
-        'skills': [],
-        'description': '',
-        'price': 0,
-        'rating': 5.0
-    }
-
-    return jsonify({
-        'success': True,
-        'profile': default_profile
-    })
-
-# 更新教练个人资料
-@app.route('/api/coach/profile', methods=['PUT'])
-@jwt_required()
-def update_coach_profile():
-    current_user = get_jwt_identity()
-    print(f"当前用户: {current_user}")
-
-    # 检查用户是否是教练
-    user_data = get_user_data(current_user)
-    print(f"用户数据: {user_data}")
-    if not user_data or user_data.get('role') != 'coach':
-        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
-
-    # 获取请求数据
-    data = request.json
-    print(f"请求数据: {data}")
-    if not data:
-        return jsonify({'success': False, 'message': '请求数据无效'}), 400
-
-    try:
-        # 从coaches.json文件中读取教练信息
-        coaches_file = os.path.join(app.root_path, 'data', 'coaches.json')
-        coaches = []
-        if os.path.exists(coaches_file):
-            try:
-                with open(coaches_file, 'r', encoding='utf-8-sig') as f:
-                    content = f.read()
-                    print(f"读取到的文件内容: {content}")
-                    if content.strip():
-                        coaches = json.loads(content)
-                    else:
-                        coaches = []
-                print(f"读取到的教练数据: {coaches}")
-            except json.JSONDecodeError as e:
-                print(f"JSON解码错误: {str(e)}")
-                coaches = []
-            except Exception as e:
-                print(f"读取文件错误: {str(e)}")
-                coaches = []
-
-        # 准备新的教练资料
-        new_coach_data = {
-            'id': current_user,
-            'name': data.get('name', ''),
-            'gender': data.get('gender', 'male'),
-            'location': data.get('location', {'city': '', 'districts': []}),
-            'school': data.get('school', ''),
-            'technical_level': data.get('technical_level', ''),
-            'certification': data.get('certification', ''),
-            'skills': data.get('skills', []),
-            'description': data.get('description', ''),
-            'price': data.get('price', 0),
-            'rating': 5.0,  # 默认评分
-            'avatar': None  # 默认无头像
-        }
-
-        # 查找当前教练的资料
-        coach_found = False
-        for i, coach in enumerate(coaches):
-            if coach.get('id') == current_user:
-                # 保留原有的avatar字段
-                if 'avatar' in coach and coach['avatar']:
-                    new_coach_data['avatar'] = coach['avatar']
-                # 更新教练资料
-                coaches[i] = new_coach_data
-                coach_found = True
-                print(f"更新现有教练资料: {coaches[i]}")
-                break
-
-        # 如果没有找到教练资料，添加新的教练资料
-        if not coach_found:
-            coaches.append(new_coach_data)
-            print(f"添加新教练资料: {new_coach_data}")
-
-        # 确保目录存在
-        os.makedirs(os.path.dirname(coaches_file), exist_ok=True)
-
-        # 保存更新后的教练信息
-        with open(coaches_file, 'w', encoding='utf-8') as f:
-            json.dump(coaches, f, ensure_ascii=False, indent=4)
-        print(f"保存成功: {coaches_file}")
-
-        return jsonify({
-            'success': True,
-            'message': '教练资料更新成功'
-        })
-    except Exception as e:
-        print(f"保存失败: {str(e)}")
-        return jsonify({
-            'success': False,
-            'message': f'保存失败: {str(e)}'
-        }), 500
-
-# 上传教练头像
-@app.route('/api/coach/avatar', methods=['POST'])
-@jwt_required()
-def upload_coach_avatar():
-    current_user = get_jwt_identity()
-
-    # 检查用户是否是教练
-    user_data = get_user_data(current_user)
-    if not user_data or user_data.get('role') != 'coach':
-        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
-
-    # 检查是否有文件上传
-    if 'avatar' not in request.files:
-        return jsonify({'success': False, 'message': '没有上传文件'}), 400
-
-    file = request.files['avatar']
-    if file.filename == '':
-        return jsonify({'success': False, 'message': '没有选择文件'}), 400
-
-    # 检查文件类型
-    if not allowed_file(file.filename, {'png', 'jpg', 'jpeg', 'gif'}):
-        return jsonify({'success': False, 'message': '不支持的文件类型'}), 400
-
-    # 保存文件
-    filename = secure_filename(f"{current_user}_{int(time.time())}.{file.filename.rsplit('.', 1)[1].lower()}")
-    avatar_dir = os.path.join(app.root_path, 'static', 'avatars')
-    os.makedirs(avatar_dir, exist_ok=True)
-
-    file_path = os.path.join(avatar_dir, filename)
-    file.save(file_path)
-
-    # 更新教练资料中的头像URL
-    avatar_url = f"/static/avatars/{filename}"
-
-    # 从coaches.json文件中读取教练信息
-    coaches_file = os.path.join(app.root_path, 'data', 'coaches.json')
-    coaches = []
-    if os.path.exists(coaches_file):
-        try:
-            with open(coaches_file, 'r', encoding='utf-8-sig') as f:
-                coaches = json.load(f)
-        except json.JSONDecodeError:
-            # 如果文件为空或格式不正确，初始化为空列表
-            coaches = []
-
-    # 更新教练头像
-    coach_found = False
-    for i, coach in enumerate(coaches):
-        if coach.get('id') == current_user:
-            coaches[i]['avatar'] = avatar_url
-            coach_found = True
-            break
-
-    # 如果没有找到教练资料，添加新的教练资料
-    if not coach_found:
-        new_coach = {
-            'id': current_user,
-            'name': user_data.get('username', ''),
-            'gender': 'male',
-            'avatar': avatar_url,
-            'location': {
-                'city': '',
-                'districts': []
-            },
-            'school': '',
-            'technical_level': '',
-            'certification': '',
-            'skills': [],
-            'description': '',
-            'price': 0,
-            'rating': 5.0
-        }
-        coaches.append(new_coach)
-
-    # 保存更新后的教练信息
-    os.makedirs(os.path.dirname(coaches_file), exist_ok=True)
-    with open(coaches_file, 'w', encoding='utf-8') as f:
-        json.dump(coaches, f, ensure_ascii=False, indent=4)
-
-    return jsonify({
-        'success': True,
-        'message': '头像上传成功',
-        'avatar_url': avatar_url
-    })
+# Note: Coach avatar upload route is now handled by coach_api blueprint
 
 # Admin appointment management routes
 @app.route('/api/admin/appointments', methods=['GET'])
@@ -1658,40 +993,7 @@ def review_appointment_status(appointment_id):
             'message': f'审核预约失败: {str(e)}'
         }), 500
 
-# 教练API - 获取自己创建的预约及其审核状态
-@app.route('/api/coach/appointments/with_status', methods=['GET'])
-@jwt_required()
-def get_coach_appointments_with_status():
-    current_user = get_jwt_identity()
-    user_data = get_user_data(current_user)
-
-    # 检查用户是否是教练
-    if not user_data or user_data.get('role') != 'coach':
-        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
-
-    try:
-        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            all_appointments = data.get('appointments', [])
-
-        # 筛选当前教练创建的预约
-        coach_appointments = [
-            apt for apt in all_appointments
-            if apt.get('coach_id') == current_user
-        ]
-
-        # 按创建时间排序（最新的在前）
-        coach_appointments.sort(key=lambda x: x.get('created_at', ''), reverse=True)
-
-        return jsonify({
-            'success': True,
-            'appointments': coach_appointments
-        })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': f'获取预约列表失败: {str(e)}'
-        }), 500
+# Note: Coach appointments with status route is now handled by coach_api blueprint
 
 # 用户获取预约列表API
 @app.route('/api/appointments', methods=['GET'])
@@ -1778,70 +1080,7 @@ def get_appointments():
             'error': str(e)
         })
 
-# 教练API - 创建预约信息
-@app.route('/api/coach/create_appointment', methods=['POST'])
-@jwt_required()
-def create_coach_appointment():
-    current_user = get_jwt_identity()
-    user_data = get_user_data(current_user)
-
-    # 检查用户是否是教练
-    if not user_data or user_data.get('role') != 'coach':
-        return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
-
-    data = request.get_json()
-
-    # 检查必要字段
-    required_fields = ['coach_name', 'phone', 'skill', 'location', 'price']
-    for field in required_fields:
-        if field not in data or not data[field]:
-            return jsonify({
-                'success': False,
-                'message': f'缺少必要的字段: {field}'
-            }), 400
-
-    try:
-        # 打开预约文件
-        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8') as f:
-            file_data = json.load(f)
-            appointments = file_data.get('appointments', [])
-
-        # 生成唯一ID
-        import uuid
-        appointment_id = str(uuid.uuid4())
-
-        # 创建新预约
-        new_appointment = {
-            'id': appointment_id,
-            'coach_id': current_user,
-            'coach_name': data.get('coach_name'),
-            'phone': data.get('phone'),
-            'skill': data.get('skill'),
-            'location': data.get('location'),
-            'price': data.get('price'),
-            'home_service': data.get('home_service', False),
-            'notes': data.get('notes', ''),
-            'created_at': get_current_time(),
-            'approval_status': 'pending',  # 初始状态为待审核
-        }
-
-        # 添加到预约文件
-        appointments.append(new_appointment)
-        file_data['appointments'] = appointments
-
-        with open(APPOINTMENTS_DATA_FILE, 'w', encoding='utf-8') as f:
-            json.dump(file_data, f, ensure_ascii=False, indent=4)
-
-        return jsonify({
-            'success': True,
-            'message': '预约信息发布成功，等待管理员审核',
-            'appointment_id': appointment_id
-        })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': f'发布预约失败: {str(e)}'
-        }), 500
+# Note: Coach create appointment route is now handled by coach_api blueprint
 
 # 添加用户预约API端点
 @app.route('/api/user/create_appointment', methods=['POST'])
@@ -2063,36 +1302,7 @@ def admin_delete_appointment(appointment_id):
     except Exception as e:
         return jsonify({'success': False, 'message': f'删除预约失败: {str(e)}'}), 500
 
-# 教练查看自己发布的预约信息和审核状态
-@app.route('/api/coach/published_appointments', methods=['GET'])
-@jwt_required()
-def get_coach_published_appointments():
-    """Get published appointments and their approval status for a coach"""
-    current_user = get_jwt_identity()
-
-    # 检查用户是否是教练
-    user_data = get_user_data(current_user)
-    if not user_data or user_data.get('role') != 'coach':
-        return jsonify({'success': False, 'message': '无权限访问此接口，仅教练可操作'}), 403
-
-    try:
-        # 读取预约数据
-        with open(APPOINTMENTS_DATA_FILE, 'r', encoding='utf-8-sig') as f:
-            appointments_data = json.load(f)
-
-        # 筛选出该教练发布的预约信息（非用户预约的）
-        coach_published_appointments = []
-        for appointment in appointments_data.get('appointments', []):
-            # 教练发布的预约将包含approval_status字段
-            if appointment.get('coach_id') == current_user and 'approval_status' in appointment:
-                coach_published_appointments.append(appointment)
-
-        return jsonify({
-            'success': True,
-            'published_appointments': coach_published_appointments
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'message': f'获取发布预约信息失败: {str(e)}'}), 500
+# Note: Coach published appointments route is now handled by coach_api blueprint
 
 # 武友论坛API路由
 @app.route('/api/forum/posts', methods=['GET'])

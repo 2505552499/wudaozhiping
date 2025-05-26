@@ -4,8 +4,8 @@
         "password": "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
         "role": "coach",
         "created_at": "2025-04-28T10:00:00",
-        "last_login": "2025-04-29T22:50:25.490005",
-        "login_count": 1
+        "last_login": "2025-05-27T00:41:23.083345",
+        "login_count": 8
     },
     "user1": {
         "username": "user1",
@@ -28,8 +28,8 @@
         "password": "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
         "role": "user",
         "created_at": "2025-04-28T13:27:30.599686",
-        "last_login": "2025-05-26T20:14:03.211444",
-        "login_count": 46
+        "last_login": "2025-05-27T00:01:07.644081",
+        "login_count": 47
     },
     "coach3": {
         "username": "coach3",
@@ -76,5 +76,12 @@
         "created_at": "2025-05-14T16:59:50.439303",
         "last_login": "2025-05-14T17:01:12.192993",
         "login_count": 1
+    },
+    "testuser123": {
+        "password": "7e6e0c3079a08c5cc6036789b57e951f65f82383913ba1a49ae992544f1b4b6e",
+        "role": "user",
+        "created_at": "2025-05-26T23:49:06.122032",
+        "last_login": null,
+        "login_count": 0
     }
 }
