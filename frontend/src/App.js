@@ -40,6 +40,19 @@ import AdminCourseManagement from './pages/AdminCourseManagement';
 import EnrollmentSuccess from './pages/EnrollmentSuccess';
 import AdminEnrollmentManagement from './pages/AdminEnrollmentManagement';
 
+// 新增页面
+import UserProfile from './pages/UserProfile';
+import MyCourses from './pages/MyCourses';
+import MyAppointments from './pages/MyAppointments';
+import ActionGuidance from './pages/ActionGuidance';
+import CoachTeam from './pages/CoachTeam';
+import OfflineGuidance from './pages/OfflineGuidance';
+import BeginnerCourses from './pages/BeginnerCourses';
+import AdvancedCourses from './pages/AdvancedCourses';
+import ProfessionalSkills from './pages/ProfessionalSkills';
+import AboutUs from './pages/AboutUs';
+import CourseStudy from './pages/CourseStudy';
+
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -62,7 +75,7 @@ function App() {
                 <HomePage />
               </Layout>
             } />
-            
+
             {/* 登录页面（不使用布局组件，有自己的设计） */}
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={
@@ -127,35 +140,35 @@ function App() {
                 <CoachCreateAppointment />
               </ProtectedRoute>
             } />
-            
+
             {/* 教练详情页面 */}
             <Route path="/coach/:coachId" element={
               <ProtectedRoute>
                 <CoachDetail />
               </ProtectedRoute>
             } />
-            
+
             {/* 教练资料编辑页面 */}
             <Route path="/coach-profile-edit" element={
               <ProtectedRoute>
                 <CoachProfileEdit />
               </ProtectedRoute>
             } />
-            
+
             {/* 教练发布预约页面 */}
             <Route path="/coach-appointment-create" element={
               <ProtectedRoute>
                 <CoachAppointmentCreate />
               </ProtectedRoute>
             } />
-            
+
             {/* 支付结果页面 */}
             <Route path="/payment/result" element={
               <ProtectedRoute>
                 <PaymentResult />
               </ProtectedRoute>
             } />
-            
+
             {/* 武友论坛路由 */}
             <Route path="/forum" element={
               <ProtectedRoute>
@@ -182,7 +195,7 @@ function App() {
                 <ForumReview />
               </ProtectedRoute>
             } />
-            
+
             {/* 精品课程路由 */}
             <Route path="/courses" element={
               <CourseList />
@@ -195,17 +208,72 @@ function App() {
                 <AdminCourseManagement />
               </ProtectedRoute>
             } />
-            
+
             <Route path="/admin/enrollments" element={
               <ProtectedRoute>
                 <AdminEnrollmentManagement />
               </ProtectedRoute>
             } />
-            
+
             <Route path="/enrollment-success" element={
               <EnrollmentSuccess />
             } />
-            
+
+            {/* 用户个人中心相关页面 */}
+            <Route path="/user-profile" element={
+              <ProtectedRoute>
+                <UserProfile />
+              </ProtectedRoute>
+            } />
+            <Route path="/my-courses" element={
+              <ProtectedRoute>
+                <MyCourses />
+              </ProtectedRoute>
+            } />
+            <Route path="/my-appointments" element={
+              <ProtectedRoute>
+                <MyAppointments />
+              </ProtectedRoute>
+            } />
+
+            {/* 智能分析服务页面 */}
+            <Route path="/action-guidance" element={
+              <ProtectedRoute>
+                <ActionGuidance />
+              </ProtectedRoute>
+            } />
+
+            {/* 教练资源页面 */}
+            <Route path="/coach-team" element={
+              <CoachTeam />
+            } />
+            <Route path="/offline-guidance" element={
+              <OfflineGuidance />
+            } />
+
+            {/* 课程中心页面 */}
+            <Route path="/beginner-courses" element={
+              <BeginnerCourses />
+            } />
+            <Route path="/advanced-courses" element={
+              <AdvancedCourses />
+            } />
+            <Route path="/professional-skills" element={
+              <ProfessionalSkills />
+            } />
+
+            {/* 课程学习页面 */}
+            <Route path="/course-study/:courseId" element={
+              <ProtectedRoute>
+                <CourseStudy />
+              </ProtectedRoute>
+            } />
+
+            {/* 关于我们页面 */}
+            <Route path="/about" element={
+              <AboutUs />
+            } />
+
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>

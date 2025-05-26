@@ -1,8 +1,8 @@
-# 武道智评 - AI助力武道动作评估平台
+# 武道智评 - 智能武术姿势分析平台
 
 <div align="center">
 
-![武道智评](https://img.shields.io/badge/武道智评-v2.1-blue.svg)
+![武道智评](https://img.shields.io/badge/武道智评-v2.2-blue.svg)
 ![Flask](https://img.shields.io/badge/Flask-2.3.3-green.svg)
 ![React](https://img.shields.io/badge/React-18.2.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
@@ -10,7 +10,7 @@
 
 **🥋 专业武术动作智能分析平台 | AI驱动的姿态评估与教学辅助系统**
 
-[在线体验](https://wudao.250555.xyz) | [API文档](docs/api_reference.md) | [演示视频](#) | [技术博客](#)
+[在线体验](http://localhost:3001) | [API文档](docs/api_reference.md) | [项目状态](docs/PROJECT_STATUS_REPORT.md) | [技术文档](docs/)
 
 </div>
 
@@ -18,7 +18,7 @@
 
 ## 📖 项目简介
 
-武道智评是一款**专业的AI武术动作分析平台**，融合先进的计算机视觉、深度学习和人体姿态估计技术，为武术爱好者、教练和学习者提供精准的动作分析、评价和改进建议。
+武道智评是一款**专业的AI武术动作分析平台**，融合先进的计算机视觉、深度学习和人体姿态估计技术，为武术爱好者、教练和学习者提供精准的动作分析、评价和改进建议。平台集成了智能分析、教练预约、在线学习、社区交流等多项功能，打造完整的武术学习生态系统。
 
 ### 🌟 核心特色
 
@@ -27,7 +27,8 @@
 - **📱 全平台支持**: 图像、视频、实时摄像头多种分析模式
 - **👨‍🏫 专业教学**: 完整的教练预约、课程管理、论坛交流生态
 - **💰 支付集成**: 支付宝完整支付流程，支持预约付费
-- **🎨 现代设计**: 采用现代渐变背景的美观界面设计
+- **🎨 现代设计**: 采用Ant Design和现代UI设计理念
+- **📚 完整学习体系**: 从基础课程到专业技巧的全方位学习平台
 
 ---
 
@@ -88,61 +89,88 @@
 - 用户注册/登录 (支持多角色：用户/教练/管理员)
 - JWT令牌认证机制
 - 游客模式支持 (guest/guest)
-- 个人资料管理
+- 个人资料管理和头像上传
+- 角色权限控制 (RBAC)
 
 ### 🥋 **AI动作分析引擎**
-- **图像分析**: 单张图片姿态评估
-- **视频分析**: 连续动作序列分析
-- **实时分析**: 摄像头实时姿态评估
+- **图像分析**: 单张图片姿态评估，支持多种格式
+- **视频分析**: 连续动作序列分析，逐帧检测
+- **实时分析**: 摄像头实时姿态评估，毫秒级响应
 - **多维评估**: 角度、坐标、时序综合分析
-- **智能反馈**: AI生成改进建议
+- **智能反馈**: AI生成改进建议和技术指导
+- **标准姿势库**: 支持太极拳、形意拳、八卦掌等多种武术
 
 ### 👨‍🏫 **教练管理系统**
-- 教练资料管理 (技能、地区、价格)
-- 教练头像上传
-- 预约时段发布
-- 学员管理功能
+- 教练资料管理 (技能、地区、价格、经验)
+- 教练头像上传和个人展示
+- 预约时段发布和管理
+- 学员管理和教学记录
+- 教练评价和反馈系统
 
 ### 📅 **预约管理系统**
-- 在线预约教练
-- 预约状态管理 (待审核/已确认/已完成)
-- 预约修改/取消
+- 在线预约教练，支持时间选择
+- 预约状态管理 (待审核/已确认/已完成/已取消)
+- 预约修改/取消功能
 - 管理员审核机制
+- 预约历史查询和统计
 
 ### 💰 **支付系统**
-- 支付宝集成支付
-- 订单管理
-- 支付状态查询
-- 支付记录查询
+- 支付宝集成支付，安全可靠
+- 订单管理和状态跟踪
+- 支付状态查询和验证
+- 支付记录查询和导出
+- 费用结算和分成管理
 
-### 📚 **课程管理系统**
-- 课程发布与管理
-- 在线报名系统
-- 课程进度跟踪
-- 报名状态管理
+### 📚 **课程学习中心**
+- **基础课程**: 入门级武术课程体系
+- **进阶课程**: 高级技巧和深度学习
+- **专业技巧**: 实战技击、表演艺术、教练培训
+- **在线报名**: 课程报名和学习进度跟踪
+- **学习管理**: 个人学习记录和成就系统
+- **VIP课程**: 专享高级课程和一对一指导
 
-### 💬 **社区论坛系统**
-- 帖子发布与管理
-- 评论互动功能
-- 点赞系统
-- 内容审核机制
+### 💬 **武友社区论坛**
+- 帖子发布与管理，支持图文并茂
+- 评论互动功能，实时交流
+- 点赞系统和用户互动
+- 内容审核机制，保证社区质量
+- 分类讨论和专题交流
+- 经验分享和技巧交流
 
-### 📝 **视频批注系统**
-- 视频时间点标注
-- 绘图标注功能
-- 批注管理
-- 多类型标注支持
+### 📝 **训练视频批注系统**
+- 视频上传和管理
+- 时间点标注和绘图批注
+- 教练专业批注和反馈
+- 协作学习和团队批注
+- 批注管理和历史记录
+- 多类型标注支持 (文字、语音、绘图)
 
 ### 📨 **消息通知系统**
-- 站内消息
-- 系统通知
-- 消息状态管理
+- 站内消息和系统通知
+- 预约提醒和状态更新
+- 课程通知和学习提醒
+- 消息状态管理 (已读/未读)
+- 消息分类和筛选
 
 ### 🛡️ **管理员系统**
-- 用户管理
-- 内容审核
-- 预约审核
-- 系统配置
+- 用户管理和权限控制
+- 内容审核和质量管理
+- 预约审核和状态管理
+- 课程管理和发布
+- 系统配置和参数设置
+- 数据统计和分析报表
+
+### 🎯 **动作指导系统**
+- 线下指导和技巧分享
+- 动作要领和注意事项
+- 常见错误和纠正方法
+- 练习建议和进阶路径
+
+### 📖 **知识库系统**
+- 武术理论和历史文化
+- 技术文档和教学资料
+- 常见问题和解答
+- 学习资源和参考资料
 
 ---
 
@@ -150,19 +178,22 @@
 
 ```
 wudaozhiping/
-├── 📁 config/                    # 配置模块 (新增)
-│   ├── 🔧 app_config.py          # 应用配置
-│   └── 🗄️ database_config.py     # 数据库配置
+├── 📁 config/                    # 配置模块
+│   ├── 🔧 settings.py            # 应用配置
+│   └── � __init__.py            # 模块初始化
 │
-├── 📁 utils/                     # 工具模块 (新增)
+├── 📁 utils/                     # 工具模块
 │   ├── 🔐 auth_utils.py          # 认证工具
-│   └── 📁 file_utils.py          # 文件处理工具
+│   ├── 📁 file_utils.py          # 文件处理工具
+│   └── 📁 __init__.py            # 模块初始化
 │
-├── 📁 api/                       # API模块 (新增)
+├── 📁 api/                       # API模块
 │   ├── 🔐 auth_api.py            # 认证API
 │   ├── 🥋 pose_api.py            # 姿势分析API
 │   ├── 🌍 location_api.py        # 地理位置API
-│   └── 👨‍🏫 coach_api.py           # 教练管理API
+│   ├── 👨‍🏫 coach_api.py           # 教练管理API
+│   ├── 📁 static_files_api.py    # 静态文件API
+│   └── 📁 __init__.py            # 模块初始化
 │
 ├── 🐍 app.py                     # Flask应用入口 (1361行 ↓37%)
 ├── 🧠 model.py                   # AI分析核心引擎 (692行)
@@ -173,43 +204,79 @@ wudaozhiping/
 ├── 📚 course_api.py              # 课程管理API (609行)
 ├── 💬 forum_api.py               # 论坛系统API (513行)
 ├── 📝 annotations_api.py         # 批注系统API (113行)
+├── 🎥 training_video_api.py      # 训练视频API (新增)
 └── 📊 coordinate_master.py       # 姿态坐标管理 (158行)
 │
 ├── 📁 frontend/                  # 前端应用
 │   ├── 📁 public/                # 静态资源
+│   │   ├── �️ index.html         # 主页面
+│   │   └── �📁 img/               # 图片资源
 │   ├── 📁 src/
 │   │   ├── 📁 components/        # React组件
-│   │   │   ├── 📁 layout/        # 布局组件
-│   │   │   ├── 📁 home/         # 首页组件
-│   │   │   └── 📁 ui/           # UI组件库
-│   │   ├── 📁 pages/            # 页面组件
-│   │   ├── 🎨 App.css           # 全局样式
-│   │   └── ⚙️ tailwind.config.js # Tailwind配置
-│   ├── 📦 package.json          # 前端依赖
-│   └── 🔧 package-lock.json     # 锁定版本
+│   │   │   ├── � MainLayout.js  # 主布局组件
+│   │   │   ├── 🧭 Navigation.js  # 导航组件
+│   │   │   └── 📁 ...            # 其他组件
+│   │   ├── 📁 pages/             # 页面组件 (40+页面)
+│   │   │   ├── 🏠 HomePage.js    # 首页
+│   │   │   ├── � Dashboard.js   # 仪表板
+│   │   │   ├── 📚 CourseList.js  # 课程列表
+│   │   │   ├── 🥋 ProfessionalSkills.js # 专业技巧
+│   │   │   ├── 🎥 VideoAnalysis.js # 视频分析
+│   │   │   ├── � CameraAnalysis.js # 摄像头分析
+│   │   │   ├── 👨‍🏫 CoachTeam.js    # 教练团队
+│   │   │   ├── 💬 ForumList.js   # 论坛列表
+│   │   │   └── 📁 ...            # 其他页面
+│   │   ├── 📁 api/               # API接口
+│   │   │   └── 🔗 api.js         # API配置和请求
+│   │   ├── 📁 services/          # 服务层
+│   │   ├── 🎨 App.css            # 全局样式
+│   │   ├── ⚙️ index.js           # 应用入口
+│   │   └── ⚙️ config.js          # 前端配置
+│   ├── 📦 package.json           # 前端依赖
+│   ├── 🔧 package-lock.json      # 锁定版本
+│   └── ⚙️ tailwind.config.js     # Tailwind配置
 │
-├── 📁 data/                     # 数据存储
-│   ├── 👥 users.json            # 用户数据
+├── 📁 data/                      # 数据存储
+│   ├── 👥 users.db               # 用户数据库
+│   ├── 👥 users.json             # 用户数据 (备份)
 │   ├── 👨‍🏫 coaches.json          # 教练数据
-│   ├── 📅 appointments.json     # 预约数据
-│   ├── 📚 courses.json          # 课程数据
-│   └── 💬 forum_posts.json      # 论坛数据
+│   ├── 📅 appointments.json      # 预约数据
+│   ├── 📚 courses.json           # 课程数据
+│   ├── 📚 enrollments.json       # 报名数据
+│   ├── 💬 forum_posts.json       # 论坛帖子
+│   ├── 💬 forum_comments.json    # 论坛评论
+│   ├── 📨 messages.json          # 消息数据
+│   ├── 💰 payments.json          # 支付数据
+│   ├── 💰 settlements.json       # 结算数据
+│   └── 🎥 training_videos.json   # 训练视频数据
 │
-├── 📁 uploads/                  # 上传文件
-│   ├── 📁 images/               # 图片文件
-│   └── 📁 videos/               # 视频文件
+├── 📁 uploads/                   # 上传文件
+│   ├── 📁 images/                # 图片文件
+│   ├── 📁 videos/                # 视频文件
+│   ├── 📁 training_videos/       # 训练视频
+│   └── 📁 avatars/               # 头像文件
 │
-├── 📁 img/                      # 处理后文件
-├── 📁 docs/                     # 项目文档 (完善)
-│   ├── 📖 api_reference.md      # API接口文档
-│   ├── 📋 API_DOCUMENTATION.md  # 详细API文档
+├── 📁 img/                       # 处理后文件
+├── 📁 static/                    # 静态文件
+│   └── 📁 avatars/               # 头像静态文件
+│
+├── 📁 docs/                      # 项目文档 (完善)
+│   ├── 📖 README.md              # 文档目录
+│   ├── 📖 api_reference.md       # API接口文档 (1500+行)
+│   ├── 📋 API_DOCUMENTATION.md   # 详细API文档
 │   ├── 📊 PROJECT_STATUS_REPORT.md # 项目状态报告
 │   ├── 🔧 REFACTORING_SUMMARY.md # 重构总结
+│   ├── ✅ COMPLETION_SUMMARY.md  # 完成总结
+│   ├── 📚 course_center_implementation.md # 课程中心实现
+│   ├── 🔧 course_study_fix.md    # 课程学习修复
 │   └── 🧪 test_api_functionality.py # API测试脚本
 │
-├── 📋 requirements.txt          # Python依赖
-├── 📖 README.md                 # 项目说明
-└── 🚀 run.py                    # 启动脚本
+├── 📋 requirements.txt           # Python依赖
+├── 📖 README.md                  # 项目说明 (本文档)
+├── 🚀 run.py                     # 启动脚本
+├── 🔧 run_wudao.ps1              # Windows启动脚本
+├── 🔧 run_wudao_app.bat          # Windows批处理启动
+└── 🔧 install_deps.bat           # 依赖安装脚本
 ```
 
 ### 🎯 v2.1 重构亮点
