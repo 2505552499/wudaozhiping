@@ -150,7 +150,7 @@ const Login = () => {
           <ArrowLeftOutlined className="mr-2" />
           <span>{t('login.backToHome')}</span>
         </Link>
-        <LanguageSwitcher />
+        <LanguageSwitcher scrolled={false} />
       </div>
 
       <div className="z-10 w-full max-w-md">

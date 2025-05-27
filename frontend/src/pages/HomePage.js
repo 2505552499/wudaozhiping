@@ -37,12 +37,12 @@ const HomePage = () => {
     if (token && storedUserId) {
       setUserId(storedUserId);
     }
-    
+
     // 页面加载完成后的动画效果
     const timer = setTimeout(() => {
       setIsPageLoaded(true);
     }, 100);
-    
+
     return () => clearTimeout(timer);
   }, [t]);
 
@@ -87,7 +87,7 @@ const HomePage = () => {
           >
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm rounded-full px-6 py-2 mb-8 border border-cyan-400/30">
               <RocketOutlined className="text-cyan-400" />
-              <span className="text-white text-sm font-medium">开启武术之旅</span>
+              <span className="text-white text-sm font-medium">{t('home.cta.startJourney')}</span>
             </div>
 
             <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
@@ -116,7 +116,7 @@ const HomePage = () => {
                 className="text-lg px-10 py-4 border-white/30 text-white hover:bg-white hover:text-gray-900"
                 onClick={() => window.location.href = '/about'}
               >
-                了解更多
+                {t('home.cta.learnMore')}
               </StyledButton>
             </div>
           </motion.div>

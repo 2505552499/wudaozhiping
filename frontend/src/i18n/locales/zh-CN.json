@@ -17,7 +17,8 @@
     "error": "错误",
     "warning": "警告",
     "info": "信息",
-    "welcome": "欢迎，{{name}}"
+    "welcome": "欢迎，{{name}}",
+    "guest": "游客"
   },
   "nav": {
     "home": "首页",
@@ -44,11 +45,32 @@
       "startNow": "立即开始",
       "learnMore": "了解更多",
       "titleLine1": "以 <1>AI</1> 和 <1>CV</1> 驱动",
-      "titleLine2": "武术动作分析与评价"
+      "titleLine2": "武术动作分析与评价",
+      "platformTag": "AI驱动的武术分析平台"
     },
     "features": {
       "title": "核心功能",
       "subtitle": "全方位智能武术训练解决方案",
+      "sectionTag": "核心功能特性",
+      "sectionTitle": "科技赋能，",
+      "sectionSubtitle": "重新定义武术训练",
+      "sectionDescription": "融合人工智能与传统武学精髓，打造全方位的智能训练体系，让每一次练习都更有效果",
+      "aiAnalysis": {
+        "title": "AI智能分析",
+        "description": "利用先进的计算机视觉算法，对武术动作进行多维度分析，提供精确的评分和改进建议。"
+      },
+      "realtimeFeedback": {
+        "title": "实时反馈系统",
+        "description": "通过摄像头实时分析动作，提供即时反馈，帮助练习者及时调整姿势，避免形成错误习惯。"
+      },
+      "personalizedTraining": {
+        "title": "个性化训练",
+        "description": "根据用户的练习数据和进步情况，自动生成个性化训练计划，科学安排训练强度和内容。"
+      },
+      "professionalCoaching": {
+        "title": "专业教练指导",
+        "description": "连接全国优秀武术教练资源，提供线上辅导和点评，让每位用户都能获得专业指导。"
+      },
       "imageAnalysis": {
         "title": "图片分析",
         "description": "上传武术动作图片，AI即时分析姿势准确性并提供改进建议"
@@ -60,15 +82,37 @@
       "realtimeGuidance": {
         "title": "实时指导",
         "description": "摄像头实时捕捉动作，AI教练全程陪练，即时纠正动作偏差"
-      },
-      "personalizedTraining": {
-        "title": "个性化训练",
-        "description": "根据个人水平和目标，定制专属训练计划，循序渐进提升技能"
       }
     },
     "services": {
       "title": "服务内容",
       "subtitle": "专业全面的武术学习平台",
+      "sectionTitle": "全方位武术评估解决方案",
+      "sectionDescription": "武道智评平台提供多种专业服务，满足不同层次武术爱好者和专业人士的需求",
+      "imageAnalysis": {
+        "title": "图像分析",
+        "description": "上传武术动作图片，AI自动识别姿态并提供专业评分与改进建议"
+      },
+      "videoAnalysis": {
+        "title": "视频分析",
+        "description": "分析武术动作视频，获取连续动作的评估与详细动作分解"
+      },
+      "realtimeAnalysis": {
+        "title": "实时分析",
+        "description": "通过摄像头实时监测姿态，即时反馈武术动作准确度"
+      },
+      "professionalCoach": {
+        "title": "专业教练",
+        "description": "预约资深武术教练，获取一对一专业指导和个性化训练计划"
+      },
+      "premiumCourses": {
+        "title": "精品课程",
+        "description": "精选武术课程，从入门到精通，系统学习各种流派技巧"
+      },
+      "martialArtsForum": {
+        "title": "武友论坛",
+        "description": "加入武术爱好者社区，分享经验、讨论技巧、结交同道中人"
+      },
       "smartAnalysis": {
         "title": "智能分析服务",
         "items": {
@@ -109,26 +153,32 @@
     "stats": {
       "title": "平台数据",
       "subtitle": "见证每一份进步",
+      "sectionTitle": "数据见证",
+      "sectionHighlight": "实力",
+      "sectionDescription": "自武道智评平台上线以来，已经帮助数以万计的武术爱好者提升技能水平",
       "users": "注册用户",
       "analyses": "分析次数",
       "courses": "精品课程",
-      "coaches": "认证教练",
+      "coaches": "专业教练",
       "accuracy": "准确率"
     },
     "process": {
       "title": "使用流程",
       "subtitle": "简单三步，开启智能武术训练之旅",
+      "sectionTitle": "简单三步",
+      "sectionSubtitle": "提升武术水平",
+      "sectionDescription": "武道智评让武术技能评估变得简单高效，只需三个简单步骤，即可获得专业分析",
       "step1": {
-        "title": "上传内容",
-        "description": "上传武术动作的图片或视频"
+        "title": "上传武术视频",
+        "description": "上传您的武术练习视频，支持多种常见格式，如MP4、AVI和MOV。系统会快速处理您的视频文件，准备AI分析。"
       },
       "step2": {
-        "title": "AI分析",
-        "description": "系统自动识别并分析动作要点"
+        "title": "AI动作分析",
+        "description": "我们的AI系统会自动识别和分析您的武术动作、姿势和技术细节，实时进行多角度评估，精确到每个关节位置和动作轨迹。"
       },
       "step3": {
-        "title": "获得指导",
-        "description": "查看分析报告，获取专业改进建议"
+        "title": "查看评分",
+        "description": "获得详细的分析报告，包括动作评分、改进建议和专业指导。我们会为您提供个性化的训练建议，帮助您快速提升武术技能。"
       }
     },
     "news": {
@@ -139,7 +189,9 @@
     "cta": {
       "title": "开始您的武术精进之旅",
       "description": "无论您是武术初学者还是有经验的爱好者，武道智评平台都能为您提供专业的动作分析和建议，帮助您更快地掌握技巧，提高技术水平",
-      "joinNow": "立即加入"
+      "joinNow": "立即加入",
+      "learnMore": "了解更多",
+      "startJourney": "开启武术之旅"
     }
   },
   "login": {
@@ -385,13 +437,87 @@
     "changePassword": "修改密码",
     "notifications": "通知设置"
   },
+  "dashboard": {
+    "welcome": "欢迎使用武道智评系统，{{username}}！",
+    "description": "武道智评是一款专业的武术姿态分析系统，通过先进的计算机视觉技术，帮助您提升武术技能。选择下方功能开始您的武术之旅！",
+    "startUsing": "开始使用",
+    "systemOverview": "系统概览",
+    "features": {
+      "imageAnalysis": {
+        "title": "图像分析",
+        "description": "上传武术动作图片，系统将自动识别动作姿态，并提供评分和改进建议。"
+      },
+      "videoAnalysis": {
+        "title": "视频分析",
+        "description": "上传武术动作视频，系统将分析整个动作序列，提供全面评估。"
+      },
+      "cameraAnalysis": {
+        "title": "摄像头分析",
+        "description": "通过摄像头实时采集动作，立即分析评估您的武术姿态，提供及时反馈。"
+      },
+      "premiumCourses": {
+        "title": "精品课程",
+        "description": "浏览太极、防身术等精品班课程，拥有专业教练团队指导，提升武术技能。"
+      },
+      "knowledgeBase": {
+        "title": "武术知识库",
+        "description": "浏览各种武术动作的标准姿势、要点和技巧，提高您的武术水平。"
+      },
+      "coachAppointment": {
+        "title": "教练预约",
+        "description": "预约专业武术教练进行一对一指导，提升训练效果，获得个性化指导。"
+      },
+      "forum": {
+        "title": "武友论坛",
+        "description": "加入武友论坛，分享学习经验，交流武术心得，结交志同道合的武友。"
+      }
+    },
+    "stats": {
+      "supportedMoves": "支持的武术动作",
+      "accuracy": "分析精度",
+      "responseTime": "响应时间",
+      "systemVersion": "系统版本",
+      "movesUnit": "种",
+      "accuracyUnit": "%",
+      "timeUnit": "秒"
+    }
+  },
   "footer": {
     "about": {
       "title": "关于我们",
+      "description": "武道智评是一个专业的武术动作分析平台，采用人工智能和计算机视觉技术，帮助武术爱好者和专业人士提升技术水平。",
       "company": "公司介绍",
       "team": "团队成员",
       "contact": "联系我们",
       "careers": "加入我们"
+    },
+    "quickLinks": {
+      "title": "快速链接",
+      "home": "首页",
+      "imageAnalysis": "图像分析",
+      "videoAnalysis": "视频分析",
+      "coachAppointment": "教练预约",
+      "courses": "课程中心",
+      "forum": "武友论坛"
+    },
+    "faq": {
+      "title": "常见问题",
+      "howToUse": "如何使用分析工具",
+      "membership": "会员等级与权益",
+      "appointment": "预约流程说明",
+      "payment": "支付方式与退款",
+      "privacy": "隐私与数据安全"
+    },
+    "contact": {
+      "title": "联系我们",
+      "phone": "0371-12345678",
+      "email": "support@wudaozhiping.com",
+      "address": "河南省郑州市金水区",
+      "subscribe": {
+        "title": "订阅我们",
+        "placeholder": "输入您的邮箱",
+        "button": "订阅"
+      }
     },
     "services": {
       "title": "服务",
@@ -413,6 +539,6 @@
       "weibo": "新浪微博",
       "email": "邮箱"
     },
-    "copyright": "© 2024 武道智评. 保留所有权利。"
+    "copyright": "© {{year}} 武道智评科技有限公司. 所有权利已保留."
   }
 }

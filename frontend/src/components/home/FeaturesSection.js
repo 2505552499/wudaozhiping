@@ -8,6 +8,7 @@ import {
   TeamOutlined,
   StarFilled
 } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import GradientTitle from '../ui/GradientTitle';
 import { BeautifulCard } from '../ui/DesignSystem';
 
@@ -61,6 +62,7 @@ const FeatureCard = ({ icon, title, description, delay = 0, gradient }) => {
 };
 
 const FeaturesSection = () => {
+  const { t } = useTranslation();
   const { ref, inView } = useInView({
     threshold: 0.1,
     triggerOnce: true
@@ -70,26 +72,26 @@ const FeaturesSection = () => {
   const features = [
     {
       icon: <RobotOutlined />,
-      title: "AI智能分析",
-      description: "利用先进的计算机视觉算法，对武术动作进行多维度分析，提供精确的评分和改进建议。",
+      title: t('home.features.aiAnalysis.title'),
+      description: t('home.features.aiAnalysis.description'),
       gradient: "from-blue-600 to-cyan-600"
     },
     {
       icon: <ThunderboltOutlined />,
-      title: "实时反馈系统",
-      description: "通过摄像头实时分析动作，提供即时反馈，帮助练习者及时调整姿势，避免形成错误习惯。",
+      title: t('home.features.realtimeFeedback.title'),
+      description: t('home.features.realtimeFeedback.description'),
       gradient: "from-purple-600 to-pink-600"
     },
     {
       icon: <EyeOutlined />,
-      title: "个性化训练",
-      description: "根据用户的练习数据和进步情况，自动生成个性化训练计划，科学安排训练强度和内容。",
+      title: t('home.features.personalizedTraining.title'),
+      description: t('home.features.personalizedTraining.description'),
       gradient: "from-green-600 to-emerald-600"
     },
     {
       icon: <TeamOutlined />,
-      title: "专业教练指导",
-      description: "连接全国优秀武术教练资源，提供线上辅导和点评，让每位用户都能获得专业指导。",
+      title: t('home.features.professionalCoaching.title'),
+      description: t('home.features.professionalCoaching.description'),
       gradient: "from-orange-600 to-red-600"
     }
   ];
@@ -113,21 +115,21 @@ const FeaturesSection = () => {
         >
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full px-6 py-2 mb-8 shadow-lg">
             <StarFilled className="text-yellow-300" />
-            <span className="text-sm font-medium">核心功能特性</span>
+            <span className="text-sm font-medium">{t('home.features.sectionTag')}</span>
           </div>
 
           <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
             <span className="bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">
-              科技赋能，
+              {t('home.features.sectionTitle')}
             </span>
             <br/>
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              重新定义武术训练
+              {t('home.features.sectionSubtitle')}
             </span>
           </h2>
 
           <p className="text-gray-600 text-xl max-w-4xl mx-auto leading-relaxed">
-            融合人工智能与传统武学精髓，打造全方位的智能训练体系，让每一次练习都更有效果
+            {t('home.features.sectionDescription')}
           </p>
         </motion.div>
 

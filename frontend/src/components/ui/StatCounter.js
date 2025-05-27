@@ -13,7 +13,7 @@ const StatCounter = ({
   const [count, setCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef(null);
-  
+
   // 检测元素是否进入视口的函数
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -25,28 +25,28 @@ const StatCounter = ({
       },
       { threshold: 0.3 }
     );
-    
+
     const currentRef = ref.current;
     if (currentRef) {
       observer.observe(currentRef);
     }
-    
+
     return () => {
       observer.disconnect();
     };
   }, []);
-  
+
   // 计数动画效果
   useEffect(() => {
     if (!isVisible) return;
-    
+
     let startTime;
     let animationFrame;
-    
+
     const updateCount = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const progress = (timestamp - startTime) / (duration * 1000);
-      
+
       if (progress < 1) {
         setCount(Math.floor(value * progress));
         animationFrame = requestAnimationFrame(updateCount);
@@ -54,25 +54,25 @@ const StatCounter = ({
         setCount(value);
       }
     };
-    
+
     animationFrame = requestAnimationFrame(updateCount);
-    
+
     return () => {
       if (animationFrame) {
         cancelAnimationFrame(animationFrame);
       }
     };
   }, [isVisible, value, duration]);
-  
+
   return (
-    <div 
+    <div
       ref={ref}
       className={`text-center transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} ${className}`}
     >
-      <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary-500 to-accent bg-clip-text text-transparent">
+      <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-500 to-accent bg-clip-text text-transparent mb-2">
         {prefix}{count}{suffix}
       </div>
-      <div className="mt-2 text-text-secondary font-medium text-lg">{label}</div>
+      <div className="text-gray-600 font-medium text-base">{label}</div>
     </div>
   );
 };

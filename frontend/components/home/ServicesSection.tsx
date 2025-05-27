@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import GradientTitle from '../ui/GradientTitle';
 
 interface ServiceCardProps {
@@ -35,40 +36,42 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon, lin
 };
 
 const ServicesSection: React.FC = () => {
+  const { t } = useTranslation();
+
   const services = [
     {
-      title: "图像分析",
-      description: "上传武术动作图片，AI自动识别姿态并提供专业评分与改进建议",
+      title: t('home.services.imageAnalysis.title'),
+      description: t('home.services.imageAnalysis.description'),
       icon: "📷",
       link: "/image-analysis"
     },
     {
-      title: "视频分析",
-      description: "分析武术动作视频，获取连续动作的评估与详细动作分解",
+      title: t('home.services.videoAnalysis.title'),
+      description: t('home.services.videoAnalysis.description'),
       icon: "🎬",
       link: "/video-analysis"
     },
     {
-      title: "实时分析",
-      description: "通过摄像头实时监测姿态，即时反馈武术动作准确度",
+      title: t('home.services.realtimeAnalysis.title'),
+      description: t('home.services.realtimeAnalysis.description'),
       icon: "📹",
       link: "/camera-analysis"
     },
     {
-      title: "专业教练",
-      description: "预约资深武术教练，获取一对一专业指导和个性化训练计划",
+      title: t('home.services.professionalCoach.title'),
+      description: t('home.services.professionalCoach.description'),
       icon: "👨‍🏫",
       link: "/coach-appointment"
     },
     {
-      title: "精品课程",
-      description: "精选武术课程，从入门到精通，系统学习各种流派技巧",
+      title: t('home.services.premiumCourses.title'),
+      description: t('home.services.premiumCourses.description'),
       icon: "📚",
       link: "/courses"
     },
     {
-      title: "武友论坛",
-      description: "加入武术爱好者社区，分享经验、讨论技巧、结交同道中人",
+      title: t('home.services.martialArtsForum.title'),
+      description: t('home.services.martialArtsForum.description'),
       icon: "💬",
       link: "/forum"
     }
@@ -82,9 +85,9 @@ const ServicesSection: React.FC = () => {
           align="center"
           className="mb-4"
         >
-          全方位武术评估解决方案
+          {t('home.services.sectionTitle')}
         </GradientTitle>
-        
+
         <motion.p
           className="text-gray-600 text-lg max-w-3xl mx-auto text-center mb-12"
           initial={{ opacity: 0 }}
@@ -92,9 +95,9 @@ const ServicesSection: React.FC = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          武道智评平台提供多种专业服务，满足不同层次武术爱好者和专业人士的需求
+          {t('home.services.sectionDescription')}
         </motion.p>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <ServiceCard

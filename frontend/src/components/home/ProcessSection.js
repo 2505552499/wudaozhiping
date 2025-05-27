@@ -1,5 +1,6 @@
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
+import { useTranslation } from 'react-i18next';
 import GradientTitle from '../ui/GradientTitle';
 import { motion } from 'framer-motion';
 
@@ -9,13 +10,13 @@ const ProcessStep = ({ number, title, description, imageSrc, icon }) => {
     threshold: 0.3,
     triggerOnce: true
   });
-  
+
   // 计算延迟时间，实现连续的动画效果
   const delayBase = 0.2;  // 基础延迟时间
   const delayIncrement = parseInt(number) * 0.1;  // 根据步骤编号增加延迟
-  
+
   return (
-    <motion.div 
+    <motion.div
       ref={ref}
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -29,17 +30,17 @@ const ProcessStep = ({ number, title, description, imageSrc, icon }) => {
         </div>
         <div className="h-px flex-grow bg-gradient-to-r from-primary-500/30 to-transparent"></div>
       </div>
-      
+
       {/* 卡片内容 */}
       <div className="w-full bg-surface rounded-xl overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:shadow-primary-500/20 hover:-translate-y-2 border border-primary-500/10 group">
         {/* 图片区域 */}
         <div className="h-48 overflow-hidden bg-primary-500/5 flex items-center justify-center relative">
           {/* 渐变背景 */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-accent/5 group-hover:from-primary-500/15 group-hover:to-accent/10 transition-all duration-500"></div>
-          
+
           {number === "01" && (
             <div className="w-full h-full flex items-center justify-center relative">
-              <motion.div 
+              <motion.div
                 initial={{ scale: 1 }}
                 animate={{ scale: inView ? [1, 1.05, 1] : 1 }}
                 transition={{ duration: 2, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
@@ -50,10 +51,10 @@ const ProcessStep = ({ number, title, description, imageSrc, icon }) => {
               <div className="absolute bottom-4 right-4 text-xs text-primary-500/70 bg-dark-bg/50 px-2 py-1 rounded">MP4, AVI, MOV</div>
             </div>
           )}
-          
+
           {number === "02" && (
             <div className="w-full h-full flex items-center justify-center relative">
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 1 }}
                 animate={{ opacity: inView ? [1, 0.8, 1] : 1 }}
                 transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
@@ -69,11 +70,11 @@ const ProcessStep = ({ number, title, description, imageSrc, icon }) => {
               <div className="absolute bottom-4 left-4 text-xs text-accent/70 bg-dark-bg/70 px-2 py-1 rounded">AI分析中...</div>
             </div>
           )}
-          
+
           {number === "03" && (
             <div className="w-full h-full flex items-center justify-center relative">
               <div className="relative z-10 transform transition-transform group-hover:scale-110 duration-500">
-                <motion.div 
+                <motion.div
                   initial={{ x: 0 }}
                   animate={{ x: inView ? [0, 5, 0, -5, 0] : 0 }}
                   transition={{ duration: 5, repeat: Infinity, repeatType: "loop", ease: "easeInOut" }}
@@ -84,7 +85,7 @@ const ProcessStep = ({ number, title, description, imageSrc, icon }) => {
                     <span className="text-primary-500 text-lg ml-2 font-semibold">姿态评分</span>
                   </div>
                   <div className="w-full h-6 bg-dark-bg/70 rounded-full mt-2 overflow-hidden">
-                    <motion.div 
+                    <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: inView ? '85%' : '0%' }}
                       transition={{ duration: 1, delay: 0.5 }}
@@ -101,12 +102,12 @@ const ProcessStep = ({ number, title, description, imageSrc, icon }) => {
             </div>
           )}
         </div>
-        
+
         {/* 文字内容 */}
         <div className="p-6 relative overflow-hidden">
           {/* 装饰线条 - 只在悬停时显示 */}
           <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-primary-500/50 to-accent/30 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
-          
+
           <h3 className="text-lg font-bold mb-3 bg-gradient-to-r from-primary-500 to-accent text-transparent bg-clip-text group-hover:from-accent group-hover:to-primary-500 transition-all duration-500">{title}</h3>
           <p className="text-text-secondary text-sm leading-relaxed">{description}</p>
         </div>
@@ -116,17 +117,18 @@ const ProcessStep = ({ number, title, description, imageSrc, icon }) => {
 };
 
 const ProcessSection = () => {
+  const { t } = useTranslation();
   const { ref, inView } = useInView({
     threshold: 0.1,
     triggerOnce: true,
   });
-  
+
   // 流程步骤数据
   const cardData = [
     {
       number: "01",
-      title: "上传武术视频",
-      description: "上传您的武术练习视频，支持多种常见格式，如MP4、AVI和MOV。系统会快速处理您的视频文件，准备AI分析。",
+      title: t('home.process.step1.title'),
+      description: t('home.process.step1.description'),
       imageSrc: "/img/process/upload.png",
       icon: (
         <svg className="w-12 h-12 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -136,8 +138,8 @@ const ProcessSection = () => {
     },
     {
       number: "02",
-      title: "AI动作分析",
-      description: "我们的AI系统会自动识别和分析您的武术动作、姿势和技术细节，实时进行多角度评估，精确到每个关节位置和动作轨迹。",
+      title: t('home.process.step2.title'),
+      description: t('home.process.step2.description'),
       imageSrc: "/img/process/analysis.png",
       icon: (
         <svg className="w-12 h-12 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -147,8 +149,8 @@ const ProcessSection = () => {
     },
     {
       number: "03",
-      title: "获取专业评价",
-      description: "获得详细的武术评分报告和专业的改进建议，包括关节角度矫正、动作速度调整和力量分配优化，以及为您量身定制的个性化练习计划。",
+      title: t('home.process.step3.title'),
+      description: t('home.process.step3.description'),
       imageSrc: "/img/process/feedback.png",
       icon: (
         <svg className="w-12 h-12 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -157,7 +159,7 @@ const ProcessSection = () => {
       )
     }
   ];
-  
+
   return (
     <section className="py-20 relative overflow-hidden">
       {/* 背景装饰 */}
@@ -175,25 +177,25 @@ const ProcessSection = () => {
           backgroundRepeat: 'no-repeat'
         }}></div>
       </div>
-      
+
       <div className="container mx-auto px-4 relative z-10">
-        <div 
-          ref={ref} 
+        <div
+          ref={ref}
           className="text-center mb-16"
-          style={{ 
+          style={{
             opacity: inView ? 1 : 0,
             transform: inView ? 'translateY(0)' : 'translateY(40px)',
             transition: 'opacity 0.7s ease-out, transform 0.7s ease-out'
           }}
         >
           <GradientTitle align="center" className="mb-6">
-            <span className="text-primary-500">简单三步</span>，提升武术水平
+            <span className="text-primary-500">{t('home.process.sectionTitle')}</span>，{t('home.process.sectionSubtitle')}
           </GradientTitle>
           <p className="text-text-secondary text-lg max-w-3xl mx-auto">
-            武道智评让武术技能评估变得简单高效，只需三个简单步骤，即可获得专业分析
+            {t('home.process.sectionDescription')}
           </p>
         </div>
-        
+
         <div className="flex flex-col md:flex-row justify-between items-start gap-6 md:gap-10">
           {cardData.map((step, index) => (
             <ProcessStep
@@ -206,11 +208,11 @@ const ProcessSection = () => {
             />
           ))}
         </div>
-        
+
         {/* 连接线 */}
         <div className="hidden md:block relative mt-8 h-1">
           <div className="absolute left-[12%] right-[12%] top-0 h-0.5 bg-gradient-to-r from-primary-500/50 via-accent/50 to-primary-500/50 transform -translate-y-20"></div>
-          
+
           {/* 装饰点 */}
           <div className="absolute left-1/4 top-0 w-3 h-3 rounded-full bg-dark-bg border border-primary-500 transform -translate-x-1/2 -translate-y-[78px]"></div>
           <div className="absolute left-1/2 top-0 w-3 h-3 rounded-full bg-dark-bg border border-accent transform -translate-x-1/2 -translate-y-[78px]"></div>

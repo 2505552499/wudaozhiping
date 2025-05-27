@@ -11,21 +11,21 @@ module.exports = {
         'xtalpi-purple': '#6E43FF',
         'xtalpi-cyan': '#36CFC9',
         'xtalpi-green': '#5CDBD3',
-        
+
         // 添加新的武道智评品牌色彩系统
         'primary': {
           500: '#165DFF', // 武术"劲气"蓝
           600: '#274CFF'
         },
         'accent': '#8B5CFF',
-        
+
         // 现代渐变背景色彩方案
         'modern-bg': {
           'start': '#1a2332', // 深蓝色起点
           'mid': '#2d3748',   // 中间过渡色
           'end': '#4a5568'    // 浅灰色终点
         },
-        
+
         // 保留原配置以便渐进式迁移
         'dark-bg': '#0A0A0A',
         'surface': '#161616',
@@ -46,6 +46,7 @@ module.exports = {
         'spin-slow': 'spin 8s linear infinite',
         'ping': 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
         'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'blob': 'blob 7s infinite',
       },
       keyframes: {
         fadeIn: {
@@ -64,6 +65,16 @@ module.exports = {
           '0%, 100%': { transform: 'translateY(-25%)', animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)' },
           '50%': { transform: 'translateY(0)', animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)' },
         },
+        blob: {
+          '0%': { transform: 'translate(0px, 0px) scale(1)' },
+          '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+          '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+          '100%': { transform: 'translate(0px, 0px) scale(1)' },
+        },
+      },
+      animationDelay: {
+        '2000': '2s',
+        '4000': '4s',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

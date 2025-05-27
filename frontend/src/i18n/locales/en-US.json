@@ -17,7 +17,8 @@
     "error": "Error",
     "warning": "Warning",
     "info": "Info",
-    "welcome": "Welcome, {{name}}"
+    "welcome": "Welcome, {{name}}",
+    "guest": "Guest"
   },
   "nav": {
     "home": "Home",
@@ -44,11 +45,32 @@
       "startNow": "Start Now",
       "learnMore": "Learn More",
       "titleLine1": "Powered by <1>AI</1> and <1>CV</1>",
-      "titleLine2": "Martial Arts Motion Analysis & Evaluation"
+      "titleLine2": "Martial Arts Motion Analysis & Evaluation",
+      "platformTag": "AI-Powered Martial Arts Analysis Platform"
     },
     "features": {
       "title": "Core Features",
       "subtitle": "Comprehensive Intelligent Martial Arts Training Solution",
+      "sectionTag": "Core Features",
+      "sectionTitle": "Technology Empowered,",
+      "sectionSubtitle": "Redefining Martial Arts Training",
+      "sectionDescription": "Integrating artificial intelligence with traditional martial arts essence to create a comprehensive intelligent training system, making every practice more effective",
+      "aiAnalysis": {
+        "title": "AI Smart Analysis",
+        "description": "Utilizing advanced computer vision algorithms to perform multi-dimensional analysis of martial arts movements, providing precise scoring and improvement suggestions."
+      },
+      "realtimeFeedback": {
+        "title": "Real-time Feedback System",
+        "description": "Real-time motion analysis through camera, providing instant feedback to help practitioners adjust postures timely and avoid forming bad habits."
+      },
+      "personalizedTraining": {
+        "title": "Personalized Training",
+        "description": "Automatically generate personalized training plans based on user practice data and progress, scientifically arranging training intensity and content."
+      },
+      "professionalCoaching": {
+        "title": "Professional Coach Guidance",
+        "description": "Connecting excellent martial arts coach resources nationwide, providing online tutoring and reviews, ensuring every user receives professional guidance."
+      },
       "imageAnalysis": {
         "title": "Image Analysis",
         "description": "Upload martial arts pose images for instant AI analysis and improvement suggestions"
@@ -60,15 +82,37 @@
       "realtimeGuidance": {
         "title": "Real-time Guidance",
         "description": "Live camera motion capture with AI coach providing instant corrections"
-      },
-      "personalizedTraining": {
-        "title": "Personalized Training",
-        "description": "Customized training plans based on individual level and goals for progressive skill improvement"
       }
     },
     "services": {
       "title": "Our Services",
       "subtitle": "Professional and Comprehensive Martial Arts Learning Platform",
+      "sectionTitle": "Comprehensive Martial Arts Assessment Solutions",
+      "sectionDescription": "Martial Arts AI platform provides various professional services to meet the needs of martial arts enthusiasts and professionals at different levels",
+      "imageAnalysis": {
+        "title": "Image Analysis",
+        "description": "Upload martial arts pose images for AI automatic posture recognition and professional scoring with improvement suggestions"
+      },
+      "videoAnalysis": {
+        "title": "Video Analysis",
+        "description": "Analyze martial arts videos to get continuous motion assessment and detailed action breakdown"
+      },
+      "realtimeAnalysis": {
+        "title": "Real-time Analysis",
+        "description": "Real-time posture monitoring through camera with instant feedback on martial arts movement accuracy"
+      },
+      "professionalCoach": {
+        "title": "Professional Coach",
+        "description": "Book experienced martial arts coaches for one-on-one professional guidance and personalized training plans"
+      },
+      "premiumCourses": {
+        "title": "Premium Courses",
+        "description": "Selected martial arts courses from beginner to advanced, systematic learning of various martial arts styles"
+      },
+      "martialArtsForum": {
+        "title": "Martial Arts Forum",
+        "description": "Join the martial arts enthusiast community to share experiences, discuss techniques, and connect with fellow practitioners"
+      },
       "smartAnalysis": {
         "title": "Smart Analysis",
         "items": {
@@ -109,26 +153,32 @@
     "stats": {
       "title": "Platform Statistics",
       "subtitle": "Witnessing Every Progress",
+      "sectionTitle": "Data Proves",
+      "sectionHighlight": "Excellence",
+      "sectionDescription": "Since the launch of Martial Arts AI platform, we have helped tens of thousands of martial arts enthusiasts improve their skill levels",
       "users": "Registered Users",
       "analyses": "Analyses Performed",
       "courses": "Premium Courses",
-      "coaches": "Certified Coaches",
+      "coaches": "Professional Coaches",
       "accuracy": "Accuracy Rate"
     },
     "process": {
       "title": "How It Works",
       "subtitle": "Three Simple Steps to Start Your Smart Martial Arts Training Journey",
+      "sectionTitle": "Three Simple Steps",
+      "sectionSubtitle": "Improve Your Martial Arts Skills",
+      "sectionDescription": "Martial Arts AI makes martial arts skill assessment simple and efficient. Just three simple steps to get professional analysis",
       "step1": {
-        "title": "Upload Content",
-        "description": "Upload images or videos of martial arts movements"
+        "title": "Upload Martial Arts Video",
+        "description": "Upload your martial arts practice videos, supporting various common formats like MP4, AVI, and MOV. The system will quickly process your video files and prepare for AI analysis."
       },
       "step2": {
-        "title": "AI Analysis",
-        "description": "System automatically identifies and analyzes key points"
+        "title": "AI Motion Analysis",
+        "description": "Our AI system automatically recognizes and analyzes your martial arts movements, postures, and technical details, performing real-time multi-angle assessment, precise to each joint position and movement trajectory."
       },
       "step3": {
-        "title": "Get Guidance",
-        "description": "View analysis report and receive professional improvement suggestions"
+        "title": "View Scoring",
+        "description": "Get detailed analysis reports including motion scoring, improvement suggestions, and professional guidance. We provide personalized training recommendations to help you quickly improve your martial arts skills."
       }
     },
     "news": {
@@ -139,7 +189,9 @@
     "cta": {
       "title": "Start Your Martial Arts Journey",
       "description": "Whether you're a beginner or an experienced practitioner, Martial Arts AI platform provides professional motion analysis and suggestions to help you master techniques faster and improve your skill level",
-      "joinNow": "Join Now"
+      "joinNow": "Join Now",
+      "learnMore": "Learn More",
+      "startJourney": "Start Your Journey"
     }
   },
   "login": {
@@ -385,13 +437,87 @@
     "changePassword": "Change Password",
     "notifications": "Notification Settings"
   },
+  "dashboard": {
+    "welcome": "Welcome to Martial Arts AI System, {{username}}!",
+    "description": "Martial Arts AI is a professional martial arts posture analysis system that uses advanced computer vision technology to help you improve your martial arts skills. Choose the functions below to start your martial arts journey!",
+    "startUsing": "Start Using",
+    "systemOverview": "System Overview",
+    "features": {
+      "imageAnalysis": {
+        "title": "Image Analysis",
+        "description": "Upload martial arts pose images, and the system will automatically recognize postures and provide scoring and improvement suggestions."
+      },
+      "videoAnalysis": {
+        "title": "Video Analysis",
+        "description": "Upload martial arts videos, and the system will analyze the entire action sequence to provide comprehensive evaluation."
+      },
+      "cameraAnalysis": {
+        "title": "Camera Analysis",
+        "description": "Real-time motion capture through camera, instantly analyze and evaluate your martial arts posture, providing timely feedback."
+      },
+      "premiumCourses": {
+        "title": "Premium Courses",
+        "description": "Browse premium courses like Tai Chi and self-defense, with professional coaching teams to enhance your martial arts skills."
+      },
+      "knowledgeBase": {
+        "title": "Martial Arts Knowledge Base",
+        "description": "Browse standard postures, key points, and techniques of various martial arts movements to improve your martial arts level."
+      },
+      "coachAppointment": {
+        "title": "Coach Appointment",
+        "description": "Book professional martial arts coaches for one-on-one guidance, enhance training effectiveness, and get personalized instruction."
+      },
+      "forum": {
+        "title": "Martial Arts Forum",
+        "description": "Join the martial arts forum to share learning experiences, exchange martial arts insights, and connect with like-minded practitioners."
+      }
+    },
+    "stats": {
+      "supportedMoves": "Supported Martial Arts Moves",
+      "accuracy": "Analysis Accuracy",
+      "responseTime": "Response Time",
+      "systemVersion": "System Version",
+      "movesUnit": "types",
+      "accuracyUnit": "%",
+      "timeUnit": "seconds"
+    }
+  },
   "footer": {
     "about": {
-      "title": "About",
+      "title": "About Us",
+      "description": "Martial Arts AI is a professional martial arts motion analysis platform that uses artificial intelligence and computer vision technology to help martial arts enthusiasts and professionals improve their technical skills.",
       "company": "Company",
       "team": "Our Team",
       "contact": "Contact Us",
       "careers": "Careers"
+    },
+    "quickLinks": {
+      "title": "Quick Links",
+      "home": "Home",
+      "imageAnalysis": "Image Analysis",
+      "videoAnalysis": "Video Analysis",
+      "coachAppointment": "Coach Appointment",
+      "courses": "Course Center",
+      "forum": "Martial Arts Forum"
+    },
+    "faq": {
+      "title": "FAQ",
+      "howToUse": "How to Use Analysis Tools",
+      "membership": "Membership Levels & Benefits",
+      "appointment": "Appointment Process",
+      "payment": "Payment Methods & Refunds",
+      "privacy": "Privacy & Data Security"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "phone": "0371-12345678",
+      "email": "support@wudaozhiping.com",
+      "address": "Jinshui District, Zhengzhou, Henan Province",
+      "subscribe": {
+        "title": "Subscribe",
+        "placeholder": "Enter your email",
+        "button": "Subscribe"
+      }
     },
     "services": {
       "title": "Services",
@@ -413,6 +539,6 @@
       "weibo": "Weibo",
       "email": "Email"
     },
-    "copyright": "© 2024 Martial Arts AI. All rights reserved."
+    "copyright": "© {{year}} Martial Arts AI Technology Co., Ltd. All rights reserved."
   }
 }

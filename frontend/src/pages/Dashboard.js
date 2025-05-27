@@ -2,59 +2,61 @@ import React from 'react';
 import { Row, Col, Card, Button, Statistic } from 'antd';
 import { FileImageOutlined, VideoCameraOutlined, CameraOutlined, BookOutlined, TeamOutlined, ReadOutlined, TrophyOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import MainLayout from '../components/MainLayout';
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const username = localStorage.getItem('username') || '游客';
+  const username = localStorage.getItem('username') || t('common.guest');
 
   const featureCards = [
     {
-      title: '图像分析',
+      title: t('dashboard.features.imageAnalysis.title'),
       icon: <FileImageOutlined style={{ fontSize: 48, color: '#1890ff' }} />,
-      description: '上传武术动作图片，系统将自动识别动作姿态，并提供评分和改进建议。',
+      description: t('dashboard.features.imageAnalysis.description'),
       route: '/image-analysis',
       color: '#e6f7ff',
     },
     {
-      title: '视频分析',
+      title: t('dashboard.features.videoAnalysis.title'),
       icon: <VideoCameraOutlined style={{ fontSize: 48, color: '#52c41a' }} />,
-      description: '上传武术动作视频，系统将分析整个动作序列，提供全面评估。',
+      description: t('dashboard.features.videoAnalysis.description'),
       route: '/video-analysis',
       color: '#f6ffed',
     },
     {
-      title: '摄像头分析',
+      title: t('dashboard.features.cameraAnalysis.title'),
       icon: <CameraOutlined style={{ fontSize: 48, color: '#fa8c16' }} />,
-      description: '通过摄像头实时采集动作，立即分析评估您的武术姿态，提供及时反馈。',
+      description: t('dashboard.features.cameraAnalysis.description'),
       route: '/camera-analysis',
       color: '#fff7e6',
     },
     {
-      title: '精品课程',
+      title: t('dashboard.features.premiumCourses.title'),
       icon: <ReadOutlined style={{ fontSize: 48, color: '#f5222d' }} />,
-      description: '浏览太极、防身术等精品班课程，拥有专业教练团队指导，提升武术技能。',
+      description: t('dashboard.features.premiumCourses.description'),
       route: '/courses',
       color: '#fff1f0',
     },
     {
-      title: '武术知识库',
+      title: t('dashboard.features.knowledgeBase.title'),
       icon: <BookOutlined style={{ fontSize: 48, color: '#722ed1' }} />,
-      description: '浏览各种武术动作的标准姿势、要点和技巧，提高您的武术水平。',
+      description: t('dashboard.features.knowledgeBase.description'),
       route: '/knowledge-base',
       color: '#f9f0ff',
     },
     {
-      title: '教练预约',
+      title: t('dashboard.features.coachAppointment.title'),
       icon: <TeamOutlined style={{ fontSize: 48, color: '#eb2f96' }} />,
-      description: '预约专业武术教练进行一对一指导，提升训练效果，获得个性化指导。',
+      description: t('dashboard.features.coachAppointment.description'),
       route: '/coach-appointment',
       color: '#fff0f6',
     },
     {
-      title: '武友论坛',
+      title: t('dashboard.features.forum.title'),
       icon: <TrophyOutlined style={{ fontSize: 48, color: '#faad14' }} />,
-      description: '加入武友论坛，分享学习经验，交流武术心得，结交志同道合的武友。',
+      description: t('dashboard.features.forum.description'),
       route: '/forum',
       color: '#fffbe6',
     },
@@ -66,10 +68,9 @@ const Dashboard = () => {
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Card>
-              <h1 style={{ fontSize: 28, marginBottom: 16 }}>欢迎使用武道智评系统，{username}！</h1>
+              <h1 style={{ fontSize: 28, marginBottom: 16 }}>{t('dashboard.welcome', { username })}</h1>
               <p style={{ fontSize: 16 }}>
-                武道智评是一款专业的武术姿态分析系统，通过先进的计算机视觉技术，帮助您提升武术技能。
-                选择下方功能开始您的武术之旅！
+                {t('dashboard.description')}
               </p>
             </Card>
           </Col>
@@ -80,8 +81,8 @@ const Dashboard = () => {
             <Col xs={24} sm={12} lg={index === 4 ? 24 : 6} key={index}>
               <Card
                 hoverable
-                style={{ 
-                  height: '100%', 
+                style={{
+                  height: '100%',
                   backgroundColor: card.color,
                   borderRadius: 8,
                   overflow: 'hidden'
@@ -93,13 +94,13 @@ const Dashboard = () => {
                   <h2 style={{ marginTop: 8 }}>{card.title}</h2>
                 </div>
                 <p style={{ flex: 1 }}>{card.description}</p>
-                <Button 
-                  type="primary" 
-                  size="large" 
+                <Button
+                  type="primary"
+                  size="large"
                   block
                   onClick={() => navigate(card.route)}
                 >
-                  开始使用
+                  {t('dashboard.startUsing')}
                 </Button>
               </Card>
             </Col>
@@ -108,19 +109,19 @@ const Dashboard = () => {
 
         <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
           <Col span={24}>
-            <Card title="系统概览" bordered={false}>
+            <Card title={t('dashboard.systemOverview')} bordered={false}>
               <Row gutter={16}>
                 <Col span={6}>
-                  <Statistic title="支持的武术动作" value={10} suffix="种" />
+                  <Statistic title={t('dashboard.stats.supportedMoves')} value={10} suffix={t('dashboard.stats.movesUnit')} />
                 </Col>
                 <Col span={6}>
-                  <Statistic title="分析精度" value={95.8} suffix="%" />
+                  <Statistic title={t('dashboard.stats.accuracy')} value={95.8} suffix={t('dashboard.stats.accuracyUnit')} />
                 </Col>
                 <Col span={6}>
-                  <Statistic title="响应时间" value={0.8} suffix="秒" />
+                  <Statistic title={t('dashboard.stats.responseTime')} value={0.8} suffix={t('dashboard.stats.timeUnit')} />
                 </Col>
                 <Col span={6}>
-                  <Statistic title="系统版本" value="1.0.0" />
+                  <Statistic title={t('dashboard.stats.systemVersion')} value="1.0.0" />
                 </Col>
               </Row>
             </Card>

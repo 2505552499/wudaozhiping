@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -195,7 +195,9 @@ const HeroSection = () => {
               className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm rounded-full px-6 py-2 mb-8 border border-cyan-400/30 hover:border-cyan-400/50 transition-all duration-300"
             >
               <StarFilled className="text-cyan-400 animate-pulse" />
-              <span className="text-white text-sm font-medium tracking-wide">AI驱动的武术分析平台</span>
+              <span className="text-white text-sm font-medium tracking-wide">
+                {t('home.hero.platformTag', 'AI驱动的武术分析平台')}
+              </span>
             </motion.div>
 
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">

@@ -239,7 +239,7 @@ const Navbar = () => {
 
           {/* 登录/注册按钮或用户信息 */}
           <div className="hidden md:flex items-center space-x-4">
-            <LanguageSwitcher />
+            <LanguageSwitcher scrolled={scrolled} />
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
                 <div className="relative group">
@@ -392,7 +392,7 @@ const Navbar = () => {
             ))}
             <div className="pt-4 pb-3 border-t border-white/20">
               <div className="flex justify-center items-center flex-col space-y-2">
-                <LanguageSwitcher />
+                <LanguageSwitcher scrolled={false} />
                 {isAuthenticated ? (
                   <>
                     <div className="text-white text-center mb-2">

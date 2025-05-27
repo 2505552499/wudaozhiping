@@ -1,15 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <footer className="bg-gradient-to-r from-xtalpi-dark-blue to-black text-white">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* u5173u4e8eu6211u4eec */}
+          {/* 关于我们 */}
           <div className="col-span-1 md:col-span-1">
-            <h3 className="text-xl font-bold mb-4">关于我们</h3>
-            <p className="text-gray-300 mb-4">武道智评是一个专业的武术动作分析平台，采用人工智能和计算机视觉技术，帮助武术爱好者和专业人士提升技术水平。</p>
+            <h3 className="text-xl font-bold mb-4">{t('footer.about.title')}</h3>
+            <p className="text-gray-300 mb-4">{t('footer.about.description')}</p>
             <div className="flex space-x-4">
               <a href="https://www.weixin.qq.com/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white">
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -33,97 +36,97 @@ const Footer = () => {
               </a>
             </div>
           </div>
-          
-          {/* u5febu6377u94feu63a5 */}
+
+          {/* 快速链接 */}
           <div className="col-span-1 md:col-span-1">
-            <h3 className="text-xl font-bold mb-4">快捷链接</h3>
+            <h3 className="text-xl font-bold mb-4">{t('footer.quickLinks.title')}</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-300 hover:text-white transition-colors">首页</Link>
+                <Link to="/" className="text-gray-300 hover:text-white transition-colors">{t('footer.quickLinks.home')}</Link>
               </li>
               <li>
-                <Link to="/image-analysis" className="text-gray-300 hover:text-white transition-colors">图像分析</Link>
+                <Link to="/image-analysis" className="text-gray-300 hover:text-white transition-colors">{t('footer.quickLinks.imageAnalysis')}</Link>
               </li>
               <li>
-                <Link to="/video-analysis" className="text-gray-300 hover:text-white transition-colors">视频分析</Link>
+                <Link to="/video-analysis" className="text-gray-300 hover:text-white transition-colors">{t('footer.quickLinks.videoAnalysis')}</Link>
               </li>
               <li>
-                <Link to="/coach-appointment" className="text-gray-300 hover:text-white transition-colors">教练预约</Link>
+                <Link to="/coach-appointment" className="text-gray-300 hover:text-white transition-colors">{t('footer.quickLinks.coachAppointment')}</Link>
               </li>
               <li>
-                <Link to="/courses" className="text-gray-300 hover:text-white transition-colors">课程中心</Link>
+                <Link to="/courses" className="text-gray-300 hover:text-white transition-colors">{t('footer.quickLinks.courses')}</Link>
               </li>
               <li>
-                <Link to="/forum" className="text-gray-300 hover:text-white transition-colors">武友论坛</Link>
+                <Link to="/forum" className="text-gray-300 hover:text-white transition-colors">{t('footer.quickLinks.forum')}</Link>
               </li>
             </ul>
           </div>
-          
-          {/* u5e38u89c1u95eeu9898 */}
+
+          {/* 常见问题 */}
           <div className="col-span-1 md:col-span-1">
-            <h3 className="text-xl font-bold mb-4">常见问题</h3>
+            <h3 className="text-xl font-bold mb-4">{t('footer.faq.title')}</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">如何使用分析工具</Link>
+                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">{t('footer.faq.howToUse')}</Link>
               </li>
               <li>
-                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">会员等级与权益</Link>
+                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">{t('footer.faq.membership')}</Link>
               </li>
               <li>
-                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">预约流程说明</Link>
+                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">{t('footer.faq.appointment')}</Link>
               </li>
               <li>
-                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">支付方式与退款</Link>
+                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">{t('footer.faq.payment')}</Link>
               </li>
               <li>
-                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">隐私与数据安全</Link>
+                <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">{t('footer.faq.privacy')}</Link>
               </li>
             </ul>
           </div>
-          
-          {/* u8054u7cfbu6211u4eec */}
+
+          {/* 联系我们 */}
           <div className="col-span-1 md:col-span-1">
-            <h3 className="text-xl font-bold mb-4">联系我们</h3>
+            <h3 className="text-xl font-bold mb-4">{t('footer.contact.title')}</h3>
             <ul className="space-y-2">
               <li className="flex items-start">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-xtalpi-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                <span className="text-gray-300">0755-12345678</span>
+                <span className="text-gray-300">{t('footer.contact.phone')}</span>
               </li>
               <li className="flex items-start">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-xtalpi-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                <span className="text-gray-300">support@wudaozhiping.com</span>
+                <span className="text-gray-300">{t('footer.contact.email')}</span>
               </li>
               <li className="flex items-start">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-xtalpi-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <span className="text-gray-300">广东省深圳市南山区科技园</span>
+                <span className="text-gray-300">{t('footer.contact.address')}</span>
               </li>
             </ul>
-            
+
             <div className="mt-6">
-              <h4 className="text-lg font-semibold mb-2">订阅我们</h4>
+              <h4 className="text-lg font-semibold mb-2">{t('footer.contact.subscribe.title')}</h4>
               <form className="flex">
-                <input 
-                  type="email" 
-                  placeholder="输入您的邮箱" 
+                <input
+                  type="email"
+                  placeholder={t('footer.contact.subscribe.placeholder')}
                   className="px-4 py-2 w-full rounded-l-md focus:outline-none text-gray-800"
                 />
                 <button type="submit" className="bg-gradient-to-r from-xtalpi-indigo to-xtalpi-purple px-4 py-2 rounded-r-md hover:opacity-90 transition-opacity">
-                  订阅
+                  {t('footer.contact.subscribe.button')}
                 </button>
               </form>
             </div>
           </div>
         </div>
-        
+
         <div className="border-t border-gray-700 mt-12 pt-8 text-center">
-          <p className="text-white font-medium">© {new Date().getFullYear()} 武道智评科技有限公司. 所有权利已保留.</p>
+          <p className="text-white font-medium">{t('footer.copyright', { year: new Date().getFullYear() })}</p>
         </div>
       </div>
     </footer>
