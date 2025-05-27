@@ -4,6 +4,7 @@ import { API_BASE_URL } from '../config';
 // 创建axios实例
 const api = axios.create({
   baseURL: API_BASE_URL,
+  proxy: false // 禁用代理
 });
 
 // 添加请求拦截器，自动添加认证token

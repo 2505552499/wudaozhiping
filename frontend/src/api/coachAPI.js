@@ -4,6 +4,7 @@ import { API_BASE_URL } from '../config';
 // 创建axios实例
 const api = axios.create({
   baseURL: API_BASE_URL,
+  proxy: false // 禁用代理
 });
 
 // 添加请求拦截器，自动添加认证token
@@ -25,27 +26,27 @@ const coachAPI = {
   getCoaches: () => {
     return api.get('/api/coaches');
   },
-  
+
   // 获取教练详情
   getCoachDetail: (coachId) => {
     return api.get(`/api/coach/${coachId}`);
   },
-  
+
   // 获取城市列表
   getCities: () => {
     return api.get('/api/cities');
   },
-  
+
   // 获取区域列表
   getDistricts: (city) => {
     return api.get(`/api/districts?city=${city}`);
   },
-  
+
   // 发送消息给教练
   sendMessage: (data) => {
     return api.post('/api/send_message', data);
   },
-  
+
   // 评价教练
   rateCoach: (coachId, rating, comment) => {
     return api.post('/api/rate_coach', {

@@ -537,7 +537,7 @@ def create_appointment():
     print(f"当前用户: {current_user}")
 
     # 检查用户是否是教练
-    user_data = get_user_data(current_user)
+    user_data = get_user_data(current_user, USERS_DATA_FILE)
     print(f"用户数据: {user_data}")
     if not user_data or user_data.get('role') != 'coach':
         return jsonify({'success': False, 'message': '无权限访问此接口'}), 403
@@ -799,7 +799,7 @@ def mark_message_as_read(message_id):
 @jwt_required()
 def get_pending_appointments():
     current_user = get_jwt_identity()
-    user_data = get_user_data(current_user)
+    user_data = get_user_data(current_user, USERS_DATA_FILE)
 
     # Check if user is admin
     if not user_data or user_data.get('role') != 'admin':
@@ -834,7 +834,7 @@ def get_pending_appointments():
 @jwt_required()
 def review_appointment(appointment_id):
     current_user = get_jwt_identity()
-    user_data = get_user_data(current_user)
+    user_data = get_user_data(current_user, USERS_DATA_FILE)
 
     # Check if user is admin
     if not user_data or user_data.get('role') != 'admin':
@@ -913,7 +913,7 @@ def get_user_appointments_detail():
 @jwt_required()
 def get_pending_appointments_list():
     current_user = get_jwt_identity()
-    user_data = get_user_data(current_user)
+    user_data = get_user_data(current_user, USERS_DATA_FILE)
 
     # 检查用户是否是管理员
     if not user_data or user_data.get('role') != 'admin':
@@ -948,7 +948,7 @@ def get_pending_appointments_list():
 @jwt_required()
 def review_appointment_status(appointment_id):
     current_user = get_jwt_identity()
-    user_data = get_user_data(current_user)
+    user_data = get_user_data(current_user, USERS_DATA_FILE)
 
     # 检查用户是否是管理员
     if not user_data or user_data.get('role') != 'admin':
@@ -1001,7 +1001,7 @@ def review_appointment_status(appointment_id):
 def get_appointments():
     try:
         current_user = get_jwt_identity()
-        user_data = get_user_data(current_user)
+        user_data = get_user_data(current_user, USERS_DATA_FILE)
 
         print(f"DEBUG: 用户身份: {current_user}, 角色: {user_data.get('role') if user_data else 'unknown'}")
 
@@ -1091,7 +1091,7 @@ def user_create_appointment():
     print(f"当前用户: {current_user}")
 
     # 检查用户是否存在
-    user_data = get_user_data(current_user)
+    user_data = get_user_data(current_user, USERS_DATA_FILE)
     print(f"用户数据: {user_data}")
     if not user_data:
         return jsonify({'success': False, 'message': '用户不存在'}), 404
@@ -1196,7 +1196,7 @@ def admin_revoke_appointment(appointment_id):
     current_user = get_jwt_identity()
 
     # 检查用户是否是管理员
-    user_data = get_user_data(current_user)
+    user_data = get_user_data(current_user, USERS_DATA_FILE)
     if not user_data or user_data.get('role') != 'admin':
         return jsonify({'success': False, 'message': '无权限访问此接口，仅管理员可操作'}), 403
 
@@ -1256,7 +1256,7 @@ def admin_delete_appointment(appointment_id):
     current_user = get_jwt_identity()
 
     # 检查用户是否是管理员
-    user_data = get_user_data(current_user)
+    user_data = get_user_data(current_user, USERS_DATA_FILE)
     if not user_data or user_data.get('role') != 'admin':
         return jsonify({'success': False, 'message': '无权限访问此接口，仅管理员可操作'}), 403
 

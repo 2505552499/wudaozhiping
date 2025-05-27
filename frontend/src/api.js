@@ -7,7 +7,9 @@ const api = axios.create({
   timeout: 30000, // 请求超时时间
   headers: {
     'Content-Type': 'application/json',
-  }
+  },
+  // 在开发环境中禁用代理
+  proxy: false
 });
 
 // 请求拦截器
@@ -29,25 +31,25 @@ api.interceptors.request.use(
 export const coachAPI = {
   // 获取所有教练
   getAllCoaches: () => api.get('/api/coaches'),
-  
+
   // 获取特定教练详情
   getCoachDetail: (coachId) => api.get(`/api/coaches/${coachId}`),
-  
+
   // 筛选教练
   filterCoaches: (params) => api.get('/api/coaches/filter', { params }),
-  
+
   // 获取城市列表
   getCities: () => api.get('/api/cities'),
-  
+
   // 获取特定城市的区域列表
   getDistricts: (city) => api.get(`/api/districts/${city}`),
-  
+
   // 获取当前登录教练的个人资料
   getCoachProfile: () => api.get('/api/coach/profile'),
-  
+
   // 更新教练个人资料
   updateCoachProfile: (data) => api.put('/api/coach/profile', data),
-  
+
   // 上传教练头像
   uploadAvatar: (formData) => api.post('/api/coach/avatar', formData, {
     headers: {
@@ -60,29 +62,29 @@ export const coachAPI = {
 export const appointmentAPI = {
   // 获取我的预约
   getUserAppointments: () => api.get('/api/user/appointments'),
-  
+
   // 创建预约
   createAppointment: (data) => api.post('/api/user/create_appointment', data),
-  
+
   // 获取教练发布的预约信息和审核状态
   getCoachPublishedAppointments: () => api.get('/api/coach/published_appointments'),
-  
+
   // 更新预约状态
-  updateAppointmentStatus: (appointmentId, status) => 
+  updateAppointmentStatus: (appointmentId, status) =>
     api.put(`/api/appointments/${appointmentId}`, { status }),
-  
+
   // 取消预约
   cancelAppointment: (appointmentId) => api.delete(`/api/appointments/${appointmentId}`),
-  
+
   // 获取教练的所有预约（仅教练可用）
   getCoachAppointments: () => api.get('/api/coach/appointments'),
-  
+
   // 获取教练的所有预约及其状态（仅教练可用）
   getCoachAppointmentsWithStatus: () => api.get('/api/coach/appointments/with_status'),
-  
+
   // 教练发布服务信息（仅教练可用）
   createCoachAppointment: (data) => api.post('/api/coach/create_appointment', data),
-  
+
   // 发送消息
   sendMessage: (data) => api.post('/api/messages', data)
 };
@@ -91,7 +93,7 @@ export const appointmentAPI = {
 export const messageAPI = {
   // 获取用户的所有消息
   getUserMessages: () => api.get('/api/messages'),
-  
+
   // 标记消息为已读
   markMessageAsRead: (messageId) => api.put(`/api/messages/${messageId}/read`)
 };
@@ -100,27 +102,27 @@ export const messageAPI = {
 export const adminAPI = {
   // 获取待审核的预约
   getPendingAppointments: () => api.get('/api/admin/appointments?status=pending'),
-  
+
   // 获取已审核通过的预约
   getApprovedAppointments: () => api.get('/api/admin/appointments?status=approved'),
-  
+
   // 获取已拒绝的预约
   getRejectedAppointments: () => api.get('/api/admin/appointments?status=rejected'),
-  
+
   // 获取已撤销的预约
   getRevokedAppointments: () => api.get('/api/admin/appointments?status=revoked'),
-  
+
   // 审核预约
   reviewAppointment: (appointmentId, action, reason) => api.post(`/api/admin/appointments/${appointmentId}/review`, {
     action,
     reason
   }),
-  
+
   // 管理员撤销预约（软删除）
   revokeAppointment: (appointmentId) => {
     return api.post(`/api/admin/appointments/${appointmentId}/revoke`);
   },
-  
+
   // 管理员删除预约（真实删除）
   deleteAppointment: (appointmentId) => {
     return api.delete(`/api/admin/appointments/${appointmentId}`);
@@ -130,34 +132,34 @@ export const adminAPI = {
 // 武友论坛相关API
 export const forumAPI = {
   // 获取帖子列表（已审核通过的）
-  getPosts: (page = 1, perPage = 10) => 
+  getPosts: (page = 1, perPage = 10) =>
     api.get(`/api/forum/posts?page=${page}&per_page=${perPage}`),
-  
+
   // 获取帖子详情
   getPostDetail: (postId) => api.get(`/api/forum/posts/${postId}`),
-  
+
   // 创建帖子
   createPost: (data) => api.post('/api/forum/posts', data),
-  
+
   // 获取用户自己发布的帖子
-  getUserPosts: (page = 1, perPage = 10) => 
+  getUserPosts: (page = 1, perPage = 10) =>
     api.get(`/api/forum/posts/user?page=${page}&per_page=${perPage}`),
-  
+
   // 获取待审核的帖子（仅管理员可用）
-  getPendingPosts: (page = 1, perPage = 10) => 
+  getPendingPosts: (page = 1, perPage = 10) =>
     api.get(`/api/forum/posts/pending?page=${page}&per_page=${perPage}`),
-  
+
   // 审核帖子（仅管理员可用）
-  reviewPost: (postId, action, reason) => 
+  reviewPost: (postId, action, reason) =>
     api.post(`/api/forum/posts/${postId}/review`, { action, reason }),
-  
+
   // 添加评论
-  addComment: (postId, content) => 
+  addComment: (postId, content) =>
     api.post(`/api/forum/posts/${postId}/comments`, { content }),
-  
+
   // 点赞帖子
   likePost: (postId) => api.post(`/api/forum/posts/${postId}/like`),
-  
+
   // 点赞评论
   likeComment: (commentId) => api.post(`/api/forum/comments/${commentId}/like`)
 };
@@ -170,16 +172,16 @@ export const fetchWithAuth = async (url, options = {}) => {
       'Content-Type': 'application/json',
       ...options.headers,
     };
-    
+
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
-    
+
     const response = await fetch(`${config.API_BASE_URL}${url}`, {
       ...options,
       headers,
     });
-    
+
     const data = await response.json();
     return data;
   } catch (error) {

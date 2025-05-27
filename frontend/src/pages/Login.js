@@ -27,22 +27,6 @@ const Login = () => {
   const handleLogin = async (values) => {
     setLoading(true);
     try {
-      // 临时解决方案：如果是coach2，直接设置token
-      if (values.username === 'coach2' && values.password === '12345678') {
-        const coach2Token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0ODIyODUxNCwianRpIjoiNTRjN2MxZDctMjE3OC00YTI0LTg0ZGMtNDQ0M2FhNTk2YzA2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImNvYWNoMiIsIm5iZiI6MTc0ODIyODUxNCwiY3NyZiI6IjJhMjgwNTEzLTQ3ODYtNGU4NS05NTMwLTY0MTZlY2JlMzZlNiIsImV4cCI6MTc0ODMxNDkxNH0.ga_cxndCwv5kgVtnI8vYTDlcgBFqqQ9AVbX0xNTwWQg';
-
-        localStorage.setItem('token', coach2Token);
-        localStorage.setItem('username', 'coach2');
-        localStorage.setItem('role', 'coach');
-
-        axios.defaults.headers.common['Authorization'] = `Bearer ${coach2Token}`;
-
-        message.success(t('login.loginSuccess'));
-        navigate('/coach-dashboard');
-        setLoading(false);
-        return;
-      }
-
       const response = await axios.post(`${config.API_BASE_URL}/api/auth/login`, values);
 
       if (response.data.success) {

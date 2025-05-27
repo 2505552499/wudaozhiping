@@ -5,6 +5,7 @@ import zhCN from 'antd/lib/locale/zh_CN';
 import enUS from 'antd/lib/locale/en_US';
 import { useTranslation } from 'react-i18next';
 import './i18n/config'; // 引入i18n配置
+import setupAxiosDefaults from './utils/axiosConfig'; // 引入axios配置
 
 // Layout
 import Layout from './components/layout/Layout';
@@ -66,7 +67,12 @@ import './App.css';
 function App() {
   const { i18n } = useTranslation();
   const antdLocale = i18n.language === 'zh-CN' ? zhCN : enUS;
-  
+
+  // 初始化axios配置
+  React.useEffect(() => {
+    setupAxiosDefaults();
+  }, []);
+
   return (
     <ConfigProvider locale={antdLocale} theme={{
       token: {
@@ -280,7 +286,7 @@ function App() {
             <Route path="/about" element={
               <AboutUs />
             } />
-            
+
             {/* 国际化演示页面 */}
             <Route path="/i18n-demo" element={
               <I18nDemo />

@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem('token');
-      
+
       if (!token) {
         setLoading(false);
         return;
@@ -19,10 +19,10 @@ const ProtectedRoute = ({ children }) => {
       try {
         // Set the authorization header
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        
+
         // Check if the token is valid
         const response = await axios.get('/api/auth/user');
-        
+
         if (response.data.success) {
           setIsAuthenticated(true);
           // Store username in localStorage
