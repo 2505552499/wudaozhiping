@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Tabs, message, Radio, Card } from 'antd';
 import { UserOutlined, LockOutlined, TeamOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import config from '../config';
 import GradientButton from '../components/ui/GradientButton';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 const { TabPane } = Tabs;
 
@@ -12,6 +14,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('login');
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     // 检查用户是否已登录
@@ -34,7 +37,7 @@ const Login = () => {
 
         axios.defaults.headers.common['Authorization'] = `Bearer ${coach2Token}`;
 
-        message.success('登录成功');
+        message.success(t('login.loginSuccess'));
         navigate('/coach-dashboard');
         setLoading(false);
         return;
@@ -51,7 +54,7 @@ const Login = () => {
         // 设置默认授权头
         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
 
-        message.success(response.data.message);
+        message.success(t('login.loginSuccess'));
 
         // 根据角色导航到不同页面
         if (response.data.role === 'coach') {
@@ -60,11 +63,11 @@ const Login = () => {
           navigate('/');
         }
       } else {
-        message.error(response.data.message || '登录失败');
+        message.error(response.data.message || t('login.loginFailed'));
       }
     } catch (error) {
       console.error('Login error:', error);
-      message.error(error.response?.data?.message || '登录失败，请检查用户名和密码');
+      message.error(error.response?.data?.message || t('login.loginFailedMessage'));
     } finally {
       setLoading(false);
     }
@@ -87,7 +90,7 @@ const Login = () => {
         // 设置默认授权头
         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
 
-        message.success(response.data.message);
+        message.success(t('login.registerSuccess'));
 
         // 根据角色导航到不同页面
         if (response.data.role === 'coach') {
@@ -96,11 +99,11 @@ const Login = () => {
           navigate('/');
         }
       } else {
-        message.error(response.data.message || '注册失败');
+        message.error(response.data.message || t('login.registerFailed'));
       }
     } catch (error) {
       console.error('Registration error:', error);
-      message.error(error.response?.data?.message || '注册失败，请检查输入');
+      message.error(error.response?.data?.message || t('login.registerFailedMessage'));
     } finally {
       setLoading(false);
     }
@@ -120,14 +123,14 @@ const Login = () => {
         // 设置默认授权头
         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
 
-        message.success('游客登录成功');
+        message.success(t('login.guestLoginSuccess'));
         navigate('/');
       } else {
-        message.error(response.data.message || '游客登录失败');
+        message.error(response.data.message || t('login.guestLoginFailed'));
       }
     } catch (error) {
       console.error('Guest login error:', error);
-      message.error('游客登录失败，请稍后再试');
+      message.error(t('login.guestLoginFailedMessage'));
     } finally {
       setLoading(false);
     }
@@ -141,18 +144,21 @@ const Login = () => {
         <div className="absolute bottom-[10%] right-[10%] w-80 h-80 bg-xtalpi-indigo rounded-full filter blur-3xl opacity-20"></div>
       </div>
 
-      {/* 返回首页按钮 */}
-      <Link to="/" className="absolute top-8 left-8 flex items-center text-white hover:text-xtalpi-cyan transition-colors">
-        <ArrowLeftOutlined className="mr-2" />
-        <span>返回首页</span>
-      </Link>
+      {/* 返回首页按钮和语言切换 */}
+      <div className="absolute top-8 left-8 right-8 flex justify-between items-center">
+        <Link to="/" className="flex items-center text-white hover:text-xtalpi-cyan transition-colors">
+          <ArrowLeftOutlined className="mr-2" />
+          <span>{t('login.backToHome')}</span>
+        </Link>
+        <LanguageSwitcher />
+      </div>
 
       <div className="z-10 w-full max-w-md">
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-xtalpi-indigo via-xtalpi-purple to-xtalpi-cyan bg-clip-text text-transparent mb-4">
-            武道智评平台
+            {t('login.platformTitle')}
           </h1>
-          <p className="text-gray-200 text-lg">专业的武术动作分析与评估系统</p>
+          <p className="text-gray-200 text-lg">{t('login.platformSubtitle')}</p>
         </div>
 
         <Card className="bg-black/40 backdrop-blur-lg border border-white/20 rounded-xl shadow-2xl overflow-hidden">
@@ -163,7 +169,7 @@ const Login = () => {
             centered
             tabBarStyle={{ borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: '24px' }}
           >
-            <TabPane tab={<span className="text-white">用户登录</span>} key="login">
+            <TabPane tab={<span className="text-white">{t('login.userLogin')}</span>} key="login">
               <Form
                 name="login"
                 className="login-form"
@@ -172,23 +178,23 @@ const Login = () => {
               >
                 <Form.Item
                   name="username"
-                  rules={[{ required: true, message: '请输入用户名!' }]}
+                  rules={[{ required: true, message: t('login.usernameRequired') }]}
                 >
                   <Input
                     prefix={<UserOutlined className="text-gray-400" />}
-                    placeholder="用户名"
+                    placeholder={t('login.usernamePlaceholder')}
                     size="large"
                     className="bg-white border-gray-300 rounded-lg py-2"
                   />
                 </Form.Item>
                 <Form.Item
                   name="password"
-                  rules={[{ required: true, message: '请输入密码!' }]}
+                  rules={[{ required: true, message: t('login.passwordRequired') }]}
                 >
                   <Input
                     prefix={<LockOutlined className="text-gray-400" />}
                     type="password"
-                    placeholder="密码"
+                    placeholder={t('login.passwordPlaceholder')}
                     size="large"
                     className="bg-white border-gray-300 rounded-lg py-2"
                   />
@@ -200,25 +206,25 @@ const Login = () => {
                     className="w-full py-2 text-white"
                     loading={loading}
                   >
-                    登录
+                    {t('common.login')}
                   </GradientButton>
                 </Form.Item>
 
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-white/70 hover:text-white transition-colors cursor-pointer text-sm">
-                    忘记密码？
+                    {t('login.forgotPassword')}
                   </span>
                   <span
                     onClick={handleGuestLogin}
                     className="text-xtalpi-cyan hover:text-white transition-colors cursor-pointer text-sm"
                   >
-                    游客模式
+                    {t('login.guestMode')}
                   </span>
                 </div>
               </Form>
             </TabPane>
 
-            <TabPane tab={<span className="text-white">用户注册</span>} key="register">
+            <TabPane tab={<span className="text-white">{t('login.userRegister')}</span>} key="register">
               <Form
                 name="register"
                 className="login-form"
@@ -228,13 +234,13 @@ const Login = () => {
                 <Form.Item
                   name="username"
                   rules={[
-                    { required: true, message: '请输入用户名!' },
-                    { min: 4, max: 20, message: '用户名长度必须在4-20个字符之间!' }
+                    { required: true, message: t('login.usernameRequired') },
+                    { min: 4, max: 20, message: t('login.usernameLength') }
                   ]}
                 >
                   <Input
                     prefix={<UserOutlined className="text-gray-400" />}
-                    placeholder="用户名 (4-20位字母数字)"
+                    placeholder={t('login.registerUsernamePlaceholder')}
                     size="large"
                     className="bg-white border-gray-300 rounded-lg py-2"
                   />
@@ -243,14 +249,14 @@ const Login = () => {
                 <Form.Item
                   name="password"
                   rules={[
-                    { required: true, message: '请输入密码!' },
-                    { min: 8, message: '密码长度至少为8个字符!' }
+                    { required: true, message: t('login.passwordRequired') },
+                    { min: 8, message: t('login.passwordLength') }
                   ]}
                 >
                   <Input
                     prefix={<LockOutlined className="text-gray-400" />}
                     type="password"
-                    placeholder="密码 (至少8位)"
+                    placeholder={t('login.registerPasswordPlaceholder')}
                     size="large"
                     className="bg-white border-gray-300 rounded-lg py-2"
                   />
@@ -260,13 +266,13 @@ const Login = () => {
                   name="confirmPassword"
                   dependencies={['password']}
                   rules={[
-                    { required: true, message: '请确认密码!' },
+                    { required: true, message: t('login.confirmPasswordRequired') },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (!value || getFieldValue('password') === value) {
                           return Promise.resolve();
                         }
-                        return Promise.reject(new Error('两次输入的密码不一致!'));
+                        return Promise.reject(new Error(t('login.passwordMismatch')));
                       },
                     }),
                   ]}
@@ -274,19 +280,19 @@ const Login = () => {
                   <Input
                     prefix={<LockOutlined className="text-gray-400" />}
                     type="password"
-                    placeholder="确认密码"
+                    placeholder={t('login.confirmPasswordPlaceholder')}
                     size="large"
                     className="bg-white border-gray-300 rounded-lg py-2"
                   />
                 </Form.Item>
 
-                <Form.Item name="role" label={<span className="text-white">注册身份</span>}>
+                <Form.Item name="role" label={<span className="text-white">{t('login.registerRole')}</span>}>
                   <Radio.Group className="flex justify-around bg-white/30 p-3 rounded-lg border border-white/30">
                     <Radio value="user" className="text-white font-medium hover:text-xtalpi-cyan">
-                      <UserOutlined className="mr-1" /> 普通用户
+                      <UserOutlined className="mr-1" /> {t('login.normalUser')}
                     </Radio>
                     <Radio value="coach" className="text-white font-medium hover:text-xtalpi-cyan">
-                      <TeamOutlined className="mr-1" /> 教练员
+                      <TeamOutlined className="mr-1" /> {t('login.coach')}
                     </Radio>
                   </Radio.Group>
                 </Form.Item>
@@ -297,19 +303,19 @@ const Login = () => {
                     className="w-full py-2 text-white"
                     loading={loading}
                   >
-                    注册
+                    {t('login.registerButton')}
                   </GradientButton>
                 </Form.Item>
               </Form>
             </TabPane>
           </Tabs>
           <div className="text-center mt-4 text-white/80 text-sm">
-            注册即表示您同意我们的 <Link to="/terms" className="text-xtalpi-cyan hover:text-white">服务条款</Link> 和 <Link to="/privacy" className="text-xtalpi-cyan hover:text-white">隐私政策</Link>
+            {t('login.termsAgreement')} <Link to="/terms" className="text-xtalpi-cyan hover:text-white">{t('login.termsOfService')}</Link> {t('login.and')} <Link to="/privacy" className="text-xtalpi-cyan hover:text-white">{t('login.privacyPolicy')}</Link>
           </div>
         </Card>
 
         <div className="text-center mt-8 text-white/70 text-sm">
-          © {new Date().getFullYear()} 武道智评科技有限公司. 保留所有权利.
+          {t('login.copyrightText', { year: new Date().getFullYear() })}
         </div>
       </div>
     </div>

@@ -2,6 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale/zh_CN';
+import enUS from 'antd/lib/locale/en_US';
+import { useTranslation } from 'react-i18next';
+import './i18n/config'; // 引入i18n配置
 
 // Layout
 import Layout from './components/layout/Layout';
@@ -52,6 +55,7 @@ import AdvancedCourses from './pages/AdvancedCourses';
 import ProfessionalSkills from './pages/ProfessionalSkills';
 import AboutUs from './pages/AboutUs';
 import CourseStudy from './pages/CourseStudy';
+import I18nDemo from './pages/I18nDemo'; // 添加国际化演示页面
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -60,8 +64,11 @@ import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
 function App() {
+  const { i18n } = useTranslation();
+  const antdLocale = i18n.language === 'zh-CN' ? zhCN : enUS;
+  
   return (
-    <ConfigProvider locale={zhCN} theme={{
+    <ConfigProvider locale={antdLocale} theme={{
       token: {
         colorPrimary: '#4F49FF', // XtalPi靛蓝色
       },
@@ -272,6 +279,11 @@ function App() {
             {/* 关于我们页面 */}
             <Route path="/about" element={
               <AboutUs />
+            } />
+            
+            {/* 国际化演示页面 */}
+            <Route path="/i18n-demo" element={
+              <I18nDemo />
             } />
 
             <Route path="*" element={<Navigate to="/" replace />} />

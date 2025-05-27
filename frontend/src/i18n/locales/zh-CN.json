@@ -1,0 +1,418 @@
+{
+  "common": {
+    "language": "语言",
+    "login": "登录",
+    "logout": "退出登录",
+    "register": "注册",
+    "submit": "提交",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "search": "搜索",
+    "back": "返回",
+    "confirm": "确认",
+    "loading": "加载中...",
+    "success": "成功",
+    "error": "错误",
+    "warning": "警告",
+    "info": "信息",
+    "welcome": "欢迎，{{name}}"
+  },
+  "nav": {
+    "home": "首页",
+    "courses": "精品课程",
+    "coaches": "教练团队",
+    "analysis": "智能分析",
+    "forum": "武友论坛",
+    "about": "关于我们",
+    "dashboard": "个人中心",
+    "imageAnalysis": "图片分析",
+    "videoAnalysis": "视频分析",
+    "cameraAnalysis": "实时分析",
+    "knowledgeBase": "知识库",
+    "appointments": "预约管理",
+    "messages": "消息中心",
+    "settings": "设置",
+    "menu": "菜单"
+  },
+  "home": {
+    "hero": {
+      "title": "武道智评",
+      "subtitle": "AI赋能武术训练，科技助力传承创新",
+      "description": "运用前沿人工智能技术，为武术爱好者提供专业的动作分析和个性化指导",
+      "startNow": "立即开始",
+      "learnMore": "了解更多",
+      "titleLine1": "以 <1>AI</1> 和 <1>CV</1> 驱动",
+      "titleLine2": "武术动作分析与评价"
+    },
+    "features": {
+      "title": "核心功能",
+      "subtitle": "全方位智能武术训练解决方案",
+      "imageAnalysis": {
+        "title": "图片分析",
+        "description": "上传武术动作图片，AI即时分析姿势准确性并提供改进建议"
+      },
+      "videoAnalysis": {
+        "title": "视频分析",
+        "description": "智能解析武术视频，逐帧分析动作要点，生成详细训练报告"
+      },
+      "realtimeGuidance": {
+        "title": "实时指导",
+        "description": "摄像头实时捕捉动作，AI教练全程陪练，即时纠正动作偏差"
+      },
+      "personalizedTraining": {
+        "title": "个性化训练",
+        "description": "根据个人水平和目标，定制专属训练计划，循序渐进提升技能"
+      }
+    },
+    "services": {
+      "title": "服务内容",
+      "subtitle": "专业全面的武术学习平台",
+      "smartAnalysis": {
+        "title": "智能分析服务",
+        "items": {
+          "poseAnalysis": "动作姿势分析",
+          "actionGuidance": "动作要领指导",
+          "errorCorrection": "错误动作纠正",
+          "progressTracking": "进步轨迹追踪"
+        }
+      },
+      "coachResources": {
+        "title": "教练资源",
+        "items": {
+          "eliteCoaches": "精英教练团队",
+          "onlineAppointment": "在线预约指导",
+          "oneOnOne": "一对一辅导",
+          "offlineTraining": "线下集训营"
+        }
+      },
+      "courseCenter": {
+        "title": "课程中心",
+        "items": {
+          "beginnerCourses": "入门基础课程",
+          "advancedTechniques": "进阶技法训练",
+          "masterClasses": "大师精品课",
+          "professionalSkills": "专业技能培训"
+        }
+      },
+      "community": {
+        "title": "社区互动",
+        "items": {
+          "forum": "武友交流论坛",
+          "experienceSharing": "经验分享",
+          "questionAnswer": "问答互助",
+          "activityNotices": "活动通知"
+        }
+      }
+    },
+    "stats": {
+      "title": "平台数据",
+      "subtitle": "见证每一份进步",
+      "users": "注册用户",
+      "analyses": "分析次数",
+      "courses": "精品课程",
+      "coaches": "认证教练",
+      "accuracy": "准确率"
+    },
+    "process": {
+      "title": "使用流程",
+      "subtitle": "简单三步，开启智能武术训练之旅",
+      "step1": {
+        "title": "上传内容",
+        "description": "上传武术动作的图片或视频"
+      },
+      "step2": {
+        "title": "AI分析",
+        "description": "系统自动识别并分析动作要点"
+      },
+      "step3": {
+        "title": "获得指导",
+        "description": "查看分析报告，获取专业改进建议"
+      }
+    },
+    "news": {
+      "title": "最新动态",
+      "subtitle": "了解武道智评最新资讯",
+      "viewAll": "查看全部"
+    },
+    "cta": {
+      "title": "开始您的武术精进之旅",
+      "description": "无论您是武术初学者还是有经验的爱好者，武道智评平台都能为您提供专业的动作分析和建议，帮助您更快地掌握技巧，提高技术水平",
+      "joinNow": "立即加入"
+    }
+  },
+  "login": {
+    "title": "欢迎回来",
+    "subtitle": "登录您的账户",
+    "username": "用户名",
+    "password": "密码",
+    "rememberMe": "记住我",
+    "forgotPassword": "忘记密码？",
+    "noAccount": "还没有账户？",
+    "registerNow": "立即注册",
+    "loginButton": "登录",
+    "or": "或",
+    "loginWith": "使用其他方式登录",
+    "platformTitle": "武道智评平台",
+    "platformSubtitle": "专业的武术动作分析与评估系统",
+    "userLogin": "用户登录",
+    "userRegister": "用户注册",
+    "usernamePlaceholder": "用户名",
+    "passwordPlaceholder": "密码",
+    "usernameRequired": "请输入用户名!",
+    "passwordRequired": "请输入密码!",
+    "forgotPassword": "忘记密码？",
+    "guestMode": "游客模式",
+    "registerUsernamePlaceholder": "用户名 (4-20位字母数字)",
+    "registerPasswordPlaceholder": "密码 (至少8位)",
+    "confirmPasswordPlaceholder": "确认密码",
+    "usernameLength": "用户名长度必须在4-20个字符之间!",
+    "passwordLength": "密码长度至少为8个字符!",
+    "confirmPasswordRequired": "请确认密码!",
+    "passwordMismatch": "两次输入的密码不一致!",
+    "registerRole": "注册身份",
+    "normalUser": "普通用户",
+    "coach": "教练员",
+    "registerButton": "注册",
+    "termsAgreement": "注册即表示您同意我们的",
+    "termsOfService": "服务条款",
+    "and": "和",
+    "privacyPolicy": "隐私政策",
+    "backToHome": "返回首页",
+    "loginSuccess": "登录成功",
+    "loginFailed": "登录失败",
+    "loginFailedMessage": "登录失败，请检查用户名和密码",
+    "registerSuccess": "注册成功",
+    "registerFailed": "注册失败",
+    "registerFailedMessage": "注册失败，请检查输入",
+    "guestLoginSuccess": "游客登录成功",
+    "guestLoginFailed": "游客登录失败",
+    "guestLoginFailedMessage": "游客登录失败，请稍后再试",
+    "copyrightText": "© {{year}} 武道智评科技有限公司. 保留所有权利."
+  },
+  "courses": {
+    "title": "精品课程",
+    "categories": {
+      "all": "全部",
+      "beginner": "入门基础",
+      "intermediate": "进阶提升",
+      "advanced": "高级技法",
+      "master": "大师课程"
+    },
+    "difficulty": {
+      "beginner": "初级",
+      "intermediate": "中级",
+      "advanced": "高级"
+    },
+    "duration": "课程时长",
+    "students": "学习人数",
+    "rating": "评分",
+    "price": "价格",
+    "free": "免费",
+    "enroll": "立即报名",
+    "enrolled": "已报名",
+    "startLearning": "开始学习",
+    "viewDetails": "查看详情",
+    "courseManagement": "课程管理",
+    "noCourses": "暂无课程",
+    "fetchError": "获取课程数据失败",
+    "fetchErrorMessage": "获取课程数据失败，请稍后重试",
+    "courseImage": "课程图片",
+    "courseTypes": {
+      "all": "全部课程",
+      "public": "公开课",
+      "private": "私人课程",
+      "taijiBest": "太极精品班",
+      "selfDefenseBest": "防身术精品班"
+    },
+    "courseStatus": {
+      "published": "已发布",
+      "draft": "草稿",
+      "upcoming": "即将开始",
+      "inProgress": "进行中",
+      "completed": "已完成"
+    }
+  },
+  "imageAnalysis": {
+    "title": "武术动作图像分析",
+    "description": "您可以上传武术动作图片进行分析，系统将自动识别动作姿态，并提供评分和改进建议。",
+    "uploadCard": {
+      "title": "上传图片",
+      "selectPoseType": "选择动作类型:",
+      "selectImage": "选择图片",
+      "startAnalysis": "开始分析",
+      "uploadSuccess": "{{filename}} 上传成功",
+      "uploadFailed": "文件上传失败，请重试",
+      "pleaseUploadFirst": "请先上传图片",
+      "noFileObject": "无法获取文件对象"
+    },
+    "resultCard": {
+      "title": "分析结果",
+      "analyzing": "正在分析图像...",
+      "uploadPrompt": "请上传图片并点击\"开始分析\"按钮",
+      "tabs": {
+        "scoreAndSuggestions": "评分与建议",
+        "poseImage": "姿势图像",
+        "angleData": "角度数据"
+      },
+      "evaluationTitle": "评价与建议",
+      "analysisComplete": "分析完成",
+      "analysisFailed": "分析失败",
+      "analysisRequestFailed": "分析请求失败",
+      "serverNotResponding": "服务器未响应，请检查网络连接",
+      "requestConfigError": "请求配置错误"
+    },
+    "scoreLevel": {
+      "excellent": "优秀",
+      "good": "良好",
+      "needsImprovement": "需要改进"
+    },
+    "poses": {
+      "弓步冲拳": "弓步冲拳",
+      "猛虎出洞": "猛虎出洞",
+      "五花坐山": "五花坐山",
+      "滚身冲拳": "滚身冲拳",
+      "猿猴纳肘": "猿猴纳肘",
+      "马步推掌": "马步推掌",
+      "并步崩拳": "并步崩拳",
+      "狮子张嘴": "狮子张嘴",
+      "马步扣床": "马步扣床",
+      "罗汉张掌": "罗汉张掌"
+    }
+  },
+  "videoAnalysis": {
+    "title": "武术动作视频分析",
+    "description": "您可以上传武术动作视频进行分析，系统将自动识别视频中的动作姿态序列，并提供评分和改进建议。",
+    "uploadCard": {
+      "title": "上传视频",
+      "selectVideo": "选择视频文件",
+      "selectPosePlaceholder": "选择标准姿势",
+      "startAnalysis": "开始分析",
+      "fileSelected": "文件 \"{{filename}}\" 已选择",
+      "pleaseUploadFirst": "请先上传视频文件",
+      "fetchPosesFailed": "获取姿势列表失败",
+      "checkRoleFailed": "检查用户角色失败"
+    },
+    "resultCard": {
+      "analyzing": "正在分析视频，请稍候...",
+      "uploadPrompt": "请上传视频并点击\"开始分析\"按钮",
+      "tabs": {
+        "analysisResult": "分析结果",
+        "annotations": "批注"
+      },
+      "evaluationTitle": "评价与建议",
+      "analysisComplete": "分析完成",
+      "analysisFailed": "分析失败",
+      "analysisRequestFailed": "分析请求失败",
+      "pleaseUploadVideo": "请先上传视频文件"
+    },
+    "keyFrames": {
+      "title": "关键帧分析",
+      "frameTitle": "关键帧 {{index}}",
+      "time": "时间",
+      "score": "评分",
+      "seconds": "秒"
+    },
+    "timeline": {
+      "title": "动作评分时间线"
+    }
+  },
+  "coaches": {
+    "title": "教练团队",
+    "subtitle": "汇聚顶尖武术教练，传承武道精神",
+    "specialties": "专长",
+    "experience": "教龄",
+    "students": "学员",
+    "rating": "评分",
+    "appointment": "预约指导",
+    "viewProfile": "查看详情",
+    "years": "年"
+  },
+  "analysis": {
+    "upload": {
+      "title": "上传文件",
+      "dragText": "点击或拖拽文件到这里上传",
+      "supportText": "支持格式：",
+      "imageFormats": "JPG, PNG, GIF",
+      "videoFormats": "MP4, AVI, MOV",
+      "maxSize": "最大文件大小：",
+      "analyzing": "分析中...",
+      "uploadSuccess": "上传成功",
+      "uploadError": "上传失败"
+    },
+    "results": {
+      "title": "分析结果",
+      "score": "综合评分",
+      "keyPoints": "关键点分析",
+      "suggestions": "改进建议",
+      "comparisonTitle": "标准对比",
+      "downloadReport": "下载报告"
+    }
+  },
+  "forum": {
+    "title": "武友论坛",
+    "createPost": "发布帖子",
+    "categories": {
+      "all": "全部",
+      "technique": "技术交流",
+      "experience": "经验分享",
+      "question": "问答求助",
+      "activity": "活动通知"
+    },
+    "sortBy": {
+      "latest": "最新发布",
+      "hottest": "最热门",
+      "mostReplies": "回复最多"
+    },
+    "post": {
+      "reply": "回复",
+      "like": "点赞",
+      "views": "浏览",
+      "replies": "条回复",
+      "writeReply": "写下你的回复..."
+    }
+  },
+  "profile": {
+    "title": "个人资料",
+    "basicInfo": "基本信息",
+    "accountInfo": "账户信息",
+    "learningProgress": "学习进度",
+    "appointments": "我的预约",
+    "courses": "我的课程",
+    "achievements": "成就徽章",
+    "editProfile": "编辑资料",
+    "changePassword": "修改密码",
+    "notifications": "通知设置"
+  },
+  "footer": {
+    "about": {
+      "title": "关于我们",
+      "company": "公司介绍",
+      "team": "团队成员",
+      "contact": "联系我们",
+      "careers": "加入我们"
+    },
+    "services": {
+      "title": "服务",
+      "analysis": "智能分析",
+      "courses": "在线课程",
+      "coaching": "教练指导",
+      "community": "社区论坛"
+    },
+    "support": {
+      "title": "支持",
+      "help": "帮助中心",
+      "faq": "常见问题",
+      "feedback": "意见反馈",
+      "terms": "服务条款"
+    },
+    "follow": {
+      "title": "关注我们",
+      "wechat": "微信公众号",
+      "weibo": "新浪微博",
+      "email": "邮箱"
+    },
+    "copyright": "© 2024 武道智评. 保留所有权利。"
+  }
+}

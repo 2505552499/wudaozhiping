@@ -1,0 +1,418 @@
+{
+  "common": {
+    "language": "Language",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "back": "Back",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info",
+    "welcome": "Welcome, {{name}}"
+  },
+  "nav": {
+    "home": "Home",
+    "courses": "Courses",
+    "coaches": "Coaches",
+    "analysis": "Analysis",
+    "forum": "Forum",
+    "about": "About",
+    "dashboard": "Dashboard",
+    "imageAnalysis": "Image Analysis",
+    "videoAnalysis": "Video Analysis",
+    "cameraAnalysis": "Live Analysis",
+    "knowledgeBase": "Knowledge Base",
+    "appointments": "Appointments",
+    "messages": "Messages",
+    "settings": "Settings",
+    "menu": "Menu"
+  },
+  "home": {
+    "hero": {
+      "title": "Martial Arts AI",
+      "subtitle": "AI-Powered Martial Arts Training, Technology-Driven Innovation",
+      "description": "Using cutting-edge artificial intelligence technology to provide professional motion analysis and personalized guidance for martial arts enthusiasts",
+      "startNow": "Start Now",
+      "learnMore": "Learn More",
+      "titleLine1": "Powered by <1>AI</1> and <1>CV</1>",
+      "titleLine2": "Martial Arts Motion Analysis & Evaluation"
+    },
+    "features": {
+      "title": "Core Features",
+      "subtitle": "Comprehensive Intelligent Martial Arts Training Solution",
+      "imageAnalysis": {
+        "title": "Image Analysis",
+        "description": "Upload martial arts pose images for instant AI analysis and improvement suggestions"
+      },
+      "videoAnalysis": {
+        "title": "Video Analysis",
+        "description": "Intelligent video parsing with frame-by-frame analysis and detailed training reports"
+      },
+      "realtimeGuidance": {
+        "title": "Real-time Guidance",
+        "description": "Live camera motion capture with AI coach providing instant corrections"
+      },
+      "personalizedTraining": {
+        "title": "Personalized Training",
+        "description": "Customized training plans based on individual level and goals for progressive skill improvement"
+      }
+    },
+    "services": {
+      "title": "Our Services",
+      "subtitle": "Professional and Comprehensive Martial Arts Learning Platform",
+      "smartAnalysis": {
+        "title": "Smart Analysis",
+        "items": {
+          "poseAnalysis": "Pose Analysis",
+          "actionGuidance": "Action Guidance",
+          "errorCorrection": "Error Correction",
+          "progressTracking": "Progress Tracking"
+        }
+      },
+      "coachResources": {
+        "title": "Coach Resources",
+        "items": {
+          "eliteCoaches": "Elite Coaches",
+          "onlineAppointment": "Online Appointments",
+          "oneOnOne": "One-on-One Training",
+          "offlineTraining": "Offline Training Camps"
+        }
+      },
+      "courseCenter": {
+        "title": "Course Center",
+        "items": {
+          "beginnerCourses": "Beginner Courses",
+          "advancedTechniques": "Advanced Techniques",
+          "masterClasses": "Master Classes",
+          "professionalSkills": "Professional Skills"
+        }
+      },
+      "community": {
+        "title": "Community",
+        "items": {
+          "forum": "Discussion Forum",
+          "experienceSharing": "Experience Sharing",
+          "questionAnswer": "Q&A Support",
+          "activityNotices": "Activity Updates"
+        }
+      }
+    },
+    "stats": {
+      "title": "Platform Statistics",
+      "subtitle": "Witnessing Every Progress",
+      "users": "Registered Users",
+      "analyses": "Analyses Performed",
+      "courses": "Premium Courses",
+      "coaches": "Certified Coaches",
+      "accuracy": "Accuracy Rate"
+    },
+    "process": {
+      "title": "How It Works",
+      "subtitle": "Three Simple Steps to Start Your Smart Martial Arts Training Journey",
+      "step1": {
+        "title": "Upload Content",
+        "description": "Upload images or videos of martial arts movements"
+      },
+      "step2": {
+        "title": "AI Analysis",
+        "description": "System automatically identifies and analyzes key points"
+      },
+      "step3": {
+        "title": "Get Guidance",
+        "description": "View analysis report and receive professional improvement suggestions"
+      }
+    },
+    "news": {
+      "title": "Latest News",
+      "subtitle": "Stay Updated with Martial Arts AI",
+      "viewAll": "View All"
+    },
+    "cta": {
+      "title": "Start Your Martial Arts Journey",
+      "description": "Whether you're a beginner or an experienced practitioner, Martial Arts AI platform provides professional motion analysis and suggestions to help you master techniques faster and improve your skill level",
+      "joinNow": "Join Now"
+    }
+  },
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Login to Your Account",
+    "username": "Username",
+    "password": "Password",
+    "rememberMe": "Remember Me",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "registerNow": "Register Now",
+    "loginButton": "Login",
+    "or": "Or",
+    "loginWith": "Login with",
+    "platformTitle": "Martial Arts AI Platform",
+    "platformSubtitle": "Professional Martial Arts Motion Analysis & Evaluation System",
+    "userLogin": "User Login",
+    "userRegister": "User Register",
+    "usernamePlaceholder": "Username",
+    "passwordPlaceholder": "Password",
+    "usernameRequired": "Please enter username!",
+    "passwordRequired": "Please enter password!",
+    "forgotPassword": "Forgot Password?",
+    "guestMode": "Guest Mode",
+    "registerUsernamePlaceholder": "Username (4-20 alphanumeric)",
+    "registerPasswordPlaceholder": "Password (at least 8 characters)",
+    "confirmPasswordPlaceholder": "Confirm Password",
+    "usernameLength": "Username must be between 4-20 characters!",
+    "passwordLength": "Password must be at least 8 characters!",
+    "confirmPasswordRequired": "Please confirm password!",
+    "passwordMismatch": "Passwords do not match!",
+    "registerRole": "Register As",
+    "normalUser": "Regular User",
+    "coach": "Coach",
+    "registerButton": "Register",
+    "termsAgreement": "By registering, you agree to our",
+    "termsOfService": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "backToHome": "Back to Home",
+    "loginSuccess": "Login Successful",
+    "loginFailed": "Login Failed",
+    "loginFailedMessage": "Login failed, please check username and password",
+    "registerSuccess": "Registration Successful",
+    "registerFailed": "Registration Failed",
+    "registerFailedMessage": "Registration failed, please check your input",
+    "guestLoginSuccess": "Guest Login Successful",
+    "guestLoginFailed": "Guest Login Failed",
+    "guestLoginFailedMessage": "Guest login failed, please try again later",
+    "copyrightText": "© {{year}} Martial Arts AI Technology Co., Ltd. All rights reserved."
+  },
+  "courses": {
+    "title": "Premium Courses",
+    "categories": {
+      "all": "All",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced",
+      "master": "Master"
+    },
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "duration": "Duration",
+    "students": "Students",
+    "rating": "Rating",
+    "price": "Price",
+    "free": "Free",
+    "enroll": "Enroll Now",
+    "enrolled": "Enrolled",
+    "startLearning": "Start Learning",
+    "viewDetails": "View Details",
+    "courseManagement": "Course Management",
+    "noCourses": "No courses available",
+    "fetchError": "Failed to fetch courses",
+    "fetchErrorMessage": "Failed to fetch course data, please try again later",
+    "courseImage": "Course Image",
+    "courseTypes": {
+      "all": "All Courses",
+      "public": "Public Courses",
+      "private": "Private Courses",
+      "taijiBest": "Tai Chi Premium",
+      "selfDefenseBest": "Self Defense Premium"
+    },
+    "courseStatus": {
+      "published": "Published",
+      "draft": "Draft",
+      "upcoming": "Upcoming",
+      "inProgress": "In Progress",
+      "completed": "Completed"
+    }
+  },
+  "imageAnalysis": {
+    "title": "Martial Arts Pose Image Analysis",
+    "description": "Upload martial arts pose images for analysis. The system will automatically identify postures and provide scores and improvement suggestions.",
+    "uploadCard": {
+      "title": "Upload Image",
+      "selectPoseType": "Select pose type:",
+      "selectImage": "Select Image",
+      "startAnalysis": "Start Analysis",
+      "uploadSuccess": "{{filename}} uploaded successfully",
+      "uploadFailed": "File upload failed, please try again",
+      "pleaseUploadFirst": "Please upload an image first",
+      "noFileObject": "Unable to get file object"
+    },
+    "resultCard": {
+      "title": "Analysis Results",
+      "analyzing": "Analyzing image...",
+      "uploadPrompt": "Please upload an image and click \"Start Analysis\" button",
+      "tabs": {
+        "scoreAndSuggestions": "Score & Suggestions",
+        "poseImage": "Pose Image",
+        "angleData": "Angle Data"
+      },
+      "evaluationTitle": "Evaluation & Suggestions",
+      "analysisComplete": "Analysis Complete",
+      "analysisFailed": "Analysis Failed",
+      "analysisRequestFailed": "Analysis request failed",
+      "serverNotResponding": "Server not responding, please check your network connection",
+      "requestConfigError": "Request configuration error"
+    },
+    "scoreLevel": {
+      "excellent": "Excellent",
+      "good": "Good",
+      "needsImprovement": "Needs Improvement"
+    },
+    "poses": {
+      "弓步冲拳": "Bow Stance Punch",
+      "猛虎出洞": "Fierce Tiger Emerges",
+      "五花坐山": "Five Flower Mountain Sit",
+      "滚身冲拳": "Rolling Body Punch",
+      "猿猴纳肘": "Monkey Elbow Strike",
+      "马步推掌": "Horse Stance Palm Push",
+      "并步崩拳": "Together Step Crushing Fist",
+      "狮子张嘴": "Lion Opens Mouth",
+      "马步扣床": "Horse Stance Hook",
+      "罗汉张掌": "Arhat Palm Strike"
+    }
+  },
+  "videoAnalysis": {
+    "title": "Martial Arts Video Analysis",
+    "description": "Upload martial arts videos for analysis. The system will automatically identify pose sequences and provide scores and improvement suggestions.",
+    "uploadCard": {
+      "title": "Upload Video",
+      "selectVideo": "Select Video File",
+      "selectPosePlaceholder": "Select Standard Pose",
+      "startAnalysis": "Start Analysis",
+      "fileSelected": "File \"{{filename}}\" selected",
+      "pleaseUploadFirst": "Please upload a video file first",
+      "fetchPosesFailed": "Failed to fetch pose list",
+      "checkRoleFailed": "Failed to check user role"
+    },
+    "resultCard": {
+      "analyzing": "Analyzing video, please wait...",
+      "uploadPrompt": "Please upload a video and click \"Start Analysis\" button",
+      "tabs": {
+        "analysisResult": "Analysis Results",
+        "annotations": "Annotations"
+      },
+      "evaluationTitle": "Evaluation & Suggestions",
+      "analysisComplete": "Analysis Complete",
+      "analysisFailed": "Analysis Failed",
+      "analysisRequestFailed": "Analysis request failed",
+      "pleaseUploadVideo": "Please upload a video file first"
+    },
+    "keyFrames": {
+      "title": "Key Frame Analysis",
+      "frameTitle": "Key Frame {{index}}",
+      "time": "Time",
+      "score": "Score",
+      "seconds": "seconds"
+    },
+    "timeline": {
+      "title": "Action Score Timeline"
+    }
+  },
+  "coaches": {
+    "title": "Coach Team",
+    "subtitle": "Top Martial Arts Coaches, Preserving Martial Arts Spirit",
+    "specialties": "Specialties",
+    "experience": "Experience",
+    "students": "Students",
+    "rating": "Rating",
+    "appointment": "Book Session",
+    "viewProfile": "View Profile",
+    "years": "years"
+  },
+  "analysis": {
+    "upload": {
+      "title": "Upload File",
+      "dragText": "Click or drag file here to upload",
+      "supportText": "Supported formats:",
+      "imageFormats": "JPG, PNG, GIF",
+      "videoFormats": "MP4, AVI, MOV",
+      "maxSize": "Maximum file size:",
+      "analyzing": "Analyzing...",
+      "uploadSuccess": "Upload Successful",
+      "uploadError": "Upload Failed"
+    },
+    "results": {
+      "title": "Analysis Results",
+      "score": "Overall Score",
+      "keyPoints": "Key Points Analysis",
+      "suggestions": "Improvement Suggestions",
+      "comparisonTitle": "Standard Comparison",
+      "downloadReport": "Download Report"
+    }
+  },
+  "forum": {
+    "title": "Martial Arts Forum",
+    "createPost": "Create Post",
+    "categories": {
+      "all": "All",
+      "technique": "Technique Discussion",
+      "experience": "Experience Sharing",
+      "question": "Q&A Help",
+      "activity": "Activity Announcements"
+    },
+    "sortBy": {
+      "latest": "Latest",
+      "hottest": "Hottest",
+      "mostReplies": "Most Replies"
+    },
+    "post": {
+      "reply": "Reply",
+      "like": "Like",
+      "views": "Views",
+      "replies": "replies",
+      "writeReply": "Write your reply..."
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "basicInfo": "Basic Information",
+    "accountInfo": "Account Information",
+    "learningProgress": "Learning Progress",
+    "appointments": "My Appointments",
+    "courses": "My Courses",
+    "achievements": "Achievement Badges",
+    "editProfile": "Edit Profile",
+    "changePassword": "Change Password",
+    "notifications": "Notification Settings"
+  },
+  "footer": {
+    "about": {
+      "title": "About",
+      "company": "Company",
+      "team": "Our Team",
+      "contact": "Contact Us",
+      "careers": "Careers"
+    },
+    "services": {
+      "title": "Services",
+      "analysis": "Smart Analysis",
+      "courses": "Online Courses",
+      "coaching": "Coach Guidance",
+      "community": "Community Forum"
+    },
+    "support": {
+      "title": "Support",
+      "help": "Help Center",
+      "faq": "FAQ",
+      "feedback": "Feedback",
+      "terms": "Terms of Service"
+    },
+    "follow": {
+      "title": "Follow Us",
+      "wechat": "WeChat",
+      "weibo": "Weibo",
+      "email": "Email"
+    },
+    "copyright": "© 2024 Martial Arts AI. All rights reserved."
+  }
+}

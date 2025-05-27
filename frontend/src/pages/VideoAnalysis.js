@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Upload, Button, Select, Card, Spin, Tabs, 
-  message, Row, Col, Divider, List, Tag, Progress, Timeline 
+import {
+  Upload, Button, Select, Card, Spin, Tabs,
+  message, Row, Col, Divider, List, Tag, Progress, Timeline
 } from 'antd';
 import { UploadOutlined, CheckCircleOutlined, CloseCircleOutlined, PlayCircleOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import MainLayout from '../components/MainLayout';
 import AngleDataVisualization from '../components/visualization/AngleDataVisualization';
@@ -13,6 +14,7 @@ const { Option } = Select;
 const { TabPane } = Tabs;
 
 const VideoAnalysis = () => {
+  const { t } = useTranslation();
   const [file, setFile] = useState(null);
   const [posture, setPosture] = useState('弓步冲拳');
   const [loading, setLoading] = useState(false);
@@ -36,7 +38,7 @@ const VideoAnalysis = () => {
         }
       } catch (error) {
         console.error('Error fetching poses:', error);
-        message.error('获取姿势列表失败');
+        message.error(t('videoAnalysis.uploadCard.fetchPosesFailed'));
       }
     };
 
@@ -55,7 +57,7 @@ const VideoAnalysis = () => {
           }
         }
       } catch (error) {
-        console.error('检查用户角色失败:', error);
+        console.error(t('videoAnalysis.uploadCard.checkRoleFailed'), error);
       }
     };
 
@@ -87,7 +89,7 @@ const VideoAnalysis = () => {
         const videoURL = URL.createObjectURL(latestFile.originFileObj);
         setVideoUrl(videoURL);
         
-        message.success(`文件 "${latestFile.name}" 已选择`);
+        message.success(t('videoAnalysis.uploadCard.fileSelected', { filename: latestFile.name }));
       }
     } else {
       // 当没有文件时
@@ -104,7 +106,7 @@ const VideoAnalysis = () => {
   const handleAnalyze = async () => {
     // 检查文件是否存在
     if (!file) {
-      message.warning('请先上传视频文件');
+      message.warning(t('videoAnalysis.uploadCard.pleaseUploadFirst'));
       return;
     }
     
@@ -139,13 +141,13 @@ const VideoAnalysis = () => {
           feedback: response.data.feedback,
           angle_data: response.data.angle_data // 添加角度数据
         });
-        message.success('分析完成');
+        message.success(t('videoAnalysis.resultCard.analysisComplete'));
       } else {
-        message.error(response.data.message || '分析失败');
+        message.error(response.data.message || t('videoAnalysis.resultCard.analysisFailed'));
       }
     } catch (error) {
       console.error('Analysis error:', error);
-      message.error(error.response?.data?.message || '分析请求失败');
+      message.error(error.response?.data?.message || t('videoAnalysis.resultCard.analysisRequestFailed'));
     } finally {
       setAnalyzing(false);
       setLoading(false);
@@ -171,14 +173,14 @@ const VideoAnalysis = () => {
 
   return (
     <MainLayout>
-      <Card title="武术动作视频分析" bordered={false}>
+      <Card title={t('videoAnalysis.title')} bordered={false}>
         <p>
-          您可以上传武术动作视频进行分析，系统将自动识别视频中的动作姿态序列，并提供评分和改进建议。
+          {t('videoAnalysis.description')}
         </p>
 
         <Row gutter={[16, 16]}>
           <Col xs={24} md={8}>
-            <Card title="上传视频" bordered={false}>
+            <Card title={t('videoAnalysis.uploadCard.title')} bordered={false}>
               <Upload
                 name="video"
                 listType="picture"
@@ -187,7 +189,7 @@ const VideoAnalysis = () => {
                 beforeUpload={() => false} // 阻止自动上传
                 accept="video/*"
               >
-                <Button icon={<UploadOutlined />}>选择视频文件</Button>
+                <Button icon={<UploadOutlined />}>{t('videoAnalysis.uploadCard.selectVideo')}</Button>
               </Upload>
 
               {videoUrl && (
@@ -204,13 +206,13 @@ const VideoAnalysis = () => {
               <Divider />
 
               <Select
-                placeholder="选择标准姿势"
+                placeholder={t('videoAnalysis.uploadCard.selectPosePlaceholder')}
                 style={{ width: '100%', marginBottom: 16 }}
                 value={posture}
                 onChange={handlePostureChange}
               >
                 {poses.map(pose => (
-                  <Option key={pose} value={pose}>{pose}</Option>
+                  <Option key={pose} value={pose}>{t(`imageAnalysis.poses.${pose}`)}</Option>
                 ))}
               </Select>
 
@@ -221,7 +223,7 @@ const VideoAnalysis = () => {
                 loading={analyzing}
                 block
               >
-                开始分析
+                {t('videoAnalysis.uploadCard.startAnalysis')}
               </Button>
             </Card>
           </Col>
@@ -231,13 +233,13 @@ const VideoAnalysis = () => {
               <Card bordered={false}>
                 <div style={{ textAlign: 'center', padding: '40px 0' }}>
                   <Spin size="large" />
-                  <p style={{ marginTop: 16 }}>正在分析视频，请稍候...</p>
+                  <p style={{ marginTop: 16 }}>{t('videoAnalysis.resultCard.analyzing')}</p>
                 </div>
               </Card>
             ) : (
               <Card bordered={false}>
                 <Tabs activeKey={activeTab} onChange={handleTabChange}>
-                  <TabPane tab="分析结果" key="1">
+                  <TabPane tab={t('videoAnalysis.resultCard.tabs.analysisResult')} key="1">
                     {result ? (
                       <div>
                         <Progress 
@@ -253,7 +255,7 @@ const VideoAnalysis = () => {
                           {result.feedback.level}
                         </Tag>
 
-                        <Divider>评价与建议</Divider>
+                        <Divider>{t('videoAnalysis.resultCard.evaluationTitle')}</Divider>
 
                         <List
                           className="feedback-list"
@@ -275,11 +277,11 @@ const VideoAnalysis = () => {
                       </div>
                     ) : (
                       <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                        <p>请上传视频并点击"开始分析"按钮</p>
+                        <p>{t('videoAnalysis.resultCard.uploadPrompt')}</p>
                       </div>
                     )}
                   </TabPane>
-                  <TabPane tab="批注" key="2">
+                  <TabPane tab={t('videoAnalysis.resultCard.tabs.annotations')} key="2">
                     {videoUrl ? (
                       <VideoAnnotation 
                         videoUrl={videoUrl}
@@ -290,7 +292,7 @@ const VideoAnalysis = () => {
                       />
                     ) : (
                       <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                        <p>请先上传视频文件</p>
+                        <p>{t('videoAnalysis.resultCard.pleaseUploadVideo')}</p>
                       </div>
                     )}
                   </TabPane>
@@ -303,7 +305,7 @@ const VideoAnalysis = () => {
         {result && result.key_frames && result.key_frames.length > 0 && (
           <Row style={{ marginTop: 16 }}>
             <Col span={24}>
-              <Card title="关键帧分析" bordered={false}>
+              <Card title={t('videoAnalysis.keyFrames.title')} bordered={false}>
                 <Row gutter={[16, 16]}>
                   {result.key_frames.map((frame, index) => (
                     <Col xs={24} sm={12} md={8} lg={6} key={index}>
@@ -311,17 +313,17 @@ const VideoAnalysis = () => {
                         hoverable
                         cover={
                           <img
-                            alt={`关键帧 ${index + 1}`}
+                            alt={t('videoAnalysis.keyFrames.frameTitle', { index: index + 1 })}
                             src={`data:image/jpeg;base64,${frame.image}`}
                           />
                         }
                       >
                         <Card.Meta
-                          title={`关键帧 ${index + 1}`}
+                          title={t('videoAnalysis.keyFrames.frameTitle', { index: index + 1 })}
                           description={
                             <>
-                              <p>时间: {frame.time.toFixed(2)}秒</p>
-                              <p>评分: {frame.score.toFixed(1)}</p>
+                              <p>{t('videoAnalysis.keyFrames.time')}: {frame.time.toFixed(2)}{t('videoAnalysis.keyFrames.seconds')}</p>
+                              <p>{t('videoAnalysis.keyFrames.score')}: {frame.score.toFixed(1)}</p>
                             </>
                           }
                         />
@@ -337,7 +339,7 @@ const VideoAnalysis = () => {
         {result && result.frame_scores && result.frame_scores.length > 0 && (
           <Row style={{ marginTop: 16 }}>
             <Col span={24}>
-              <Card title="动作评分时间线" bordered={false}>
+              <Card title={t('videoAnalysis.timeline.title')} bordered={false}>
                 <Timeline mode="alternate">
                   {result.frame_scores
                     .filter((_, i) => i % 5 === 0) // Show every 5th frame to avoid clutter

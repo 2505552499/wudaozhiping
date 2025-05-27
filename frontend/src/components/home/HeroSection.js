@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import GradientTitle from '../ui/GradientTitle';
 import GradientButton from '../ui/GradientButton';
 
@@ -158,6 +159,7 @@ const MartialArtsElements = () => {
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -181,15 +183,15 @@ const HeroSection = () => {
             className={`transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
             <GradientTitle as="h1" align="center" className="mb-6">
-              以 <span className="text-primary-500">AI</span> 和 <span className="text-primary-500">CV</span> 驱动<br/>
-              武术动作分析与评价
+              {t('home.hero.titleLine1', {defaultValue: '以 AI 和 CV 驱动'})}
+              <br/>
+              {t('home.hero.titleLine2', {defaultValue: '武术动作分析与评价'})}
             </GradientTitle>
             
             <p 
               className={`text-text-secondary text-xl mb-10 max-w-3xl mx-auto transition-all duration-1000 delay-300 ${visible ? 'opacity-100' : 'opacity-0'}`}
             >
-              武道智评平台利用先进的计算机视觉和人工智能技术，
-              为武术爱好者和教练提供精准的姿态分析与专业评价
+              {t('home.hero.description')}
             </p>
           </div>
           
@@ -200,7 +202,7 @@ const HeroSection = () => {
               className="px-8 py-3 text-lg"
               onClick={() => navigate('/login')}
             >
-              立即开始
+              {t('home.hero.startNow')}
             </GradientButton>
             
             <GradientButton 
@@ -208,7 +210,7 @@ const HeroSection = () => {
               className="px-8 py-3 text-lg"
               onClick={() => navigate('/about')}
             >
-              了解更多
+              {t('home.hero.learnMore')}
             </GradientButton>
           </div>
           
@@ -222,19 +224,19 @@ const HeroSection = () => {
           >
             <div>
               <div className="text-4xl font-bold bg-gradient-to-r from-primary-500 to-accent bg-clip-text text-transparent mb-2">10k+</div>
-              <div className="text-text-secondary">注册用户</div>
+              <div className="text-text-secondary">{t('home.stats.users')}</div>
             </div>
             <div>
               <div className="text-4xl font-bold bg-gradient-to-r from-primary-500 to-accent bg-clip-text text-transparent mb-2">98%</div>
-              <div className="text-text-secondary">准确率</div>
+              <div className="text-text-secondary">{t('home.stats.accuracy', '准确率')}</div>
             </div>
             <div>
               <div className="text-4xl font-bold bg-gradient-to-r from-primary-500 to-accent bg-clip-text text-transparent mb-2">50+</div>
-              <div className="text-text-secondary">专业教练</div>
+              <div className="text-text-secondary">{t('home.stats.coaches')}</div>
             </div>
             <div>
               <div className="text-4xl font-bold bg-gradient-to-r from-primary-500 to-accent bg-clip-text text-transparent mb-2">100万+</div>
-              <div className="text-text-secondary">分析次数</div>
+              <div className="text-text-secondary">{t('home.stats.analyses')}</div>
             </div>
           </div>
         </div>

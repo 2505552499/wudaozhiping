@@ -1,56 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import GradientButton from '../ui/GradientButton';
-
-// 导航菜单项数据
-const menuItems = [
-  {
-    title: '首页',
-    path: '/',
-    children: []
-  },
-  {
-    title: '智能分析服务',
-    path: '#',
-    children: [
-      { title: '图像分析', path: '/image-analysis' },
-      { title: '视频分析', path: '/video-analysis' },
-      { title: '实时分析', path: '/camera-analysis' },
-      { title: '动作辅导', path: '/action-guidance' }
-    ]
-  },
-  {
-    title: '教练资源',
-    path: '#',
-    children: [
-      { title: '预约教练', path: '/coach-appointment' },
-      { title: '教练团队', path: '/coach-team' },
-      { title: '线下指导', path: '/offline-guidance' }
-    ]
-  },
-  {
-    title: '课程中心',
-    path: '#',
-    children: [
-      { title: '精品课程', path: '/courses' },
-      { title: '入门教学', path: '/beginner-courses' },
-      { title: '进阶训练', path: '/advanced-courses' },
-      { title: '专业技巧', path: '/professional-skills' }
-    ]
-  },
-  {
-    title: '武友社区',
-    path: '/forum',
-    children: []
-  },
-  {
-    title: '关于我们',
-    path: '/about',
-    children: []
-  }
-];
+import LanguageSwitcher from '../LanguageSwitcher';
 
 const Navbar = () => {
+  const { t } = useTranslation();
+  
+  // 导航菜单项数据
+  const menuItems = [
+    {
+      title: t('nav.home'),
+      path: '/',
+      children: []
+    },
+    {
+      title: t('home.services.smartAnalysis.title'),
+      path: '#',
+      children: [
+        { title: t('nav.imageAnalysis'), path: '/image-analysis' },
+        { title: t('nav.videoAnalysis'), path: '/video-analysis' },
+        { title: t('nav.cameraAnalysis'), path: '/camera-analysis' },
+        { title: t('home.services.smartAnalysis.items.actionGuidance'), path: '/action-guidance' }
+      ]
+    },
+    {
+      title: t('home.services.coachResources.title'),
+      path: '#',
+      children: [
+        { title: t('nav.appointments'), path: '/coach-appointment' },
+        { title: t('coaches.title'), path: '/coach-team' },
+        { title: t('home.services.coachResources.items.offlineTraining'), path: '/offline-guidance' }
+      ]
+    },
+    {
+      title: t('home.services.courseCenter.title'),
+      path: '#',
+      children: [
+        { title: t('nav.courses'), path: '/courses' },
+        { title: t('home.services.courseCenter.items.beginnerCourses'), path: '/beginner-courses' },
+        { title: t('home.services.courseCenter.items.advancedTechniques'), path: '/advanced-courses' },
+        { title: t('home.services.courseCenter.items.professionalSkills'), path: '/professional-skills' }
+      ]
+    },
+    {
+      title: t('nav.forum'),
+      path: '/forum',
+      children: []
+    },
+    {
+      title: t('nav.about'),
+      path: '/about',
+      children: []
+    }
+  ];
   const [scrolled, setScrolled] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -132,7 +135,7 @@ const Navbar = () => {
                 alt="武道智评" 
                 className="h-8 mr-2"
               />
-              <span className="text-white font-bold text-xl hidden md:block">武道智评</span>
+              <span className="text-white font-bold text-xl hidden md:block">{t('home.hero.title')}</span>
             </div>
           </Link>
           
@@ -175,7 +178,8 @@ const Navbar = () => {
           </nav>
           
           {/* 登录/注册按钮或用户信息 */}
-          <div className="hidden md:flex items-center space-x-2">
+          <div className="hidden md:flex items-center space-x-4">
+            <LanguageSwitcher />
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
                 <div className="relative group">
@@ -186,16 +190,16 @@ const Navbar = () => {
                   <div className="absolute right-0 z-50 w-48 mt-2 origin-top-right bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
                     <div className="py-1 rounded-md bg-white shadow-xs">
                       <Link to="/user-profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-500/10 hover:text-white">
-                        个人中心
+                        {t('nav.dashboard')}
                       </Link>
                       <Link to="/my-courses" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-500/10 hover:text-white">
-                        我的课程
+                        {t('profile.courses')}
                       </Link>
                       <Link to="/my-appointments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-500/10 hover:text-white">
-                        我的预约
+                        {t('profile.appointments')}
                       </Link>
                       <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-white">
-                        退出登录
+                        {t('common.logout')}
                       </button>
                     </div>
                   </div>
@@ -208,13 +212,13 @@ const Navbar = () => {
                   className="text-sm"
                   onClick={() => window.location.href = '/login'}
                 >
-                  登录
+                  {t('common.login')}
                 </GradientButton>
                 <GradientButton 
                   className="text-sm"
                   onClick={() => window.location.href = '/register'}
                 >
-                  注册
+                  {t('common.register')}
                 </GradientButton>
               </>
             )}
@@ -225,7 +229,7 @@ const Navbar = () => {
             <button 
               onClick={toggleMobileMenu}
               className="text-white p-2"
-              aria-label="菜单"
+              aria-label={t('nav.menu')}
             >
               {isMobileMenuOpen ? (
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -285,10 +289,11 @@ const Navbar = () => {
             ))}
             <div className="pt-4 pb-3 border-t border-white/20">
               <div className="flex justify-center items-center flex-col space-y-2">
+                <LanguageSwitcher />
                 {isAuthenticated ? (
                   <>
                     <div className="text-white text-center mb-2">
-                      欢迎，{username}
+                      {t('common.welcome', { name: username })}
                     </div>
                     <Link 
                       to="/user-profile" 
@@ -296,7 +301,7 @@ const Navbar = () => {
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <GradientButton variant="outline" className="w-full">
-                        个人中心
+                        {t('nav.dashboard')}
                       </GradientButton>
                     </Link>
                     <Link 
@@ -305,7 +310,7 @@ const Navbar = () => {
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <GradientButton variant="outline" className="w-full">
-                        我的课程
+                        {t('profile.courses')}
                       </GradientButton>
                     </Link>
                     <GradientButton 
@@ -316,7 +321,7 @@ const Navbar = () => {
                         setIsMobileMenuOpen(false);
                       }}
                     >
-                      退出登录
+                      {t('common.logout')}
                     </GradientButton>
                   </>
                 ) : (
@@ -329,7 +334,7 @@ const Navbar = () => {
                         setIsMobileMenuOpen(false);
                       }}
                     >
-                      登录
+                      {t('common.login')}
                     </GradientButton>
                     <GradientButton 
                       className="w-full"
@@ -338,7 +343,7 @@ const Navbar = () => {
                         setIsMobileMenuOpen(false);
                       }}
                     >
-                      注册
+                      {t('common.register')}
                     </GradientButton>
                   </>
                 )}

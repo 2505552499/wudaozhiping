@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Layout, Typography, Card, Row, Col, Button, Select, 
+import {
+  Layout, Typography, Card, Row, Col, Button, Select,
   Tag, Divider, Spin, Empty, Tabs, message, Space
 } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { ReadOutlined, PlusOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import MainLayout from '../layouts/MainLayout';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
@@ -13,17 +14,18 @@ const { Content } = Layout;
 const { Title, Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
 
-// 课程类型选项
-const courseTypes = [
-  { key: 'all', label: '全部课程' },
-  { key: '公开课', label: '公开课' },
-  { key: '私人课程', label: '私人课程' },
-  { key: '太极精品班', label: '太极精品班' },
-  { key: '防身术精品班', label: '防身术精品班' }
-];
-
 function CourseList() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  
+  // 课程类型选项
+  const courseTypes = [
+    { key: 'all', label: t('courses.courseTypes.all') },
+    { key: '公开课', label: t('courses.courseTypes.public') },
+    { key: '私人课程', label: t('courses.courseTypes.private') },
+    { key: '太极精品班', label: t('courses.courseTypes.taijiBest') },
+    { key: '防身术精品班', label: t('courses.courseTypes.selfDefenseBest') }
+  ];
   
   // 状态管理
   const [loading, setLoading] = useState(false);
@@ -45,11 +47,11 @@ function CourseList() {
       if (response.data.success) {
         setCourses(response.data.data);
       } else {
-        message.error(response.data.message || '获取课程数据失败');
+        message.error(response.data.message || t('courses.fetchError'));
       }
     } catch (error) {
       console.error('获取课程数据出错:', error);
-      message.error('获取课程数据失败，请稍后重试');
+      message.error(t('courses.fetchErrorMessage'));
     } finally {
       setLoading(false);
     }
@@ -85,14 +87,14 @@ function CourseList() {
             <div style={{ height: 200, overflow: 'hidden' }}>
               <img 
                 alt={course.title} 
-                src={course.cover_image || 'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22600%22%20height%3D%22400%22%20viewBox%3D%220%200%20600%20400%22%20preserveAspectRatio%3D%22none%22%3E%3Crect%20width%3D%22600%22%20height%3D%22400%22%20fill%3D%22%235470c6%22%2F%3E%3Ctext%20x%3D%22300%22%20y%3D%22200%22%20fill%3D%22%23ffffff%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2236%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%3E%E8%AF%BE%E7%A8%8B%E5%9B%BE%E7%89%87%3C%2Ftext%3E%3C%2Fsvg%3E'} 
+                src={course.cover_image || `data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22600%22%20height%3D%22400%22%20viewBox%3D%220%200%20600%20400%22%20preserveAspectRatio%3D%22none%22%3E%3Crect%20width%3D%22600%22%20height%3D%22400%22%20fill%3D%22%235470c6%22%2F%3E%3Ctext%20x%3D%22300%22%20y%3D%22200%22%20fill%3D%22%23ffffff%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2236%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%3E${t('courses.courseImage')}%3C%2Ftext%3E%3C%2Fsvg%3E`}
                 style={{ width: '100%', objectFit: 'cover' }}
               />
             </div>
           }
           actions={[
             <Button type="primary" onClick={() => viewCourseDetail(course.id)}>
-              查看详情
+              {t('courses.viewDetails')}
             </Button>
           ]}
         >
@@ -106,7 +108,7 @@ function CourseList() {
                   {course.description}
                 </Paragraph>
                 <div style={{ marginTop: 8 }}>
-                  <Text type="danger" strong>¥{course.price}</Text>
+                  <Text type="danger" strong>{t('courses.price')}: ¥{course.price}</Text>
                   <Text type="secondary" style={{ marginLeft: 8 }}>
                     {course.duration} {course.date_range ? `(${course.date_range})` : ''}
                   </Text>
@@ -124,7 +126,7 @@ function CourseList() {
       <Content style={{ padding: '0 50px', marginTop: 20 }}>
         <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <Title level={2}>精品课程</Title>
+            <Title level={2}>{t('courses.title')}</Title>
             {isAdmin && (
               <Space>
                 <Button 
@@ -132,7 +134,7 @@ function CourseList() {
                   icon={<PlusOutlined />} 
                   onClick={() => navigate('/admin/courses')}
                 >
-                  课程管理
+                  {t('courses.courseManagement')}
                 </Button>
               </Space>
             )}
@@ -151,7 +153,7 @@ function CourseList() {
                     {courses.map(course => renderCourseCard(course))}
                   </Row>
                 ) : (
-                  <Empty description="暂无课程" />
+                  <Empty description={t('courses.noCourses')} />
                 )}
               </TabPane>
             ))}

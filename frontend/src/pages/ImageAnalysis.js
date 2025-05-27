@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Upload, Button, Select, Card, Spin, 
-  message, Row, Col, Divider, List, Tag, Progress, Tabs 
+import {
+  Upload, Button, Select, Card, Spin,
+  message, Row, Col, Divider, List, Tag, Progress, Tabs
 } from 'antd';
 import { UploadOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import MainLayout from '../components/MainLayout';
 import AngleDataVisualization from '../components/visualization/AngleDataVisualization';
@@ -14,6 +15,7 @@ const { Option } = Select;
 const { TabPane } = Tabs;
 
 const ImageAnalysis = () => {
+  const { t } = useTranslation();
   const [file, setFile] = useState(null);
   const [posture, setPosture] = useState('弓步冲拳');
   const [loading, setLoading] = useState(false);
@@ -47,13 +49,13 @@ const ImageAnalysis = () => {
     console.log('File info:', info);
     if (info.file && info.file.originFileObj) {
       setFile(info.file.originFileObj);
-      message.success(`${info.file.name} 上传成功`);
+      message.success(t('imageAnalysis.uploadCard.uploadSuccess', { filename: info.file.name }));
     } else if (info.fileList && info.fileList.length > 0 && info.fileList[0].originFileObj) {
       setFile(info.fileList[0].originFileObj);
-      message.success(`${info.fileList[0].name} 上传成功`);
+      message.success(t('imageAnalysis.uploadCard.uploadSuccess', { filename: info.fileList[0].name }));
     } else {
-      console.error('无法获取文件对象:', info);
-      message.error('文件上传失败，请重试');
+      console.error(t('imageAnalysis.uploadCard.noFileObject'), info);
+      message.error(t('imageAnalysis.uploadCard.uploadFailed'));
     }
   };
 
@@ -63,7 +65,7 @@ const ImageAnalysis = () => {
 
   const handleAnalyze = async () => {
     if (!file) {
-      message.warning('请先上传图片');
+      message.warning(t('imageAnalysis.uploadCard.pleaseUploadFirst'));
       return;
     }
 
@@ -90,21 +92,21 @@ const ImageAnalysis = () => {
           feedback: response.data.feedback,
           angle_data: response.data.angle_data
         });
-        message.success('分析完成');
+        message.success(t('imageAnalysis.resultCard.analysisComplete'));
       } else {
-        message.error(response.data.message || '分析失败');
+        message.error(response.data.message || t('imageAnalysis.resultCard.analysisFailed'));
       }
     } catch (error) {
       console.error('Analysis error:', error);
       if (error.response) {
         console.log('Error response:', error.response);
-        message.error(error.response.data?.message || '分析请求失败');
+        message.error(error.response.data?.message || t('imageAnalysis.resultCard.analysisRequestFailed'));
       } else if (error.request) {
         console.log('Error request:', error.request);
-        message.error('服务器未响应，请检查网络连接');
+        message.error(t('imageAnalysis.resultCard.serverNotResponding'));
       } else {
         console.log('Error message:', error.message);
-        message.error('请求配置错误: ' + error.message);
+        message.error(t('imageAnalysis.resultCard.requestConfigError') + ': ' + error.message);
       }
     } finally {
       setAnalyzing(false);
@@ -119,30 +121,30 @@ const ImageAnalysis = () => {
   };
 
   const getScoreLevel = (score) => {
-    if (score >= 8) return '优秀';
-    if (score >= 6) return '良好';
-    return '需要改进';
+    if (score >= 8) return t('imageAnalysis.scoreLevel.excellent');
+    if (score >= 6) return t('imageAnalysis.scoreLevel.good');
+    return t('imageAnalysis.scoreLevel.needsImprovement');
   };
 
   return (
     <MainLayout>
-      <Card title="武术动作图像分析" bordered={false}>
+      <Card title={t('imageAnalysis.title')} bordered={false}>
         <p>
-          您可以上传武术动作图片进行分析，系统将自动识别动作姿态，并提供评分和改进建议。
+          {t('imageAnalysis.description')}
         </p>
 
         <Row gutter={[16, 16]}>
           <Col xs={24} md={12}>
-            <Card title="上传图片" bordered={false}>
+            <Card title={t('imageAnalysis.uploadCard.title')} bordered={false}>
               <div style={{ marginBottom: 16 }}>
-                <label style={{ marginRight: 8 }}>选择动作类型:</label>
+                <label style={{ marginRight: 8 }}>{t('imageAnalysis.uploadCard.selectPoseType')}</label>
                 <Select
                   value={posture}
                   onChange={handlePostureChange}
                   style={{ width: 200 }}
                 >
                   {poses.map(pose => (
-                    <Option key={pose} value={pose}>{pose}</Option>
+                    <Option key={pose} value={pose}>{t(`imageAnalysis.poses.${pose}`)}</Option>
                   ))}
                 </Select>
               </div>
@@ -154,7 +156,7 @@ const ImageAnalysis = () => {
                 beforeUpload={() => false}
                 onChange={handleFileChange}
               >
-                <Button icon={<UploadOutlined />}>选择图片</Button>
+                <Button icon={<UploadOutlined />}>{t('imageAnalysis.uploadCard.selectImage')}</Button>
               </Upload>
 
               <div style={{ marginTop: 16 }}>
@@ -164,7 +166,7 @@ const ImageAnalysis = () => {
                   loading={analyzing}
                   disabled={false}
                 >
-                  开始分析
+                  {t('imageAnalysis.uploadCard.startAnalysis')}
                 </Button>
               </div>
             </Card>
@@ -173,12 +175,12 @@ const ImageAnalysis = () => {
           <Col xs={24} md={12}>
             {loading ? (
               <div className="loading-container">
-                <Spin size="large" tip="正在分析图像..." />
+                <Spin size="large" tip={t('imageAnalysis.resultCard.analyzing')} />
               </div>
             ) : result ? (
-              <Card title="分析结果" bordered={false}>
+              <Card title={t('imageAnalysis.resultCard.title')} bordered={false}>
                 <Tabs defaultActiveKey="1">
-                  <TabPane tab="评分与建议" key="1">
+                  <TabPane tab={t('imageAnalysis.resultCard.tabs.scoreAndSuggestions')} key="1">
                     <div className="result-container">
                       <div 
                         className="score-display" 
@@ -207,7 +209,7 @@ const ImageAnalysis = () => {
                         {getScoreLevel(result.score)}
                       </Tag>
 
-                      <Divider>评价与建议</Divider>
+                      <Divider>{t('imageAnalysis.resultCard.evaluationTitle')}</Divider>
 
                       <List
                         className="feedback-list"
@@ -229,19 +231,19 @@ const ImageAnalysis = () => {
                     </div>
                   </TabPane>
                   
-                  <TabPane tab="姿势图像" key="2">
+                  <TabPane tab={t('imageAnalysis.resultCard.tabs.poseImage')} key="2">
                     <div style={{ textAlign: 'center' }}>
                       {result.image_path && (
                         <img 
                           src={result.image_path.startsWith('data:') ? result.image_path : `${config.API_BASE_URL}/${result.image_path}`} 
-                          alt="分析结果" 
+                          alt={t('imageAnalysis.resultCard.title')}
                           style={{ maxWidth: '100%', maxHeight: '400px' }} 
                         />
                       )}
                     </div>
                   </TabPane>
                   
-                  <TabPane tab="角度数据" key="3">
+                  <TabPane tab={t('imageAnalysis.resultCard.tabs.angleData')} key="3">
                     <AngleDataVisualization 
                       poseName={posture} 
                       angleData={result.angle_data}
@@ -250,9 +252,9 @@ const ImageAnalysis = () => {
                 </Tabs>
               </Card>
             ) : (
-              <Card title="分析结果" bordered={false}>
+              <Card title={t('imageAnalysis.resultCard.title')} bordered={false}>
                 <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                  <p>请上传图片并点击"开始分析"按钮</p>
+                  <p>{t('imageAnalysis.resultCard.uploadPrompt')}</p>
                 </div>
               </Card>
             )}
