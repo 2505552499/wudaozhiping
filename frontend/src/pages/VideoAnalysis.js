@@ -68,27 +68,27 @@ const VideoAnalysis = () => {
   // 完全重写文件上传处理函数
   const handleFileChange = (info) => {
     console.log('File change event:', info);
-    
+
     // 更新文件列表状态
     setFileList(info.fileList.slice(-1)); // 只保留最新的一个文件
-    
+
     // 当有文件被选择时
     if (info.fileList.length > 0) {
       const latestFile = info.fileList[info.fileList.length - 1];
       console.log('Latest file:', latestFile);
-      
+
       // 设置文件状态
       if (latestFile.originFileObj) {
         setFile(latestFile.originFileObj);
-        
+
         // 生成一个临时的唯一ID作为视频ID
         const tempVideoId = `video_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
         setVideoId(tempVideoId);
-        
+
         // 创建视频URL用于播放
         const videoURL = URL.createObjectURL(latestFile.originFileObj);
         setVideoUrl(videoURL);
-        
+
         message.success(t('videoAnalysis.uploadCard.fileSelected', { filename: latestFile.name }));
       }
     } else {
@@ -109,7 +109,7 @@ const VideoAnalysis = () => {
       message.warning(t('videoAnalysis.uploadCard.pleaseUploadFirst'));
       return;
     }
-    
+
     setAnalyzing(true);
     setLoading(true);
 
@@ -171,6 +171,39 @@ const VideoAnalysis = () => {
     setActiveTab(key);
   };
 
+  // 新增：AI教练建议功能
+  const generateAICoachSuggestions = (result) => {
+    if (!result) return [];
+
+    const suggestions = [];
+    const avgScore = result.average_score;
+
+    if (avgScore < 6) {
+      suggestions.push({
+        type: 'improvement',
+        title: '基础动作练习',
+        description: '建议先练习基础动作，掌握正确的身体姿态',
+        priority: 'high'
+      });
+    } else if (avgScore < 8) {
+      suggestions.push({
+        type: 'refinement',
+        title: '动作细节优化',
+        description: '整体动作不错，可以关注细节的完善',
+        priority: 'medium'
+      });
+    } else {
+      suggestions.push({
+        type: 'advanced',
+        title: '进阶技巧学习',
+        description: '动作已经很标准，可以尝试更高难度的技巧',
+        priority: 'low'
+      });
+    }
+
+    return suggestions;
+  };
+
   return (
     <MainLayout>
       <Card title={t('videoAnalysis.title')} bordered={false}>
@@ -194,10 +227,10 @@ const VideoAnalysis = () => {
 
               {videoUrl && (
                 <div style={{ marginTop: 16 }}>
-                  <video 
-                    ref={videoRef} 
-                    src={videoUrl} 
-                    controls 
+                  <video
+                    ref={videoRef}
+                    src={videoUrl}
+                    controls
                     style={{ width: '100%' }}
                   />
                 </div>
@@ -216,10 +249,10 @@ const VideoAnalysis = () => {
                 ))}
               </Select>
 
-              <Button 
-                type="primary" 
-                onClick={handleAnalyze} 
-                disabled={!file || analyzing} 
+              <Button
+                type="primary"
+                onClick={handleAnalyze}
+                disabled={!file || analyzing}
                 loading={analyzing}
                 block
               >
@@ -242,14 +275,14 @@ const VideoAnalysis = () => {
                   <TabPane tab={t('videoAnalysis.resultCard.tabs.analysisResult')} key="1">
                     {result ? (
                       <div>
-                        <Progress 
-                          percent={result.average_score * 10} 
-                          status="active" 
+                        <Progress
+                          percent={result.average_score * 10}
+                          status="active"
                           strokeColor={getScoreColor(result.average_score)}
                         />
 
-                        <Tag 
-                          color={getScoreColor(result.average_score)} 
+                        <Tag
+                          color={getScoreColor(result.average_score)}
                           style={{ fontSize: 16, padding: '4px 8px', margin: '8px 0' }}
                         >
                           {result.feedback.level}
@@ -265,8 +298,8 @@ const VideoAnalysis = () => {
                             <List.Item>
                               <List.Item.Meta
                                 avatar={
-                                  result.average_score >= 8 
-                                    ? <CheckCircleOutlined style={{ color: '#52c41a', fontSize: 18 }} /> 
+                                  result.average_score >= 8
+                                    ? <CheckCircleOutlined style={{ color: '#52c41a', fontSize: 18 }} />
                                     : <CloseCircleOutlined style={{ color: '#f5222d', fontSize: 18 }} />
                                 }
                                 description={item}
@@ -283,7 +316,7 @@ const VideoAnalysis = () => {
                   </TabPane>
                   <TabPane tab={t('videoAnalysis.resultCard.tabs.annotations')} key="2">
                     {videoUrl ? (
-                      <VideoAnnotation 
+                      <VideoAnnotation
                         videoUrl={videoUrl}
                         videoId={videoId}
                         videoRef={videoRef}

@@ -1,30 +1,62 @@
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
+import { motion } from 'framer-motion';
+import {
+  RobotOutlined,
+  ThunderboltOutlined,
+  EyeOutlined,
+  TeamOutlined,
+  StarFilled
+} from '@ant-design/icons';
 import GradientTitle from '../ui/GradientTitle';
+import { BeautifulCard } from '../ui/DesignSystem';
 
-// 特性卡片组件
-const FeatureCard = ({ icon, title, description, delay = 0 }) => {
+// 美化的特性卡片组件
+const FeatureCard = ({ icon, title, description, delay = 0, gradient }) => {
   const { ref, inView } = useInView({
     threshold: 0.1,
     triggerOnce: true
   });
 
   return (
-    <div
+    <motion.div
       ref={ref}
-      className="bg-surface rounded-lg p-6 shadow-lg border border-primary-500/10 transition-all duration-500"
-      style={{
-        transform: inView ? 'translateY(0)' : 'translateY(40px)',
-        opacity: inView ? 1 : 0,
-        transitionDelay: `${delay}ms`
-      }}
+      initial={{ opacity: 0, y: 50 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ duration: 0.6, delay: delay * 0.1 }}
+      className="group"
     >
-      <div className="w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-r from-primary-500/10 to-accent/10 mb-6">
-        {icon}
+      <div className={`
+        relative overflow-hidden rounded-3xl p-8 h-full
+        bg-gradient-to-br ${gradient}
+        shadow-xl hover:shadow-2xl
+        transform hover:-translate-y-2 transition-all duration-500
+        border border-white/10
+        before:absolute before:inset-0 before:bg-gradient-to-br before:from-black/40 before:to-black/20 before:rounded-3xl
+      `}>
+        {/* 背景装饰 */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full transform translate-x-16 -translate-y-16"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full transform -translate-x-12 translate-y-12"></div>
+
+        {/* 内容 */}
+        <div className="relative z-10">
+          <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-white/25 backdrop-blur-sm mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <div className="text-2xl text-white drop-shadow-lg">
+              {icon}
+            </div>
+          </div>
+          <h3 className="text-xl font-bold text-white mb-4 group-hover:text-yellow-100 transition-colors duration-300 drop-shadow-lg">
+            {title}
+          </h3>
+          <p className="text-white/90 leading-relaxed drop-shadow">
+            {description}
+          </p>
+        </div>
+
+        {/* 悬停效果 */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       </div>
-      <h3 className="text-xl font-bold text-text-primary mb-3">{title}</h3>
-      <p className="text-text-secondary">{description}</p>
-    </div>
+    </motion.div>
   );
 };
 
@@ -34,64 +66,70 @@ const FeaturesSection = () => {
     triggerOnce: true
   });
 
-  // 特性数据
+  // 美化的特性数据
   const features = [
     {
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      ),
-      title: "精准姿态分析",
-      description: "利用先进的计算机视觉算法，对武术动作进行多维度分析，提供精确的评分和改进建议。"
+      icon: <RobotOutlined />,
+      title: "AI智能分析",
+      description: "利用先进的计算机视觉算法，对武术动作进行多维度分析，提供精确的评分和改进建议。",
+      gradient: "from-blue-600 to-cyan-600"
     },
     {
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-        </svg>
-      ),
+      icon: <ThunderboltOutlined />,
       title: "实时反馈系统",
-      description: "通过摄像头实时分析动作，提供即时反馈，帮助练习者及时调整姿势，避免形成错误习惯。"
+      description: "通过摄像头实时分析动作，提供即时反馈，帮助练习者及时调整姿势，避免形成错误习惯。",
+      gradient: "from-purple-600 to-pink-600"
     },
     {
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-        </svg>
-      ),
-      title: "个性化训练计划",
-      description: "根据用户的练习数据和进步情况，自动生成个性化训练计划，科学安排训练强度和内容。"
+      icon: <EyeOutlined />,
+      title: "个性化训练",
+      description: "根据用户的练习数据和进步情况，自动生成个性化训练计划，科学安排训练强度和内容。",
+      gradient: "from-green-600 to-emerald-600"
     },
     {
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-      ),
+      icon: <TeamOutlined />,
       title: "专业教练指导",
-      description: "连接全国优秀武术教练资源，提供线上辅导和点评，让每位用户都能获得专业指导。"
+      description: "连接全国优秀武术教练资源，提供线上辅导和点评，让每位用户都能获得专业指导。",
+      gradient: "from-orange-600 to-red-600"
     }
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-dark-bg to-dark-bg/90">
-      <div className="container mx-auto px-4">
-        <div 
+    <section className="py-24 bg-gradient-to-br from-gray-50 via-blue-50/50 to-indigo-50 relative overflow-hidden">
+      {/* 背景装饰 */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
+        <div className="absolute top-40 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-20 left-20 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
+        <motion.div
           ref={ref}
-          className="text-center mb-16 transition-all duration-700"
-          style={{
-            transform: inView ? 'translateY(0)' : 'translateY(40px)',
-            opacity: inView ? 1 : 0
-          }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
         >
-          <GradientTitle align="center" className="mb-6">
-            科技赋能，<span className="text-primary-500">重新定义</span>武术训练
-          </GradientTitle>
-          <p className="text-text-secondary text-lg max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full px-6 py-2 mb-8 shadow-lg">
+            <StarFilled className="text-yellow-300" />
+            <span className="text-sm font-medium">核心功能特性</span>
+          </div>
+
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            <span className="bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">
+              科技赋能，
+            </span>
+            <br/>
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              重新定义武术训练
+            </span>
+          </h2>
+
+          <p className="text-gray-600 text-xl max-w-4xl mx-auto leading-relaxed">
             融合人工智能与传统武学精髓，打造全方位的智能训练体系，让每一次练习都更有效果
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
@@ -100,7 +138,8 @@ const FeaturesSection = () => {
               icon={feature.icon}
               title={feature.title}
               description={feature.description}
-              delay={index * 150}
+              gradient={feature.gradient}
+              delay={index}
             />
           ))}
         </div>

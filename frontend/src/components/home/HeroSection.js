@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import GradientTitle from '../ui/GradientTitle';
-import GradientButton from '../ui/GradientButton';
+import { useTranslation, Trans } from 'react-i18next';
+import { motion } from 'framer-motion';
+import { PlayCircleOutlined, RocketOutlined, StarFilled } from '@ant-design/icons';
+import { StyledButton } from '../ui/DesignSystem';
 
 // 粒子动画效果
 const ParticleCanvas = () => {
@@ -55,13 +56,13 @@ const ParticleCanvas = () => {
     // 连接附近的粒子
     const connectParticles = () => {
       const maxDistance = 150; // 连线的最大距离
-      
+
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          
+
           if (distance < maxDistance) {
             const opacity = 1 - (distance / maxDistance);
             ctx.beginPath();
@@ -84,34 +85,34 @@ const ParticleCanvas = () => {
     // 动画循环
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       // 更新并绘制每个粒子
       particles.forEach(particle => {
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
         ctx.fillStyle = particle.color;
         ctx.fill();
-        
+
         // 更新位置
         particle.sinOffset += 0.01;
         particle.x += particle.vx + Math.sin(particle.sinOffset) * 0.2;
         particle.y += particle.vy + Math.cos(particle.sinOffset) * 0.2;
-        
+
         // 边界处理 - 循环出现
         if (particle.x < 0) particle.x = canvas.width;
         if (particle.x > canvas.width) particle.x = 0;
         if (particle.y < 0) particle.y = canvas.height;
         if (particle.y > canvas.height) particle.y = 0;
       });
-      
+
       // 绘制粒子间的连接线
       connectParticles();
-      
+
       animationFrameId = requestAnimationFrame(animate);
     };
-    
+
     animate();
-    
+
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
@@ -130,7 +131,7 @@ const MartialArtsElements = () => {
         <div className="absolute w-4 h-4 rounded-full bg-black top-1/4 left-1/2 transform -translate-x-1/2"></div>
         <div className="absolute w-4 h-4 rounded-full bg-white bottom-1/4 left-1/2 transform -translate-x-1/2"></div>
       </div>
-      
+
       {/* 右侧武者剧影 - 使用内联SVG */}
       <div className="absolute right-[10%] bottom-[-5%] w-[35%] h-[90%] transform scale-x-[-1] opacity-10 flex items-end justify-center">
         <svg viewBox="0 0 100 200" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -138,7 +139,7 @@ const MartialArtsElements = () => {
           <path d="M20 80C25 70 35 65 45 70C55 75 65 85 60 95C55 105 45 115 35 110C25 105 15 90 20 80Z" fill="currentColor" className="text-accent" />
         </svg>
       </div>
-      
+
       {/* 左侧武者剧影 - 使用内联SVG */}
       <div className="absolute left-[5%] bottom-[-5%] w-[30%] h-[85%] opacity-10 flex items-end justify-center">
         <svg viewBox="0 0 100 200" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -146,7 +147,7 @@ const MartialArtsElements = () => {
           <path d="M40 140C50 130 65 135 75 145C85 155 90 170 80 180C70 190 55 185 45 175C35 165 30 150 40 140Z" fill="currentColor" className="text-accent" />
         </svg>
       </div>
-      
+
       {/* 装饰线条元素 */}
       <div className="absolute right-[15%] bottom-[20%] w-40 h-60 opacity-20">
         <div className="w-20 h-20 rounded-full border border-primary-500/50 absolute top-0 left-1/2 transform -translate-x-1/2 animate-pulse"></div>
@@ -156,6 +157,7 @@ const MartialArtsElements = () => {
     </div>
   );
 };
+
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -169,81 +171,137 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
       {/* 粒子背景 */}
       <ParticleCanvas />
-      
+
       {/* 武术元素装饰 */}
       <MartialArtsElements />
-      
+
       {/* 主要内容 */}
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-5xl mx-auto text-center">
-          <div 
-            className={`transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        <div className="max-w-6xl mx-auto">
+          {/* 主标题区域 */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 30 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-center mb-16"
           >
-            <GradientTitle as="h1" align="center" className="mb-6">
-              {t('home.hero.titleLine1', {defaultValue: '以 AI 和 CV 驱动'})}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: visible ? 1 : 0.9, opacity: visible ? 1 : 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm rounded-full px-6 py-2 mb-8 border border-cyan-400/30 hover:border-cyan-400/50 transition-all duration-300"
+            >
+              <StarFilled className="text-cyan-400 animate-pulse" />
+              <span className="text-white text-sm font-medium tracking-wide">AI驱动的武术分析平台</span>
+            </motion.div>
+
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+              <span className="bg-gradient-to-r from-cyan-300 via-blue-200 to-purple-300 bg-clip-text text-transparent drop-shadow-2xl">
+                <Trans
+                  i18nKey="home.hero.titleLine1"
+                  defaults="以 <1>AI</1> 和 <1>CV</1> 驱动"
+                  components={[
+                    <span className="bg-gradient-to-r from-amber-300 to-yellow-300 bg-clip-text text-transparent font-extrabold animate-pulse" />
+                  ]}
+                />
+              </span>
               <br/>
-              {t('home.hero.titleLine2', {defaultValue: '武术动作分析与评价'})}
-            </GradientTitle>
-            
-            <p 
-              className={`text-text-secondary text-xl mb-10 max-w-3xl mx-auto transition-all duration-1000 delay-300 ${visible ? 'opacity-100' : 'opacity-0'}`}
+              <span className="bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent drop-shadow-2xl">
+                {t('home.hero.titleLine2', {defaultValue: '武术动作分析与评价'})}
+              </span>
+            </h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: visible ? 1 : 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="text-blue-100 text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed opacity-90"
             >
               {t('home.hero.description')}
-            </p>
-          </div>
-          
-          <div 
-            className={`flex flex-col sm:flex-row gap-5 justify-center transition-all duration-1000 delay-500 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            </motion.p>
+          </motion.div>
+
+          {/* 按钮区域 */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 20 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-20"
           >
-            <GradientButton 
-              className="px-8 py-3 text-lg"
+            <button
+              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 text-lg px-10 py-4 flex items-center justify-center gap-2 h-14"
               onClick={() => navigate('/login')}
+              style={{ color: 'white', minHeight: '56px' }}
             >
-              {t('home.hero.startNow')}
-            </GradientButton>
-            
-            <GradientButton 
+              <RocketOutlined style={{ color: 'white' }} />
+              <span style={{ color: 'white', fontWeight: 'bold' }}>
+                {t('home.hero.startNow')}
+              </span>
+            </button>
+
+            <StyledButton
               variant="outline"
-              className="px-8 py-3 text-lg"
+              size="large"
+              icon={<PlayCircleOutlined />}
+              className="text-lg px-10 py-4 border-white/30 text-white hover:bg-white hover:text-gray-900 h-14"
+              style={{ minHeight: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               onClick={() => navigate('/about')}
             >
-              {t('home.hero.learnMore')}
-            </GradientButton>
-          </div>
-          
+              <span style={{ color: 'inherit' }}>{t('home.hero.learnMore')}</span>
+            </StyledButton>
+          </motion.div>
+
           {/* 统计数据 */}
-          <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 text-center" 
-            style={{ 
-              opacity: visible ? 1 : 0, 
-              transform: visible ? 'translateY(0)' : 'translateY(20px)',
-              transition: 'opacity 1s ease-out 0.8s, transform 1s ease-out 0.8s'
-            }}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 30 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-6"
           >
-            <div>
-              <div className="text-4xl font-bold bg-gradient-to-r from-primary-500 to-accent bg-clip-text text-transparent mb-2">10k+</div>
-              <div className="text-text-secondary">{t('home.stats.users')}</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold bg-gradient-to-r from-primary-500 to-accent bg-clip-text text-transparent mb-2">98%</div>
-              <div className="text-text-secondary">{t('home.stats.accuracy', '准确率')}</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold bg-gradient-to-r from-primary-500 to-accent bg-clip-text text-transparent mb-2">50+</div>
-              <div className="text-text-secondary">{t('home.stats.coaches')}</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold bg-gradient-to-r from-primary-500 to-accent bg-clip-text text-transparent mb-2">100万+</div>
-              <div className="text-text-secondary">{t('home.stats.analyses')}</div>
-            </div>
-          </div>
+            {[
+              { value: '10k+', label: t('home.stats.users'), gradient: 'from-blue-400 to-cyan-400', delay: 0 },
+              { value: '98%', label: t('home.stats.accuracy', '准确率'), gradient: 'from-green-400 to-emerald-400', delay: 0.1 },
+              { value: '50+', label: t('home.stats.coaches'), gradient: 'from-purple-400 to-pink-400', delay: 0.2 },
+              { value: '100万+', label: t('home.stats.analyses'), gradient: 'from-orange-400 to-red-400', delay: 0.3 }
+            ].map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.8 }}
+                transition={{ duration: 0.5, delay: 0.8 + stat.delay }}
+                whileHover={{ scale: 1.05, y: -5 }}
+                className="relative overflow-hidden group"
+              >
+                <div className="bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:border-white/50 transition-all duration-300">
+                  {/* 背景光效 */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
+
+                  <div className="relative text-center">
+                    <motion.div
+                      className="text-4xl md:text-5xl font-bold mb-2"
+                      style={{
+                        color: 'white',
+                        textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                      }}
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+                    >
+                      {stat.value}
+                    </motion.div>
+                    <div className="text-white text-sm font-medium tracking-wide">{stat.label}</div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </div>
-      
+
       {/* 向下滚动提示 */}
-      <div 
+      <div
         className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 transition-opacity animate-bounce"
         style={{ opacity: visible ? 0.7 : 0, transitionDelay: '1.5s', transitionDuration: '1s' }}
       >

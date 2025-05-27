@@ -1,0 +1,161 @@
+/* 首页优化动画样式 */
+
+/* 粒子动画背景优化 */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-20px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(20px) rotate(240deg);
+  }
+}
+
+/* 背景渐变动画 */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 10s ease infinite;
+}
+
+/* 闪烁动画 */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+/* 页面滚动指示器动画 */
+@keyframes scroll-down {
+  0% {
+    opacity: 0.7;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 0.7;
+    transform: translateY(0);
+  }
+}
+
+.scroll-indicator {
+  animation: scroll-down 2s ease-in-out infinite;
+}
+
+/* 数字增长动画 */
+@keyframes count-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-count {
+  animation: count-up 0.8s ease-out forwards;
+}
+
+/* 卡片悬停效果增强 */
+.feature-card-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card-hover::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 70%
+  );
+  transform: scale(0);
+  transition: transform 0.6s ease-out;
+}
+
+.feature-card-hover:hover::before {
+  transform: scale(1);
+}
+
+/* 文字发光效果 */
+@keyframes text-glow {
+  0%, 100% {
+    text-shadow: 
+      0 0 10px rgba(59, 130, 246, 0.5),
+      0 0 20px rgba(59, 130, 246, 0.3),
+      0 0 30px rgba(59, 130, 246, 0.2);
+  }
+  50% {
+    text-shadow: 
+      0 0 20px rgba(139, 92, 246, 0.6),
+      0 0 30px rgba(139, 92, 246, 0.4),
+      0 0 40px rgba(139, 92, 246, 0.3);
+  }
+}
+
+.glow-text {
+  animation: text-glow 3s ease-in-out infinite;
+}
+
+/* 性能优化：GPU加速 */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .animate-gradient {
+    background-size: 300% 300%;
+    animation-duration: 15s;
+  }
+  
+  .scroll-indicator {
+    animation-duration: 1.5s;
+  }
+}
+
+/* 减少动画对性能的影响 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
