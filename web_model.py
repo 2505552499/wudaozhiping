@@ -163,7 +163,7 @@ def analyze_pose(keypoints_data, master_posture, posture_name, angles):
     
     # 检查关键点和标准姿势是否有效
     if not keypoints_data or not master_posture:
-        return 3.0, {"level": "错误", "suggestions": ["关键点或标准姿势无效"]}
+        return 5.0, {"level": "错误", "suggestions": ["关键点或标准姿势无效"]}
     
     # 分析关键点位置
     position_score = analyze_position(keypoints_data, master_posture)
@@ -174,8 +174,13 @@ def analyze_pose(keypoints_data, master_posture, posture_name, angles):
     # 分析稳定性
     stability_score = analyze_stability(keypoints_data)
     
-    # 综合评分 (位置占50%，角度占40%，稳定性占10%)
-    final_score = position_score * 0.5 + angle_score * 0.4 + stability_score * 0.1
+    # 优化评分权重：位置占40%，角度占45%，稳定性占15%
+    # 增加基础分，避免过低的评分
+    base_score = 4.0  # 基础分4分
+    final_score = base_score + (position_score * 0.35 + angle_score * 0.45 + stability_score * 0.2) * 0.6
+    
+    # 确保评分在合理范围内
+    final_score = max(3.0, min(10.0, final_score))
     
     # 生成反馈
     feedback = generate_detailed_feedback(posture_name, final_score, position_score, angle_score, stability_score, keypoints_data, master_posture, angles)
@@ -188,25 +193,27 @@ def generate_detailed_feedback(posture_name, final_score, position_score, angle_
     suggestions = []
     level = ""
     
-    # 根据总分确定等级
-    if final_score >= 8.0:
+    # 优化等级评定标准
+    if final_score >= 8.5:
         level = "优秀"
-    elif final_score >= 6.0:
+    elif final_score >= 7.0:
         level = "良好"
+    elif final_score >= 5.5:
+        level = "合格"
     else:
         level = "需要改进"
     
-    # 分析位置问题
-    if position_score < 6.0:
+    # 降低建议触发的分数阈值，使反馈更有用
+    if position_score < 7.5:
         # 检查具体哪些关键点偏离较大
         problem_points = []
         for i, (point, master_point) in enumerate(zip(keypoints_data, master_posture)):
             distance = math.sqrt((point[0] - master_point[0])**2 + (point[1] - master_point[1])**2)
             normalized_distance = distance / (math.sqrt(640**2 + 480**2))  # 归一化距离
             
-            if normalized_distance > 0.1:  # 如果偏离超过阈值
+            if normalized_distance > 0.2:  # 调整阈值为20%
                 if i == 0:
-                    problem_points.append("鼻子")
+                    problem_points.append("头部")
                 elif i == 1 or i == 2:
                     problem_points.append("肩膀")
                 elif i == 3 or i == 4:
@@ -225,10 +232,10 @@ def generate_detailed_feedback(posture_name, final_score, position_score, angle_
             if len(unique_points) > 0:
                 suggestions.append(f"您的{', '.join(unique_points)}位置需要调整，与标准姿势有较大偏差")
         else:
-            suggestions.append("整体姿势与标准姿势有差距，请参考标准姿势图片进行调整")
+            suggestions.append("整体姿势还可以进一步优化，建议参考标准姿势图片进行调整")
     
     # 分析角度问题
-    if angle_score < 6.0:
+    if angle_score < 7.5:
         # 解析角度字符串
         angle_values = {}
         angle_mapping = {
@@ -237,12 +244,12 @@ def generate_detailed_feedback(posture_name, final_score, position_score, angle_
             "6-8": "左膝", "7-9": "右膝"
         }
         
-        # 理想角度参考值
+        # 理想角度参考值（与analyze_angles中的保持一致）
         ideal_angles = {
-            "弓步冲拳": {"左肩": 45, "右肩": 90, "左肘": 170, "右肘": 90, "左膝": 150, "右膝": 90},
-            "猛虎出洞": {"左肩": 30, "右肩": 30, "左肘": 160, "右肘": 160, "左膝": 160, "右膝": 160},
+            "弓步冲拳": {"左肩": 50, "右肩": 85, "左肘": 155, "右肘": 95, "左膝": 140, "右膝": 160},
+            "猛虎出洞": {"左肩": 85, "右肩": 85, "左肘": 125, "右肘": 125, "左膝": 125, "右膝": 125},
             "五花坐山": {"左肩": 90, "右肩": 90, "左肘": 90, "右肘": 90, "左膝": 90, "右膝": 90},
-            "马步推掌": {"左肩": 90, "右肩": 90, "左肘": 160, "右肘": 160, "左膝": 120, "右膝": 120},
+            "马步推掌": {"左肩": 85, "右肩": 85, "左肘": 95, "右肘": 95, "左膝": 115, "右膝": 115},
             "并步崩拳": {"左肩": 45, "右肩": 90, "左肘": 170, "右肘": 90, "左膝": 170, "右膝": 170}
         }
         
@@ -268,38 +275,50 @@ def generate_detailed_feedback(posture_name, final_score, position_score, angle_
             for joint_name, ideal_angle in ideal_angles[posture_name].items():
                 if joint_name in angle_values:
                     diff = abs(angle_values[joint_name] - ideal_angle)
-                    if diff > 20:  # 如果偏离超过20度
+                    if diff > 25:  # 调整阈值为25度
                         if angle_values[joint_name] > ideal_angle:
-                            problem_angles.append(f"{joint_name}角度过大")
+                            problem_angles.append(f"{joint_name}角度偏大")
                         else:
-                            problem_angles.append(f"{joint_name}角度过小")
+                            problem_angles.append(f"{joint_name}角度偏小")
         
         if problem_angles:
-            suggestions.append(f"关节角度问题: {', '.join(problem_angles)}")
+            suggestions.append(f"关节角度优化建议: {', '.join(problem_angles)}")
         else:
-            suggestions.append("关节角度与标准姿势有差距，请注意调整")
+            suggestions.append("关节角度基本正确，可以进一步精细调整")
     
     # 分析稳定性问题
-    if stability_score < 6.0:
-        suggestions.append("姿势稳定性不足，请保持身体平衡，减少晃动")
+    if stability_score < 7.0:
+        suggestions.append("建议加强稳定性练习，保持身体平衡")
     
     # 根据不同姿势类型添加具体建议
     if posture_name == "弓步冲拳":
-        if position_score < 6.0 or angle_score < 6.0:
-            suggestions.append("弓步冲拳要点：前腿弯曲，膝盖在脚尖上方；后腿伸直；上体挺直；拳头与肩同高，拳眼朝下")
+        if final_score < 7.0:
+            suggestions.append("弓步冲拳要点：前腿弯曲，膝盖在脚尖上方；后腿伸直；上体挺直；拳头与肩同高")
+        elif final_score < 8.5:
+            suggestions.append("您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平")
     elif posture_name == "猛虎出洞":
-        if position_score < 6.0 or angle_score < 6.0:
+        if final_score < 7.0:
             suggestions.append("猛虎出洞要点：双手成虎爪状；手臂伸展有力；虎爪五指张开，指尖用力；站姿稳定")
+        elif final_score < 8.5:
+            suggestions.append("您的猛虎出洞姿势良好，注意增强动作的爆发力和精准度")
     elif posture_name == "马步推掌":
-        if position_score < 6.0 or angle_score < 6.0:
+        if final_score < 7.0:
             suggestions.append("马步推掌要点：马步要稳，两腿平行弯曲；上体挺直；双掌向前推出，掌心向前")
+        elif final_score < 8.5:
+            suggestions.append("您的马步推掌基础扎实，继续保持并注意动作的流畅性")
     elif posture_name == "并步崩拳":
-        if position_score < 6.0 or angle_score < 6.0:
+        if final_score < 7.0:
             suggestions.append("并步崩拳要点：两脚并拢站立；上体挺直；拳头从腰间发力，向前直击")
+        elif final_score < 8.5:
+            suggestions.append("您的并步崩拳动作规范，可以进一步提升出拳的速度和力量")
     
-    # 如果表现优秀，给予鼓励
-    if final_score >= 8.0:
-        suggestions.append("整体表现优秀，继续保持！")
+    # 根据表现给予积极反馈
+    if final_score >= 8.5:
+        suggestions.append("整体表现优秀，姿势标准，继续保持！")
+    elif final_score >= 7.0:
+        suggestions.append("表现良好，已经掌握了动作要领，继续精进！")
+    elif final_score >= 5.5:
+        suggestions.append("基本动作正确，通过练习可以达到更高水平！")
     
     return {"level": level, "suggestions": suggestions}
 
@@ -316,14 +335,20 @@ def analyze_position(keypoints_data, master_posture):
         p1 = keypoints_data[i]
         p2 = master_posture[i]
         
-        # 计算归一化距离
-        rel_distance = math.sqrt(
-            ((p1[0] - p2[0])/500.0)**2 + 
-            ((p1[1] - p2[1])/500.0)**2
-        )
+        # 优化距离计算：使用更合理的归一化方法
+        # 计算相对距离，考虑到不同身高的人
+        image_diagonal = math.sqrt(640**2 + 480**2)
+        rel_distance = math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2) / image_diagonal
         
-        # 将距离转换为相似度
-        similarity = max(0, 1 - (rel_distance / 1.0))
+        # 调整相似度计算，使其更宽容
+        # 距离小于15%认为是很好的匹配
+        if rel_distance <= 0.15:
+            similarity = 1.0
+        elif rel_distance <= 0.25:
+            similarity = 1.0 - (rel_distance - 0.15) / 0.1 * 0.3  # 在15%-25%之间线性下降到0.7
+        else:
+            similarity = max(0.3, 1.0 - rel_distance * 1.5)  # 更宽容的评分
+        
         total_similarity += similarity
         valid_points += 1
     
@@ -332,38 +357,37 @@ def analyze_position(keypoints_data, master_posture):
         avg_similarity = total_similarity / valid_points
         position_score = avg_similarity * 10
     else:
-        position_score = 5.0
+        position_score = 6.0  # 提高默认分数
     
     return position_score
 
 def analyze_angles(angles, posture_name):
     """分析关节角度"""
-    # 不同姿势的理想角度
+    # 优化后的理想角度 - 更贴近实际练习情况
     ideal_angles = {
         "弓步冲拳": {
-            "左肘": 160, "右肘": 90, 
-            "左肩": 45, "右肩": 90,
-            "左膝": 90, "右膝": 160
+            "左肘": 155, "右肘": 95, 
+            "左肩": 50, "右肩": 85,
+            "左膝": 140, "右膝": 160
         },
         "猛虎出洞": {
-            "左肘": 120, "右肘": 120, 
-            "左肩": 90, "右肩": 90,
-            "左膝": 120, "右膝": 120
+            "左肘": 125, "右肘": 125, 
+            "左肩": 85, "右肩": 85,
+            "左膝": 125, "右膝": 125
         },
         "马步推掌": {
-            "左肘": 90, "右肘": 90, 
-            "左肩": 90, "右肩": 90,
-            "左膝": 120, "右膝": 120
+            "左肘": 95, "右肘": 95, 
+            "左肩": 85, "右肩": 85,
+            "左膝": 115, "右膝": 115
         }
         # 可以添加更多姿势的理想角度
     }
     
     # 如果没有该姿势的理想角度数据，返回默认分数
     if posture_name not in ideal_angles:
-        return 7.0
+        return 7.5
     
     # 由于angles是字符串列表，我们需要解析出实际角度值
-    # 示例格式: " 0-2 和 2-6夹角为: 45.32 度"
     angle_values = {}
     angle_mapping = {
         "0-2": "左肩", "1-3": "右肩",
@@ -387,23 +411,32 @@ def analyze_angles(angles, posture_name):
         except Exception as e:
             print(f"解析角度字符串出错: {e}, 字符串: {angle_str}")
     
-    # 计算角度差异
-    total_diff = 0
+    # 计算角度差异 - 使用更宽容的评分
+    total_score = 0
     count = 0
     
     for joint_name, ideal_angle in ideal_angles[posture_name].items():
         if joint_name in angle_values:
             diff = abs(angle_values[joint_name] - ideal_angle)
-            total_diff += diff
+            
+            # 优化评分算法：更宽容的角度容忍度
+            if diff <= 15:  # 15度以内认为优秀
+                score = 10.0
+            elif diff <= 25:  # 25度以内认为良好
+                score = 10.0 - (diff - 15) / 10 * 2  # 从10分线性下降到8分
+            elif diff <= 40:  # 40度以内认为合格
+                score = 8.0 - (diff - 25) / 15 * 3  # 从8分线性下降到5分
+            else:  # 超过40度需要改进
+                score = max(3.0, 5.0 - (diff - 40) / 20 * 2)  # 最低3分
+            
+            total_score += score
             count += 1
     
-    # 计算平均角度差异并转换为分数
+    # 计算平均分
     if count > 0:
-        avg_diff = total_diff / count
-        # 角度差异越小，分数越高
-        angle_score = max(0, 10 - (avg_diff / 10))
+        angle_score = total_score / count
     else:
-        angle_score = 7.0
+        angle_score = 7.5
     
     return angle_score
 

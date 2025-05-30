@@ -1,0 +1,1122 @@
+nohup: ignoring input
+libEGL warning: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+DEBUG: 使用基础URL: https://wudao.250555.xyz
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.26.136.233:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1748509837.074393  134548 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1748509837.138517  134548 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+libEGL warning: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+libEGL warning: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+ * Debugger is active!
+ * Debugger PIN: 810-402-607
+127.0.0.1 - - [29/May/2025 17:10:38] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1748509838.713942  134620 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1748509838.763347  134620 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1748509838.784103  134642 landmark_projection_calculator.cc:186] Using NORM_RECT without IMAGE_DIMENSIONS is only supported for the square ROI. Provide IMAGE_DIMENSIONS or use PROJECTION_MATRIX.
+127.0.0.1 - - [29/May/2025 17:10:38] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:10:41] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:10:43] "OPTIONS /api/analysis/image HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:10:44] "POST /api/analysis/image HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:10:44] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:10:44] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:10:44] "GET /img/processed_1748509844_snapshot.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:10:47] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:10:50] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:10:50] "POST /api/analysis/camera HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/home/yetong/code/wudaozhiping/app.py", line 224, in analyze_camera_frame
+    with open(processed_img_path, 'rb') as img_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+127.0.0.1 - - [29/May/2025 17:10:53] "[35m[1mPOST /api/analysis/camera HTTP/1.1[0m" 500 -
+127.0.0.1 - - [29/May/2025 17:10:55] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:10:55] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:12] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:12] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:13] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:13] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:13] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:13] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:13] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:13] "POST /api/analysis/camera HTTP/1.1" 200 -
+DEBUG: 使用基础URL: https://wudao.250555.xyz
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_40445a0eaf6b4d75ae1ec7dacc5aa865.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.445586003474503, 处理后图像路径=img/processed_1748509838_temp_camera_40445a0eaf6b4d75ae1ec7dacc5aa865.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_40445a0eaf6b4d75ae1ec7dacc5aa865.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_d6bb5bce552d4d7fa4d51a667aa1de78.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.3674645423468395, 处理后图像路径=img/processed_1748509841_temp_camera_d6bb5bce552d4d7fa4d51a667aa1de78.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_d6bb5bce552d4d7fa4d51a667aa1de78.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_316ca0d9ad974a769e5195856e4d5ae8.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.546744965219592, 处理后图像路径=img/processed_1748509844_temp_camera_316ca0d9ad974a769e5195856e4d5ae8.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_316ca0d9ad974a769e5195856e4d5ae8.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_bb9cc5aaf1374855a7c32efed4e8d2c2.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.283089336813134, 处理后图像路径=img/processed_1748509847_temp_camera_bb9cc5aaf1374855a7c32efed4e8d2c2.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_bb9cc5aaf1374855a7c32efed4e8d2c2.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_2805cbbb6c13421bb54b2d44d8235fbb.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.52649608665261, 处理后图像路径=img/processed_1748509850_temp_camera_2805cbbb6c13421bb54b2d44d8235fbb.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_2805cbbb6c13421bb54b2d44d8235fbb.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_c789065a728141b496c4cf765ab81262.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+NO PERSON
+未检测到人体姿势: uploads/images/temp_camera_c789065a728141b496c4cf765ab81262.jpg
+分析结果: 得分=0, 处理后图像路径=None
+反馈: {'level': '错误', 'suggestions': ['未检测到人体姿势，请确保图像中有清晰的人物']}
+获取角度数据...
+NO PERSON
+未检测到人体姿势: uploads/images/temp_camera_c789065a728141b496c4cf765ab81262.jpg
+转换处理后的图像为base64...
+图像处理错误: expected str, bytes or os.PathLike object, not NoneType
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_c1ffd3cd3e3b43778357ebbdc5f79bcb.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.329348967478175, 处理后图像路径=img/processed_1748509933_temp_camera_c1ffd3cd3e3b43778357ebbdc5f79bcb.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_c1ffd3cd3e3b43778357ebbdc5f79bcb.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_5d285b62af8b4496a1a9bc2ff5792285.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.445990309137754, 处理后图像路径=img/processed_1748509933_temp_camera_5d285b62af8b4496a1a9bc2ff5792285.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_5d285b62af8b4496a1a9bc2ff5792285.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_d8eea9ff08a3423aa2dbb5838626f61d.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.422357593694105, 处理后图像路径=img/processed_1748509936_temp_camera_d8eea9ff08a3423aa2dbb5838626f61d.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}127.0.0.1 - - [29/May/2025 17:12:16] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:19] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:19] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:22] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:24] "OPTIONS /api/analysis/image HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:24] "POST /api/analysis/image HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:24] "GET /img/processed_1748509944_snapshot.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:25] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:25] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:28] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:31] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:31] "POST /api/analysis/camera HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/home/yetong/code/wudaozhiping/app.py", line 224, in analyze_camera_frame
+    with open(processed_img_path, 'rb') as img_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+127.0.0.1 - - [29/May/2025 17:12:34] "[35m[1mPOST /api/analysis/camera HTTP/1.1[0m" 500 -
+127.0.0.1 - - [29/May/2025 17:12:37] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:37] "POST /api/analysis/camera HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/home/yetong/code/wudaozhiping/app.py", line 224, in analyze_camera_frame
+    with open(processed_img_path, 'rb') as img_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+127.0.0.1 - - [29/May/2025 17:12:40] "[35m[1mPOST /api/analysis/camera HTTP/1.1[0m" 500 -
+127.0.0.1 - - [29/May/2025 17:12:43] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_d8eea9ff08a3423aa2dbb5838626f61d.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_f2f6bd0e4c42440da7a2dae4c3bba2b5.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.495311254480248, 处理后图像路径=img/processed_1748509939_temp_camera_f2f6bd0e4c42440da7a2dae4c3bba2b5.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_f2f6bd0e4c42440da7a2dae4c3bba2b5.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_7aa91123d6774dd0b34454e9aaedb44a.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.462820666268933, 处理后图像路径=img/processed_1748509942_temp_camera_7aa91123d6774dd0b34454e9aaedb44a.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_7aa91123d6774dd0b34454e9aaedb44a.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_721a020255604211879065975521a1d9.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.458185882303438, 处理后图像路径=img/processed_1748509945_temp_camera_721a020255604211879065975521a1d9.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_721a020255604211879065975521a1d9.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_3f5ce9eef8a0447db07d990b97d1d5e9.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.491395888334646, 处理后图像路径=img/processed_1748509948_temp_camera_3f5ce9eef8a0447db07d990b97d1d5e9.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_3f5ce9eef8a0447db07d990b97d1d5e9.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_b22d27e8835f4e0d92010c5cf3d55a82.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.491395888334646, 处理后图像路径=img/processed_1748509951_temp_camera_b22d27e8835f4e0d92010c5cf3d55a82.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_b22d27e8835f4e0d92010c5cf3d55a82.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_0e933dfacc73410ebc022a296d1a2114.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+NO PERSON
+未检测到人体姿势: uploads/images/temp_camera_0e933dfacc73410ebc022a296d1a2114.jpg
+分析结果: 得分=0, 处理后图像路径=None
+反馈: {'level': '错误', 'suggestions': ['未检测到人体姿势，请确保图像中有清晰的人物']}
+获取角度数据...
+NO PERSON
+未检测到人体姿势: uploads/images/temp_camera_0e933dfacc73410ebc022a296d1a2114.jpg
+转换处理后的图像为base64...
+图像处理错误: expected str, bytes or os.PathLike object, not NoneType
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_b28f198598f44124a4d6e0c797b38c95.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.404619351166247, 处理后图像路径=img/processed_1748509957_temp_camera_b28f198598f44124a4d6e0c797b38c95.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_b28f198598f44124a4d6e0c797b38c95.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_101be18045174b7b89a3b2bb39a9b8c3.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+NO PERSON
+未检测到人体姿势: uploads/images/temp_camera_101be18045174b7b89a3b2bb39a9b8c3.jpg
+分析结果: 得分=0, 处理后图像路径=None
+反馈: {'level': '错误', 'suggestions': ['未检测到人体姿势，请确保图像中有清晰的人物']}
+获取角度数据...
+NO PERSON
+未检测到人体姿势: uploads/images/temp_camera_101be18045174b7b89a3b2bb39a9b8c3.jpg
+转换处理后的图像为base64...
+图像处理错误: expected str, bytes or os.PathLike object, not NoneType
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_729ef172b5384ee88aed3e28ec8b2249.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.336940640177769, 处理后图像路径=img/processed_1748509963_temp_camera_729ef172b5384ee88aed3e28ec8b2249.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...127.0.0.1 - - [29/May/2025 17:12:43] "POST /api/analysis/camera HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/home/yetong/code/wudaozhiping/app.py", line 224, in analyze_camera_frame
+    with open(processed_img_path, 'rb') as img_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+127.0.0.1 - - [29/May/2025 17:12:46] "[35m[1mPOST /api/analysis/camera HTTP/1.1[0m" 500 -
+127.0.0.1 - - [29/May/2025 17:12:49] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:49] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:52] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:55] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:55] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:12:58] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:13:01] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:13:02] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:13:04] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:13:07] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:13:08] "POST /api/analysis/camera HTTP/1.1" 200 -
+
+已删除临时文件: uploads/images/temp_camera_729ef172b5384ee88aed3e28ec8b2249.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_267708d2d87745c9a6b90f7207e49991.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+NO PERSON
+未检测到人体姿势: uploads/images/temp_camera_267708d2d87745c9a6b90f7207e49991.jpg
+分析结果: 得分=0, 处理后图像路径=None
+反馈: {'level': '错误', 'suggestions': ['未检测到人体姿势，请确保图像中有清晰的人物']}
+获取角度数据...
+NO PERSON
+未检测到人体姿势: uploads/images/temp_camera_267708d2d87745c9a6b90f7207e49991.jpg
+转换处理后的图像为base64...
+图像处理错误: expected str, bytes or os.PathLike object, not NoneType
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_ce1d07d52e2f48478b44c1b1778e4d3e.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.376462243247396, 处理后图像路径=img/processed_1748509969_temp_camera_ce1d07d52e2f48478b44c1b1778e4d3e.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_ce1d07d52e2f48478b44c1b1778e4d3e.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_3e799818a1bd445886e6ca643ed89212.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.364803081816384, 处理后图像路径=img/processed_1748509972_temp_camera_3e799818a1bd445886e6ca643ed89212.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大, 左膝角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_3e799818a1bd445886e6ca643ed89212.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_43ac5eb9481b47bab490e6896dac572b.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.315931699020699, 处理后图像路径=img/processed_1748509975_temp_camera_43ac5eb9481b47bab490e6896dac572b.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_43ac5eb9481b47bab490e6896dac572b.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_352695809b544f1591beb6d35ec7d481.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.3581871908682075, 处理后图像路径=img/processed_1748509978_temp_camera_352695809b544f1591beb6d35ec7d481.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_352695809b544f1591beb6d35ec7d481.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_a6cc835c761a4551b25b8ae43946caf9.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.418080667114978, 处理后图像路径=img/processed_1748509981_temp_camera_a6cc835c761a4551b25b8ae43946caf9.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_a6cc835c761a4551b25b8ae43946caf9.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_6d6fb093f2d94711a27cf35d8a566119.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.413851609330873, 处理后图像路径=img/processed_1748509984_temp_camera_6d6fb093f2d94711a27cf35d8a566119.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_6d6fb093f2d94711a27cf35d8a566119.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_c74a4a21c5824c418d5ddb2082b8c2e2.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.352924919345896, 处理后图像路径=img/processed_1748509987_temp_camera_c74a4a21c5824c418d5ddb2082b8c2e2.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_c74a4a21c5824c418d5ddb2082b8c2e2.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_2b75e793fc524ee7844b82558ef2b305.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.383119558139654, 处理后图像路径=img/processed_1748509990_temp_camera_2b75e793fc524ee7844b82558ef2b305.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}127.0.0.1 - - [29/May/2025 17:13:10] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:13:11] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:13:11] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:13:30] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:13:31] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:13:31] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:13:31] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:14:03] "OPTIONS /api/analysis/image HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:14:03] "POST /api/analysis/image HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:14:04] "GET /img/processed_1748510043_gongbuchongquan.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:16:29] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:16:29] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:16:38] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:16:38] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:16:38] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:16:38] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:16:40] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:16:40] "OPTIONS /api/forum/posts/pending?page=1&per_page=10 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:16:41] "[35m[1mGET /api/forum/posts/pending?page=1&per_page=10 HTTP/1.1[0m" 500 -
+127.0.0.1 - - [29/May/2025 17:19:55] "HEAD /api/forum/posts HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 17:35:46] "GET / HTTP/1.0" 200 -
+127.0.0.1 - - [29/May/2025 18:26:44] code 400, message Bad request version ('À\x13À')
+127.0.0.1 - - [29/May/2025 18:26:44] "[31m[1m\x16\x03\x01\x00ò\x01\x00\x00î\x03\x03H|\x09Pi\x06¢ª1HU\x8fPV\x17Ú7ÕÀ\x8ds\x82\x8bàØ\x19n\x9c\x84³Û¡ £¾oÿb¯Ö\x06ñº\x8b®çòõÔ\x0eÓ¸\x93SÕ°\\þ\x03\x06\x97§X­N\x00&À+À/À,À0Ì©Ì¨À\x09À\x13À[0m" 400 -
+127.0.0.1 - - [29/May/2025 18:26:44] "GET /signin HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:20:21] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:20:21] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:20:25] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:20:25] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:20:26] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:20:26] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:20:26] "OPTIONS /api/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:20:26] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:20:26] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:20:26] "GET /api/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:28:57] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:28:57] "[31m[1mPOST /api/auth/login HTTP/1.1[0m" 401 -
+127.0.0.1 - - [29/May/2025 20:29:03] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:29:03] "[31m[1mPOST /api/auth/login HTTP/1.1[0m" 401 -
+127.0.0.1 - - [29/May/2025 20:29:09] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:29:10] "[31m[1mPOST /api/auth/login HTTP/1.1[0m" 401 -
+127.0.0.1 - - [29/May/2025 20:29:19] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:29:19] "[31m[1mPOST /api/auth/login HTTP/1.1[0m" 401 -
+127.0.0.1 - - [29/May/2025 20:29:38] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:29:39] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:29:50] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:29:51] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:03] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:03] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:04] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:04] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:04] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:04] "OPTIONS /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:04] "OPTIONS /api/training-videos/coach/pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:04] "OPTIONS /api/coach/published_appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:04] "OPTIONS /api/training-videos/coach/all HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:04] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:04] "GET /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:04] "GET /api/coach/published_appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:04] "GET /api/training-videos/coach/all HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:04] "GET /api/training-videos/coach/pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:42] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:30:42] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:31:34] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:31:34] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:02] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:02] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:02] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:02] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:03] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:03] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:15] "OPTIONS /api/analysis/image HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:16] "POST /api/analysis/image HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:16] "GET /img/processed_1748521936_gongbuchongquan.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:28] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:28] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:28] "OPTIONS /api/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:29] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:29] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:29] "[36mGET /api/user HTTP/1.1[0m" 304 -
+127.0.0.1 - - [29/May/2025 20:32:36] "OPTIONS /api/analysis/video HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:38] "POST /api/analysis/video HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:48] "OPTIONS /api/annotations/video_1748521953013_91 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:32:49] "GET /api/annotations/video_1748521953013_91 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:17] "OPTIONS /api/annotations HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:17] "POST /api/annotations HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:18] "OPTIONS /api/annotations/video_1748521953013_91 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:18] "GET /api/annotations/video_1748521953013_91 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:27] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:27] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:27] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:27] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:35] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:35] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:35] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:35] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:35] "OPTIONS /api/poses/弓步冲拳 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:35] "GET /api/poses/弓步冲拳 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:41] "OPTIONS /api/angles/弓步冲拳 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:41] "GET /api/angles/弓步冲拳 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:42] "OPTIONS /api/pose_keypoints/弓步冲拳 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:42] "GET /api/pose_keypoints/弓步冲拳 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:45] "OPTIONS /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:45] "GET /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:47] "OPTIONS /api/courses?type=公开课 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:47] "GET /api/courses?type=公开课 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:48] "GET /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:55] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:55] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:55] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:33:56] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:34:16] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:34:17] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:34:17] "OPTIONS /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:34:17] "OPTIONS /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:34:17] "OPTIONS /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:34:17] "GET /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:34:17] "GET /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:34:18] "GET /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:34:39] "OPTIONS /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:34:39] "GET /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:00] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:00] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:00] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:00] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:00] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:01] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:12] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:12] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:12] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:12] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:13] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:13] "OPTIONS /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:13] "OPTIONS /api/coach/published_appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:13] "OPTIONS /api/training-videos/coach/all HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:13] "OPTIONS /api/training-videos/coach/pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:13] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:13] "GET /api/coach/published_appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:13] "GET /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:13] "GET /api/training-videos/coach/pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:35:13] "GET /api/training-videos/coach/all HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:36:33] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:36:34] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:36:34] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:36:34] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:36:40] "GET /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:04] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:04] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:04] "OPTIONS /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:05] "OPTIONS /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:05] "OPTIONS /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:05] "GET /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:05] "GET /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:05] "GET /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:53] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:53] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:57] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:58] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:58] "OPTIONS /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:58] "OPTIONS /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:58] "OPTIONS /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:58] "GET /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:58] "GET /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:37:58] "GET /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:38:21] "OPTIONS /api/user/create_appointment HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:38:21] "[35m[1mPOST /api/user/create_appointment HTTP/1.1[0m" 201 -
+127.0.0.1 - - [29/May/2025 20:38:22] "OPTIONS /api/payments/create HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:38:22] "POST /api/payments/create HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:38:27] "GET /api/payment/alipay/gateway?out_trade_no=WD20250529203822868bda56&total_amount=300.0&subject=武道智评-教练预约%20coach5 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:38:31] "[32mGET /api/payment/alipay/return?out_trade_no=WD20250529203822868bda56&trade_status=TRADE_CLOSED&cancel=true HTTP/1.1[0m" 302 -
+127.0.0.1 - - [29/May/2025 20:39:05] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:39:05] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:39:05] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:39:05] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:39:06] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:39:06] "OPTIONS /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:39:06] "OPTIONS /api/coach/published_appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:39:06] "OPTIONS /api/training-videos/coach/pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:39:06] "OPTIONS /api/training-videos/coach/all HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:39:06] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:39:06] "GET /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:39:06] "GET /api/coach/published_appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:39:06] "GET /api/training-videos/coach/pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:39:06] "GET /api/training-videos/coach/all HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:04] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:04] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:17] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:17] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:17] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:17] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:17] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:18] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:24] "OPTIONS /api/analysis/image HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:25] "POST /api/analysis/image HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:25] "GET /img/processed_1748522424_gongbuchongquan.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:34] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:35] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:35] "OPTIONS /api/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:35] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:35] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:35] "[36mGET /api/user HTTP/1.1[0m" 304 -
+127.0.0.1 - - [29/May/2025 20:40:42] "OPTIONS /api/analysis/video HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:45] "POST /api/analysis/video HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:51] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:52] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:52] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:52] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:54] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:54] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:55] "OPTIONS /api/poses/弓步冲拳 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:55] "GET /api/poses/弓步冲拳 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:56] "OPTIONS /api/poses/猛虎出洞 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:56] "GET /api/poses/猛虎出洞 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:58] "OPTIONS /api/angles/弓步冲拳 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:58] "GET /api/angles/弓步冲拳 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:59] "OPTIONS /api/pose_keypoints/弓步冲拳 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:40:59] "GET /api/pose_keypoints/弓步冲拳 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:00] "OPTIONS /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:00] "GET /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:01] "OPTIONS /api/courses/course1 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:01] "OPTIONS /api/courses/course1/check-enrollment HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:01] "GET /api/courses/course1 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:02] "GET /api/courses/course1/check-enrollment HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:10] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:10] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:10] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:10] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:29] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:30] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:30] "OPTIONS /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:30] "OPTIONS /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:30] "GET /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:30] "OPTIONS /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:30] "GET /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:30] "GET /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:48] "OPTIONS /api/user/create_appointment HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:48] "[35m[1mPOST /api/user/create_appointment HTTP/1.1[0m" 201 -
+127.0.0.1 - - [29/May/2025 20:41:49] "OPTIONS /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:41:49] "GET /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:10] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:10] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:11] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:11] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:11] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:11] "OPTIONS /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:11] "OPTIONS /api/coach/published_appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:11] "OPTIONS /api/training-videos/coach/all HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:11] "OPTIONS /api/training-videos/coach/pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:11] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:11] "GET /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:11] "GET /api/coach/published_appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:11] "GET /api/training-videos/coach/pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:11] "GET /api/training-videos/coach/all HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:16] "OPTIONS /api/appointments/eddd1c9b-522a-4df0-a041-4ac4e0e33261 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:16] "PUT /api/appointments/eddd1c9b-522a-4df0-a041-4ac4e0e33261 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:17] "OPTIONS /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:17] "GET /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:33] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:34] "[35m[1mPOST /api/messages HTTP/1.1[0m" 201 -
+127.0.0.1 - - [29/May/2025 20:42:43] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:43] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:46] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:46] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:46] "OPTIONS /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:47] "OPTIONS /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:47] "OPTIONS /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:47] "GET /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:47] "GET /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:42:47] "GET /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:21] "OPTIONS /api/training-videos/upload/eddd1c9b-522a-4df0-a041-4ac4e0e33261 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:21] "POST /api/training-videos/upload/eddd1c9b-522a-4df0-a041-4ac4e0e33261 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:21] "OPTIONS /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:21] "GET /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:33] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:33] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:33] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:33] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:34] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:34] "OPTIONS /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:34] "OPTIONS /api/coach/published_appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:34] "OPTIONS /api/training-videos/coach/pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:34] "OPTIONS /api/training-videos/coach/all HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:34] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:34] "GET /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:34] "GET /api/coach/published_appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:34] "GET /api/training-videos/coach/pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:34] "GET /api/training-videos/coach/all HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:40] "OPTIONS /api/training-videos/appointment/eddd1c9b-522a-4df0-a041-4ac4e0e33261 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:41] "GET /api/training-videos/appointment/eddd1c9b-522a-4df0-a041-4ac4e0e33261 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:44] "OPTIONS /api/training-videos/655790c4-498d-4701-9112-ca7e7a090aae/annotations HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:44] "GET /api/training-videos/655790c4-498d-4701-9112-ca7e7a090aae/annotations HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:43:44] "[35m[1mGET /uploads/training_videos/training_eddd1c9b-522a-4df0-a041-4ac4e0e33261_1748522601.mp4 HTTP/1.1[0m" 206 -
+127.0.0.1 - - [29/May/2025 20:44:07] "[35m[1mGET /uploads/training_videos/training_eddd1c9b-522a-4df0-a041-4ac4e0e33261_1748522601.mp4 HTTP/1.1[0m" 206 -
+127.0.0.1 - - [29/May/2025 20:44:07] "[35m[1mGET /uploads/training_videos/training_eddd1c9b-522a-4df0-a041-4ac4e0e33261_1748522601.mp4 HTTP/1.1[0m" 206 -
+127.0.0.1 - - [29/May/2025 20:44:11] "OPTIONS /api/training-videos/655790c4-498d-4701-9112-ca7e7a090aae/annotate HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:12] "POST /api/training-videos/655790c4-498d-4701-9112-ca7e7a090aae/annotate HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:12] "OPTIONS /api/training-videos/appointment/eddd1c9b-522a-4df0-a041-4ac4e0e33261 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:12] "GET /api/training-videos/appointment/eddd1c9b-522a-4df0-a041-4ac4e0e33261 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:30] "OPTIONS /api/annotations HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:30] "POST /api/annotations HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:30] "OPTIONS /api/training-videos/655790c4-498d-4701-9112-ca7e7a090aae/annotations HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:31] "GET /api/training-videos/655790c4-498d-4701-9112-ca7e7a090aae/annotations HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:33] "OPTIONS /api/training-videos/655790c4-498d-4701-9112-ca7e7a090aae/publish HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:33] "POST /api/training-videos/655790c4-498d-4701-9112-ca7e7a090aae/publish HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:34] "OPTIONS /api/training-videos/appointment/eddd1c9b-522a-4df0-a041-4ac4e0e33261 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:34] "GET /api/training-videos/appointment/eddd1c9b-522a-4df0-a041-4ac4e0e33261 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:49] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:49] "[31m[1mPOST /api/auth/login HTTP/1.1[0m" 401 -
+127.0.0.1 - - [29/May/2025 20:44:54] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:59] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:59] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:59] "OPTIONS /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:59] "OPTIONS /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:59] "GET /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:44:59] "OPTIONS /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:00] "GET /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:00] "GET /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:06] "OPTIONS /api/training-videos/appointment/eddd1c9b-522a-4df0-a041-4ac4e0e33261 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:06] "GET /api/training-videos/appointment/eddd1c9b-522a-4df0-a041-4ac4e0e33261 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:08] "OPTIONS /api/training-videos/655790c4-498d-4701-9112-ca7e7a090aae/annotations HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:08] "GET /api/training-videos/655790c4-498d-4701-9112-ca7e7a090aae/annotations HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:13] "[35m[1mGET /uploads/training_videos/training_eddd1c9b-522a-4df0-a041-4ac4e0e33261_1748522601.mp4 HTTP/1.1[0m" 206 -
+127.0.0.1 - - [29/May/2025 20:45:23] "OPTIONS /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:23] "GET /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:27] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:27] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:33] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:33] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:39] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:39] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:44] "OPTIONS /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:44] "GET /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:51] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:45:52] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:02] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:02] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:02] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:02] "OPTIONS /api/forum/posts?page=1&per_page=10 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:02] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:02] "GET /api/forum/posts?page=1&per_page=10 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:07] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:08] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:08] "OPTIONS /api/forum/posts/0cebc8d8-f3b3-46c6-b01f-93da4a47abc3 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:08] "GET /api/forum/posts/0cebc8d8-f3b3-46c6-b01f-93da4a47abc3 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:12] "OPTIONS /api/forum/posts/0cebc8d8-f3b3-46c6-b01f-93da4a47abc3/comments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:12] "[35m[1mPOST /api/forum/posts/0cebc8d8-f3b3-46c6-b01f-93da4a47abc3/comments HTTP/1.1[0m" 201 -
+127.0.0.1 - - [29/May/2025 20:46:13] "GET /api/forum/posts/0cebc8d8-f3b3-46c6-b01f-93da4a47abc3 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:17] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:33] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:33] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:33] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:33] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:34] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:34] "OPTIONS /api/coach/published_appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:34] "OPTIONS /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:34] "OPTIONS /api/training-videos/coach/pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:34] "OPTIONS /api/training-videos/coach/all HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:34] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:34] "GET /api/coach/published_appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:34] "GET /api/coach/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:34] "GET /api/training-videos/coach/all HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:34] "GET /api/training-videos/coach/pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:39] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:46:40] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:10] "OPTIONS /api/coach/create_appointment HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:10] "[35m[1mPOST /api/coach/create_appointment HTTP/1.1[0m" 201 -
+127.0.0.1 - - [29/May/2025 20:47:17] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:17] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:23] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:23] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:23] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:23] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:27] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:27] "OPTIONS /api/admin/appointments?status=pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:27] "OPTIONS /api/admin/appointments?status=rejected HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:27] "OPTIONS /api/admin/appointments?status=approved HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:27] "OPTIONS /api/admin/appointments?status=revoked HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:27] "GET /api/admin/appointments?status=pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:27] "GET /api/admin/appointments?status=revoked HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:27] "GET /api/admin/appointments?status=approved HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:27] "GET /api/admin/appointments?status=rejected HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:33] "OPTIONS /api/admin/appointments/404871c4-79f6-4eb4-a17f-68b966927ed5/review HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:33] "POST /api/admin/appointments/404871c4-79f6-4eb4-a17f-68b966927ed5/review HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:33] "OPTIONS /api/admin/appointments?status=pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:34] "OPTIONS /api/admin/appointments?status=approved HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:34] "OPTIONS /api/admin/appointments?status=rejected HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:34] "GET /api/admin/appointments?status=pending HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:34] "GET /api/admin/appointments?status=approved HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:34] "GET /api/admin/appointments?status=rejected HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:42] "OPTIONS /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:43] "OPTIONS /api/admin/enrollments?status=&username= HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:43] "GET /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:43] "GET /api/admin/enrollments?status=&username= HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:46] "OPTIONS /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:46] "OPTIONS /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:46] "OPTIONS /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:46] "GET /api/coaches HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:46] "GET /api/user/appointments HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:46] "GET /api/cities HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:59] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:47:59] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:48:00] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:48:00] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:48:01] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:48:02] "OPTIONS /api/forum/posts/pending?page=1&per_page=10 HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:48:02] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:48:02] "[35m[1mGET /api/forum/posts/pending?page=1&per_page=10 HTTP/1.1[0m" 500 -
+127.0.0.1 - - [29/May/2025 20:48:04] "OPTIONS /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:48:05] "OPTIONS /api/admin/enrollments?status=&username= HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:48:05] "GET /api/courses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:48:05] "GET /api/admin/enrollments?status=&username= HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 20:50:03] code 400, message Bad request version ('À\x14À')
+127.0.0.1 - - [29/May/2025 20:50:03] "[31m[1m\x16\x03\x01\x00{\x01\x00\x00w\x03\x03i&\x17|0\x03zÙ\x9a\x95\x10\x07\x17Ú\x11èa\x8a\x02\x02cÌâ­\x13O\x86\x10|\x0c°x\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\x09À\x14À[0m" 400 -
+127.0.0.1 - - [29/May/2025 20:51:31] code 400, message Bad request syntax ('SSH-2.0-Go')
+127.0.0.1 - - [29/May/2025 20:51:31] "[31m[1mSSH-2.0-Go[0m" 400 -
+127.0.0.1 - - [29/May/2025 20:53:38] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x00{\x01\x00\x00w\x03\x032^0!?V\x98õê\\üò[4J\x9d\x92ò¯!}á\x98ÖÓµ1MÅiÍ\x88\x00\x00\x1aÀ/À+À\x11À\x07À\x13À')
+127.0.0.1 - - [29/May/2025 20:53:38] "[31m[1m\x16\x03\x01\x00{\x01\x00\x00w\x03\x032^0!?V\x98õê\\üò[4J\x9d\x92ò¯!}á\x98ÖÓµ1MÅiÍ\x88\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\x09À\x14À[0m" 400 -
+127.0.0.1 - - [29/May/2025 21:22:16] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:22:16] "POST /api/auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:22:21] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:22:21] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:22:22] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:22:22] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:22:22] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:22:22] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:22:51] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:22:52] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:22:52] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:22:52] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:23:00] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:23:00] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:23:00] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:23:00] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:23:21] "OPTIONS /api/analysis/image HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:23:22] "POST /api/analysis/image HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:23:22] "GET /img/processed_1748525002_snapshot.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:19] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:20] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:20] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:20] "GET /api/poses HTTP/1.1" 200 -
+
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_2b75e793fc524ee7844b82558ef2b305.jpg
+返回分析结果...
+获取待审核帖子列表出错: get_user_data() missing 1 required positional argument: 'users_data_file'
+视频角度数据: {'current': {'肩部角度': [89.40206644638837], '肘部角度': [177.54686399248303], '髋部角度': [177.96905325939684], '膝部角度': [171.92258794800438], '躯干角度': [164.73324725017733]}, 'standard': {'肩部角度': 90, '肘部角度': 170, '髋部角度': 170, '膝部角度': 170, '躯干角度': 180}}
+DEBUG: 找到3个教练服务
+DEBUG: 返回3个教练信息
+查询用户 yetong 的预约
+找到用户 yetong 的 12 条预约记录
+查询用户 yetong 的预约
+找到用户 yetong 的 12 条预约记录
+DEBUG: 找到3个教练服务
+DEBUG: 返回3个教练信息
+查询用户 coach2 的预约
+找到用户 coach2 的 0 条预约记录
+DEBUG: 找到3个教练服务
+DEBUG: 返回3个教练信息
+查询用户 yetong 的预约
+找到用户 yetong 的 12 条预约记录
+当前用户: yetong
+用户数据: {'username': 'yetong', 'password': 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'role': 'user', 'created_at': '2025-04-28T13:27:30.599686', 'last_login': '2025-05-29T20:37:53.425096', 'login_count': 58}
+请求数据: {'coach_id': 'coach5', 'date': '2025-05-29', 'time': '20:30', 'location': '郑州市 ', 'skill': '吴氏太极拳', 'duration': 2}
+用户预约创建成功: {'id': '7c8aade1-4f8c-47c0-a404-f24e5865fba1', 'user_id': 'yetong', 'coach_id': 'coach5', 'coach_name': 'coach5', 'coach_avatar': None, 'date': '2025-05-29', 'time': '20:30', 'location': '郑州市 ', 'skill': '吴氏太极拳', 'duration': 2, 'status': 'pending', 'payment_status': 'unpaid', 'created_at': '2025-05-29T20:38:21.841860'}
+DEBUG: 接收到支付创建请求: user_id=yetong, data={'appointment_id': '7c8aade1-4f8c-47c0-a404-f24e5865fba1', 'duration': 2, 'price': 300}
+DEBUG: 前端传递的价格参数: 300.0
+DEBUG: 解析到duration参数: 2.0
+DEBUG: 尝试读取预约文件: /home/yetong/code/wudaozhiping/data/appointments.json
+DEBUG: 读取到预约数据: 9785 字节
+DEBUG: 预约数据解析成功
+DEBUG: 共找到 19 条预约记录
+DEBUG: 找到预约: {'id': '7c8aade1-4f8c-47c0-a404-f24e5865fba1', 'user_id': 'yetong', 'coach_id': 'coach5', 'coach_name': 'coach5', 'coach_avatar': None, 'date': '2025-05-29', 'time': '20:30', 'location': '郑州市 ', 'skill': '吴氏太极拳', 'duration': 2, 'status': 'pending', 'payment_status': 'unpaid', 'created_at': '2025-05-29T20:38:21.841860'}
+警告: 获取教练信息时出错: 'list' object has no attribute 'get', 使用默认价格
+DEBUG: 使用默认价格: 100.0
+DEBUG: 使用预约中的duration: 2.0
+DEBUG: 使用请求中的duration: 2.0
+DEBUG: 使用前端传递的价格: 300.0
+DEBUG: 将创建支付页面, 参数: user_id=yetong, appointment_id=7c8aade1-4f8c-47c0-a404-f24e5865fba1, coach_id=coach5, amount=300.0
+DEBUG: 准备创建支付，金额: 300.0，时长: 2.0
+DEBUG: 开始构造支付URL, payment_id=75cce07b-a9a4-44cb-bf9b-982a524781e9, out_trade_no=WD20250529203822868bda56, amount=300.0
+DEBUG: 生成的支付URL: https://wudao.250555.xyz/api/payment/alipay/gateway?out_trade_no=WD20250529203822868bda56&total_amount=300.0&subject=武道智评-教练预约 coach5
+DEBUG: 已保存预约ID和交易号的映射关系
+DEBUG: 支付页面创建成功: {'payment_id': '75cce07b-a9a4-44cb-bf9b-982a524781e9', 'out_trade_no': 'WD20250529203822868bda56', 'pay_url': 'https://wudao.250555.xyz/api/payment/alipay/gateway?out_trade_no=WD20250529203822868bda56&total_amount=300.0&subject=武道智评-教练预约 coach5'}
+DEBUG: URL中的总金额参数: 300.0
+DEBUG: 找到教练coach5的小时费率: 120.0
+DEBUG: 重新计算的金额: 120.0 * 2.0 = 240.0
+DEBUG: 构造支付成功和取消URL, out_trade_no=WD20250529203822868bda56
+DEBUG: 使用基础URL: https://wudao.250555.xyz
+DEBUG: 支付成功URL: https://wudao.250555.xyz/api/payment/alipay/return?out_trade_no=WD20250529203822868bda56&trade_status=TRADE_SUCCESS
+DEBUG: 取消支付URL: https://wudao.250555.xyz/api/payment/alipay/return?out_trade_no=WD20250529203822868bda56&trade_status=TRADE_CLOSED&cancel=true
+DEBUG: 收到支付回调, 参数: ImmutableMultiDict([('out_trade_no', 'WD20250529203822868bda56'), ('trade_status', 'TRADE_CLOSED'), ('cancel', 'true')])
+DEBUG: 找到支付记录: {'id': '75cce07b-a9a4-44cb-bf9b-982a524781e9', 'out_trade_no': 'WD20250529203822868bda56', 'user_id': 'yetong', 'appointment_id': '7c8aade1-4f8c-47c0-a404-f24e5865fba1', 'coach_id': 'coach5', 'coach_name': 'coach5', 'amount': 300.0, 'status': 'pending', 'created_at': '2025-05-29T20:38:22.186010', 'paid_at': None, 'appointment_date': '2025-05-29', 'appointment_time': '20:30', 'duration': 2.0}
+DEBUG: 用户取消支付: WD20250529203822868bda56
+DEBUG: 使用基础URL: https://wudao.250555.xyz
+DEBUG: 重定向到: https://wudao.250555.xyz/payment/result?out_trade_no=WD20250529203822868bda56&status=failed
+视频角度数据: {'current': {'肩部角度': [84.69466652590158], '肘部角度': [170.34036558454946], '髋部角度': [173.91698964694274], '膝部角度': [163.06001646861557], '躯干角度': [196.21852505019922]}, 'standard': {'肩部角度': 90, '肘部角度': 170, '髋部角度': 170, '膝部角度': 170, '躯干角度': 180}}
+DEBUG: 找到3个教练服务
+DEBUG: 返回3个教练信息
+查询用户 yetong 的预约
+找到用户 yetong 的 13 条预约记录
+当前用户: yetong
+用户数据: {'username': 'yetong', 'password': 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'role': 'user', 'created_at': '2025-04-28T13:27:30.599686', 'last_login': '2025-05-29T20:40:04.643591', 'login_count': 59}
+请求数据: {'coach_id': 'coach5', 'date': '2025-05-31', 'time': '20:30', 'location': '郑州市 ', 'skill': '太极剑', 'duration': 2}
+用户预约创建成功: {'id': 'eddd1c9b-522a-4df0-a041-4ac4e0e33261', 'user_id': 'yetong', 'coach_id': 'coach5', 'coach_name': 'coach5', 'coach_avatar': None, 'date': '2025-05-31', 'time': '20:30', 'location': '郑州市 ', 'skill': '太极剑', 'duration': 2, 'status': 'pending', 'payment_status': 'unpaid', 'created_at': '2025-05-29T20:41:48.931165'}
+查询用户 yetong 的预约
+找到用户 yetong 的 14 条预约记录
+DEBUG: 找到3个教练服务
+DEBUG: 返回3个教练信息
+查询用户 yetong 的预约
+找到用户 yetong 的 14 条预约记录
+查询用户 yetong 的预约
+找到用户 yetong 的 14 条预约记录
+DEBUG: 找到3个教练服务
+DEBUG: 返回3个教练信息
+查询用户 yetong 的预约
+找到用户 yetong 的 14 条预约记录
+DEBUG: 找到4个教练服务
+DEBUG: 返回4个教练信息
+查询用户 admin 的预约
+找到用户 admin 的 1 条预约记录
+获取待审核帖子列表出错: get_user_data() missing 1 required positional argument: 'users_data_file'
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_b06c14464db44414b6f392858a8c8ab2.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.32749746424828, 处理后图像路径=img/processed_1748525060_temp_camera_b06c14464db44414b6f392858a8c8ab2.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_b06c14464db44414b6f392858a8c8ab2.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_62d57a1a89a343a693298d79afc627b1.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.444505701430101, 处理后图像路径=img/processed_1748525063_temp_camera_62d57a1a89a343a693298d79afc627b1.jpg127.0.0.1 - - [29/May/2025 21:24:23] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:25] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:26] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:28] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:32] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:32] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:34] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:41] "OPTIONS /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:41] "GET /api/auth/user HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:41] "OPTIONS /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:42] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:42] "GET /api/messages HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:24:42] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:25:22] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:25:22] "OPTIONS /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:25:22] "GET /api/poses HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:25:22] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:25:24] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:25:27] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:25:28] "POST /api/analysis/camera HTTP/1.1" 200 -
+
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_62d57a1a89a343a693298d79afc627b1.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_d4be1ec765514e27a5e848974d32a769.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.305365535510441, 处理后图像路径=img/processed_1748525066_temp_camera_d4be1ec765514e27a5e848974d32a769.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_d4be1ec765514e27a5e848974d32a769.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_844432c38aa94f39813fb7c040762ab9.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.259102245884863, 处理后图像路径=img/processed_1748525068_temp_camera_844432c38aa94f39813fb7c040762ab9.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_844432c38aa94f39813fb7c040762ab9.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_9d61e1349b164f369e22690ed0d14890.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.133059955735436, 处理后图像路径=img/processed_1748525072_temp_camera_9d61e1349b164f369e22690ed0d14890.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大, 右膝角度偏小', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_9d61e1349b164f369e22690ed0d14890.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_6d7a7de12b064221894e516072d3a057.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.286330059686788, 处理后图像路径=img/processed_1748525074_temp_camera_6d7a7de12b064221894e516072d3a057.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大, 右膝角度偏小', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_6d7a7de12b064221894e516072d3a057.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_87df2d5054904c098196fb3399618791.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.196375326517165, 处理后图像路径=img/processed_1748525122_temp_camera_87df2d5054904c098196fb3399618791.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_87df2d5054904c098196fb3399618791.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_129a7e4d28dd4aa58d1342858be1c973.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.506966323054851, 处理后图像路径=img/processed_1748525124_temp_camera_129a7e4d28dd4aa58d1342858be1c973.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_129a7e4d28dd4aa58d1342858be1c973.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_3f9de32abdd347e1aa3a6d23f4da1588.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.212394105528548, 处理后图像路径=img/processed_1748525128_temp_camera_3f9de32abdd347e1aa3a6d23f4da1588.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_3f9de32abdd347e1aa3a6d23f4da1588.jpg
+返回分析结果...
+收到摄像头分析请求: application/json
+接收到姿势类型: 弓步冲拳
+开始处理摄像头图像...
+保存临时文件到: uploads/images/temp_camera_b36893fa45414291a54ee88ccd7d476f.jpg
+调用 web_model.analyze_martial_arts_image 进行分析...
+分析结果: 得分=7.223734135790291, 处理后图像路径=img/processed_1748525130_temp_camera_b36893fa45414291a54ee88ccd7d476f.jpg
+反馈: {'level': '良好', 'suggestions': ['您的膝盖, 肘部, 手腕, 肩膀, 脚踝, 髋部, 头部位置需要调整，与标准姿势有较大偏差', '关节角度优化建议: 左肩角度偏大, 右肩角度偏大', '您的弓步冲拳已经有了很好的基础，继续练习细节可以达到更高水平', '表现良好，已经掌握了动作要领，继续精进！']}
+获取角度数据...
+转换处理后的图像为base64...
+已删除临时文件: uploads/images/temp_camera_b36893fa45414291a54ee88ccd7d476f.jpg
+返回分析结果...127.0.0.1 - - [29/May/2025 21:25:30] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:25:34] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:25:34] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:25:36] "POST /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:25:40] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/home/yetong/code/wudaozhiping/app.py", line 224, in analyze_camera_frame
+    with open(processed_img_path, 'rb') as img_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+127.0.0.1 - - [29/May/2025 21:25:40] "[35m[1mPOST /api/analysis/camera HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/yetong/code/wudaozhiping/app.py", line 224, in analyze_camera_frame
+    with open(processed_img_path, 'rb') as img_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+127.0.0.1 - - [29/May/2025 21:25:43] "[35m[1mPOST /api/analysis/camera HTTP/1.1[0m" 500 -
+127.0.0.1 - - [29/May/2025 21:25:46] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/home/yetong/code/wudaozhiping/app.py", line 224, in analyze_camera_frame
+    with open(processed_img_path, 'rb') as img_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+127.0.0.1 - - [29/May/2025 21:25:46] "[35m[1mPOST /api/analysis/camera HTTP/1.1[0m" 500 -
+127.0.0.1 - - [29/May/2025 21:25:50] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -
+127.0.0.1 - - [29/May/2025 21:25:50] "OPTIONS /api/analysis/camera HTTP/1.1" 200 -

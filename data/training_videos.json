@@ -30,5 +30,22 @@
     "coach_score": null,
     "coach_feedback": "",
     "annotation_published": false
+  },
+  {
+    "id": "655790c4-498d-4701-9112-ca7e7a090aae",
+    "appointment_id": "eddd1c9b-522a-4df0-a041-4ac4e0e33261",
+    "user_id": "yetong",
+    "coach_id": "coach5",
+    "filename": "training_eddd1c9b-522a-4df0-a041-4ac4e0e33261_1748522601.mp4",
+    "original_filename": "武术视频展示.mp4",
+    "file_path": "uploads/training_videos/training_eddd1c9b-522a-4df0-a041-4ac4e0e33261_1748522601.mp4",
+    "description": "请教练指导并评分",
+    "upload_time": 1748522601,
+    "annotation_status": "published",
+    "coach_score": 4,
+    "coach_feedback": "十分不错，部分动作还需加强",
+    "annotation_published": true,
+    "annotation_time": 1748522652,
+    "publish_time": 1748522673
   }
 ]

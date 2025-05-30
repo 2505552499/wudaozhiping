@@ -61,7 +61,6 @@
     ]
   },
   "devDependencies": {
-    "@stagewise/toolbar-react": "^0.1.2",
     "autoprefixer": "^9.8.8",
     "postcss": "^7.0.39",
     "tailwindcss": "^4.1.7"
