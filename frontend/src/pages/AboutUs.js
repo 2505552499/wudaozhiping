@@ -43,7 +43,7 @@ const AboutUs = () => {
     {
       year: '2020',
       title: '公司成立',
-      description: '武道智评科技有限公司正式成立，开始武术智能化教学的探索'
+      description: '琪武智创科技有限公司正式成立，开始武术智能化教学的探索'
     },
     {
       year: '2021',
@@ -53,7 +53,7 @@ const AboutUs = () => {
     {
       year: '2022',
       title: '平台上线',
-      description: '武道智评平台正式上线，首批用户突破1万人'
+      description: '琪武智创平台正式上线，首批用户突破1万人'
     },
     {
       year: '2023',
@@ -99,7 +99,7 @@ const AboutUs = () => {
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <Title level={1}>
               <TrophyOutlined style={{ color: '#1890ff', marginRight: 16 }} />
-              武道智评
+              琪武智创
             </Title>
             <Title level={3} type="secondary">
               传承武术文化，创新教学方式
@@ -120,7 +120,7 @@ const AboutUs = () => {
                 <div style={{ textAlign: 'center' }}>
                   <TrophyOutlined style={{ fontSize: 80, marginBottom: 16 }} />
                   <Title level={2} style={{ color: 'white', margin: 0 }}>
-                    武道智评
+                    琪武智创
                   </Title>
                 </div>
               </div>
@@ -128,7 +128,7 @@ const AboutUs = () => {
             <Col xs={24} lg={12}>
               <Title level={3}>关于我们</Title>
               <Paragraph style={{ fontSize: 16, lineHeight: 1.8 }}>
-                武道智评是一家专注于武术智能化教学的科技公司。我们结合传统武术文化与现代人工智能技术，
+                琪武智创是一家专注于武术智能化教学的科技公司。我们结合传统武术文化与现代人工智能技术，
                 为武术爱好者提供专业、便捷、高效的学习平台。
               </Paragraph>
               <Paragraph style={{ fontSize: 16, lineHeight: 1.8 }}>
@@ -256,7 +256,7 @@ const AboutUs = () => {
             <Col xs={24} lg={12}>
               <Title level={4}>公司信息</Title>
               <Paragraph>
-                <Text strong>公司名称：</Text>武道智评科技有限公司<br />
+                <Text strong>公司名称：</Text>琪武智创科技有限公司<br />
                 <Text strong>成立时间：</Text>2020年<br />
                 <Text strong>公司地址：</Text>北京市海淀区中关村科技园<br />
                 <Text strong>联系电话：</Text>400-888-9999<br />

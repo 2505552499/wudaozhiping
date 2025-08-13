@@ -1,5 +1,5 @@
 Write-Host "======================================" -ForegroundColor Cyan
-Write-Host "武道智评: 智能姿态分析系统 - Web版" -ForegroundColor Cyan
+Write-Host "琪武智创-动作评估教练预约平台 - Web版" -ForegroundColor Cyan
 Write-Host "======================================" -ForegroundColor Cyan
 Write-Host ""
 

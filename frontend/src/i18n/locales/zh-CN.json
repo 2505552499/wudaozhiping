@@ -39,7 +39,7 @@
   },
   "home": {
     "hero": {
-      "title": "武道智评",
+      "title": "琪武智创-动作评估教练预约平台",
       "subtitle": "AI赋能武术训练，科技助力传承创新",
       "description": "运用前沿人工智能技术，为武术爱好者提供专业的动作分析和个性化指导",
       "startNow": "立即开始",
@@ -88,7 +88,7 @@
       "title": "服务内容",
       "subtitle": "专业全面的武术学习平台",
       "sectionTitle": "全方位武术评估解决方案",
-      "sectionDescription": "武道智评平台提供多种专业服务，满足不同层次武术爱好者和专业人士的需求",
+      "sectionDescription": "琪武智创平台提供多种专业服务，满足不同层次武术爱好者和专业人士的需求",
       "imageAnalysis": {
         "title": "图像分析",
         "description": "上传武术动作图片，AI自动识别姿态并提供专业评分与改进建议"
@@ -155,7 +155,7 @@
       "subtitle": "见证每一份进步",
       "sectionTitle": "数据见证",
       "sectionHighlight": "实力",
-      "sectionDescription": "自武道智评平台上线以来，已经帮助数以万计的武术爱好者提升技能水平",
+      "sectionDescription": "自琪武智创平台上线以来，已经帮助数以万计的武术爱好者提升技能水平",
       "users": "注册用户",
       "analyses": "分析次数",
       "courses": "精品课程",
@@ -167,7 +167,7 @@
       "subtitle": "简单三步，开启智能武术训练之旅",
       "sectionTitle": "简单三步",
       "sectionSubtitle": "提升武术水平",
-      "sectionDescription": "武道智评让武术技能评估变得简单高效，只需三个简单步骤，即可获得专业分析",
+      "sectionDescription": "琪武智创让武术技能评估变得简单高效，只需三个简单步骤，即可获得专业分析",
       "step1": {
         "title": "上传武术视频",
         "description": "上传您的武术练习视频，支持多种常见格式，如MP4、AVI和MOV。系统会快速处理您的视频文件，准备AI分析。"
@@ -183,12 +183,12 @@
     },
     "news": {
       "title": "最新动态",
-      "subtitle": "了解武道智评最新资讯",
+      "subtitle": "了解琪武智创最新资讯",
       "viewAll": "查看全部"
     },
     "cta": {
       "title": "开始您的武术精进之旅",
-      "description": "无论您是武术初学者还是有经验的爱好者，武道智评平台都能为您提供专业的动作分析和建议，帮助您更快地掌握技巧，提高技术水平",
+      "description": "无论您是武术初学者还是有经验的爱好者，琪武智创平台都能为您提供专业的动作分析和建议，帮助您更快地掌握技巧，提高技术水平",
       "joinNow": "立即加入",
       "learnMore": "了解更多",
       "startJourney": "开启武术之旅"
@@ -206,7 +206,7 @@
     "loginButton": "登录",
     "or": "或",
     "loginWith": "使用其他方式登录",
-    "platformTitle": "武道智评平台",
+    "platformTitle": "琪武智创平台",
     "platformSubtitle": "专业的武术动作分析与评估系统",
     "userLogin": "用户登录",
     "userRegister": "用户注册",
@@ -241,7 +241,7 @@
     "guestLoginSuccess": "游客登录成功",
     "guestLoginFailed": "游客登录失败",
     "guestLoginFailedMessage": "游客登录失败，请稍后再试",
-    "copyrightText": "© {{year}} 武道智评科技有限公司. 保留所有权利."
+    "copyrightText": "© {{year}} 琪武智创-动作评估教练预约平台. 保留所有权利."
   },
   "courses": {
     "title": "精品课程",
@@ -438,8 +438,8 @@
     "notifications": "通知设置"
   },
   "dashboard": {
-    "welcome": "欢迎使用武道智评系统，{{username}}！",
-    "description": "武道智评是一款专业的武术姿态分析系统，通过先进的计算机视觉技术，帮助您提升武术技能。选择下方功能开始您的武术之旅！",
+    "welcome": "欢迎使用琪武智创系统，{{username}}！",
+    "description": "琪武智创是一款专业的武术姿态分析系统，通过先进的计算机视觉技术，帮助您提升武术技能。选择下方功能开始您的武术之旅！",
     "startUsing": "开始使用",
     "systemOverview": "系统概览",
     "features": {
@@ -485,7 +485,7 @@
   "footer": {
     "about": {
       "title": "关于我们",
-      "description": "武道智评是一个专业的武术动作分析平台，采用人工智能和计算机视觉技术，帮助武术爱好者和专业人士提升技术水平。",
+      "description": "琪武智创是一个专业的武术动作分析平台，采用人工智能和计算机视觉技术，帮助武术爱好者和专业人士提升技术水平。",
       "company": "公司介绍",
       "team": "团队成员",
       "contact": "联系我们",
@@ -511,7 +511,7 @@
     "contact": {
       "title": "联系我们",
       "phone": "0371-12345678",
-      "email": "support@wudaozhiping.com",
+      "email": "support@qiwuzhichuang.com",
       "address": "河南省郑州市金水区",
       "subscribe": {
         "title": "订阅我们",
@@ -539,6 +539,6 @@
       "weibo": "新浪微博",
       "email": "邮箱"
     },
-    "copyright": "© {{year}} 武道智评科技有限公司. 所有权利已保留."
+    "copyright": "© {{year}} 琪武智创-动作评估教练预约平台. 所有权利已保留."
   }
 }

@@ -39,7 +39,7 @@
   },
   "home": {
     "hero": {
-      "title": "Martial Arts AI",
+      "title": "QiWu ZhiChuang - Motion Assessment Coach Booking Platform",
       "subtitle": "AI-Powered Martial Arts Training, Technology-Driven Innovation",
       "description": "Using cutting-edge artificial intelligence technology to provide professional motion analysis and personalized guidance for martial arts enthusiasts",
       "startNow": "Start Now",
@@ -206,7 +206,7 @@
     "loginButton": "Login",
     "or": "Or",
     "loginWith": "Login with",
-    "platformTitle": "Martial Arts AI Platform",
+    "platformTitle": "QiWu ZhiChuang Platform",
     "platformSubtitle": "Professional Martial Arts Motion Analysis & Evaluation System",
     "userLogin": "User Login",
     "userRegister": "User Register",
@@ -438,8 +438,8 @@
     "notifications": "Notification Settings"
   },
   "dashboard": {
-    "welcome": "Welcome to Martial Arts AI System, {{username}}!",
-    "description": "Martial Arts AI is a professional martial arts posture analysis system that uses advanced computer vision technology to help you improve your martial arts skills. Choose the functions below to start your martial arts journey!",
+    "welcome": "Welcome to QiWu ZhiChuang System, {{username}}!",
+    "description": "QiWu ZhiChuang is a professional martial arts posture analysis system that uses advanced computer vision technology to help you improve your martial arts skills. Choose the functions below to start your martial arts journey!",
     "startUsing": "Start Using",
     "systemOverview": "System Overview",
     "features": {

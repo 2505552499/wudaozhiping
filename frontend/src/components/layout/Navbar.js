@@ -153,12 +153,12 @@ const Navbar = () => {
             <Link to="/" className="flex items-center group">
               <div className="flex items-center">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-3 group-hover:shadow-lg transition-all duration-300">
-                  <span className="text-white font-bold text-lg">武</span>
+                  <span className="text-white font-bold text-lg">琪</span>
                 </div>
                 <span className={`font-bold text-xl hidden md:block transition-colors duration-300 ${
                   scrolled ? 'text-gray-800' : 'text-white'
                 }`}>
-                  武道智评
+                  琪武智创
                 </span>
               </div>
             </Link>

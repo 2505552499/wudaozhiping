@@ -16,7 +16,7 @@ const Settings = () => {
     <MainLayout>
       <Card title="帮助与设置" bordered={false}>
         <p>
-          欢迎使用武道智评系统，这里提供系统使用帮助和相关设置。
+          欢迎使用琪武智创系统，这里提供系统使用帮助和相关设置。
         </p>
 
         <Divider orientation="left">使用帮助</Divider>
@@ -142,7 +142,7 @@ const Settings = () => {
         <Collapse expandIconPosition="right">
           <Panel header="系统支持哪些浏览器？" key="1">
             <Paragraph>
-              武道智评系统支持所有现代浏览器，包括但不限于：
+              琪武智创系统支持所有现代浏览器，包括但不限于：
             </Paragraph>
             <ul>
               <li>Google Chrome (推荐)</li>
@@ -170,7 +170,7 @@ const Settings = () => {
 
           <Panel header="我的数据会被保存吗？" key="3">
             <Paragraph>
-              武道智评系统尊重用户隐私，我们的数据处理原则如下：
+              琪武智创系统尊重用户隐私，我们的数据处理原则如下：
             </Paragraph>
             <ul>
               <li>上传的图片和视频仅用于当前分析，不会长期存储</li>

@@ -1,5 +1,5 @@
 @echo off
-echo ===== 武道智评系统启动脚本 =====
+echo ===== 琪武智创系统启动脚本 =====
 echo.
 
 echo 创建必要的目录...
@@ -26,7 +26,7 @@ set DANGEROUSLY_DISABLE_HOST_CHECK=true
 start cmd /k "npm start"
 
 echo.
-echo ===== 武道智评系统已启动 =====
+echo ===== 琪武智创系统已启动 =====
 echo 后端服务: http://localhost:5000
 echo 前端界面: http://localhost:3001
 echo.

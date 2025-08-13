@@ -1,8 +1,8 @@
-# 武道智评 - 智能武术姿势分析平台
+# 琪武智创-动作评估教练预约平台 - 智能武术姿势分析平台
 
 <div align="center">
 
-![武道智评](https://img.shields.io/badge/武道智评-v2.2-blue.svg)
+![琪武智创](https://img.shields.io/badge/琪武智创-v2.2-blue.svg)
 ![Flask](https://img.shields.io/badge/Flask-2.3.3-green.svg)
 ![React](https://img.shields.io/badge/React-18.2.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
@@ -18,7 +18,7 @@
 
 ## 📖 项目简介
 
-武道智评是一款**专业的AI武术动作分析平台**，融合先进的计算机视觉、深度学习和人体姿态估计技术，为武术爱好者、教练和学习者提供精准的动作分析、评价和改进建议。平台集成了智能分析、教练预约、在线学习、社区交流等多项功能，打造完整的武术学习生态系统。
+琪武智创是一款**专业的AI武术动作分析平台**，融合先进的计算机视觉、深度学习和人体姿态估计技术，为武术爱好者、教练和学习者提供精准的动作分析、评价和改进建议。平台集成了智能分析、教练预约、在线学习、社区交流等多项功能，打造完整的武术学习生态系统。
 
 ### 🌟 核心特色
 
@@ -303,8 +303,8 @@ wudaozhiping/
 #### 1️⃣ 克隆项目
 
 ```bash
-git clone https://github.com/your-repo/wudaozhiping.git
-cd wudaozhiping
+git clone https://github.com/your-repo/qiwuzhichuang.git
+cd qiwuzhichuang
 ```
 
 #### 2️⃣ 后端环境设置
@@ -504,8 +504,8 @@ CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
 
 ```bash
 # 构建和运行
-docker build -t wudaozhiping .
-docker run -p 5000:5000 wudaozhiping
+docker build -t qiwuzhichuang .
+docker run -p 5000:5000 qiwuzhichuang
 ```
 
 ### ☁️ 生产环境部署
@@ -574,7 +574,7 @@ ALIPAY_PRIVATE_KEY=your-private-key
 
 ### 🐛 问题报告
 
-使用 [GitHub Issues](https://github.com/your-repo/wudaozhiping/issues) 报告问题：
+使用 [GitHub Issues](https://github.com/your-repo/qiwuzhichuang/issues) 报告问题：
 
 - **Bug报告**: 使用Bug模板
 - **功能请求**: 使用Feature模板
@@ -616,7 +616,7 @@ ALIPAY_PRIVATE_KEY=your-private-key
 ```
 MIT License
 
-Copyright (c) 2025 武道智评团队
+Copyright (c) 2025 琪武智创团队
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -661,6 +661,6 @@ SOFTWARE.
 
 ---
 
-*Made with ❤️ by 武道智评团队*
+*Made with ❤️ by 琪武智创团队*
 
 </div>

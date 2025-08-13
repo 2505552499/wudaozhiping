@@ -1,5 +1,5 @@
 {
-  "name": "wudao-zhiping-frontend",
+  "name": "qiwu-zhichuang-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -28,7 +28,7 @@
     "react-webcam": "^7.1.1",
     "recharts": "^2.15.3",
     "web-vitals": "^2.1.4",
-    "wudao-zhiping-frontend": "file:"
+    "qiwu-zhichuang-frontend": "file:"
   },
   "scripts": {
     "start": "react-scripts start --host 0.0.0.0",

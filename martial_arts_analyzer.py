@@ -13,7 +13,7 @@ import sys
 class MartialArtsAnalyzer:
     def __init__(self, root, username="游客"):
         self.root = root
-        self.root.title("武道智评: 智能姿态分析系统")
+        self.root.title("琪武智创-动作评估教练预约平台")
         self.root.geometry("1000x650")
         self.root.configure(bg="#f0f0f0")
         
@@ -28,7 +28,7 @@ class MartialArtsAnalyzer:
         title_container = tk.Frame(self.title_frame, bg="#c62828")
         title_container.pack(fill=tk.X)
         
-        self.title_label = tk.Label(title_container, text="武道智评: 智能姿态分析系统", 
+        self.title_label = tk.Label(title_container, text="琪武智创-动作评估教练预约平台",
                                     font=("Arial", 18, "bold"), fg="white", bg="#c62828")
         self.title_label.pack(side=tk.LEFT, pady=10, padx=20)
         

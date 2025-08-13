@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>琪武智创 投资路演稿（10页，可打印为PDF）</title>
+  <style>
+    :root { --primary:#4F49FF; --text:#111; --muted:#555; }
+    *{box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans",sans-serif; color:var(--text); margin:0; background:#fff;}
+    header{position:sticky; top:0; background:#fff; border-bottom:1px solid #eee; padding:10px 16px; z-index:5}
+    header .hint{font-size:12px; color:var(--muted)}
+    .container{max-width:980px; margin:0 auto; padding:16px}
+    h1{font-size:28px; color:var(--primary); margin:0 0 8px}
+    h2{font-size:18px; color:var(--text); margin:16px 0 8px}
+    p,li{line-height:1.6}
+    .page{page-break-after:always; padding:24px 8px}
+    .badge{display:inline-block; padding:4px 8px; border:1px solid rgba(79,73,255,.3); color:var(--primary); border-radius:999px; font-size:12px}
+    .muted{color:var(--muted)}
+    .kpi{display:flex; gap:16px; flex-wrap:wrap; margin:8px 0 0}
+    .kpi .card{border:1px solid #eee; border-radius:10px; padding:10px 12px; min-width:160px}
+    .kpi .card .v{font-size:20px; color:var(--primary); font-weight:700}
+    ul{padding-left:18px}
+    .footer{font-size:12px; color:#888; margin-top:12px}
+    @media print{ header{display:none} .page{page-break-after:always} body{background:#fff} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="hint">提示：在浏览器中按 Ctrl/Cmd+P 选择“另存为 PDF”即可导出。主题配色与首页蓝色系保持一致。</div>
+    </div>
+  </header>
+  <main class="container">
+    <section class="page" id="p1">
+      <h1>1. 标题与使命</h1>
+      <div class="badge">琪武智创-动作评估教练预约平台</div>
+      <h2>一句话定位</h2>
+      <p>AI 姿态分析 + 教练协作标注 + 训练反馈与预约闭环，让“动作可量化、训练更高效”。</p>
+      <h2>当前进展摘要</h2>
+      <div class="kpi">
+        <div class="card"><div class="v">[动作数]</div><div class="t muted">已标准化动作</div></div>
+        <div class="card"><div class="v">[分析次数]</div><div class="t muted">累计/近90天分析</div></div>
+        <div class="card"><div class="v">[复训率%]</div><div class="t muted">学员复训率</div></div>
+      </div>
+      <div class="footer">可替换占位：动作数、分析次数、复训率</div>
+    </section>
+
+    <section class="page" id="p2">
+      <h1>2. 痛点与机会</h1>
+      <h2>痛点</h2>
+      <ul>
+        <li>线下反馈慢，线上难纠偏；动作难量化与复现。</li>
+        <li>教练时间碎片化，难以规模化服务更多学员。</li>
+      </ul>
+      <h2>机会</h2>
+      <ul>
+        <li>体育/技能训练线上化，用户愿为“可见进步与认证”付费。</li>
+        <li>机构数字化转型需要“效果量化”的基础设施。</li>
+      </ul>
+      <p class="muted">建议配图：传统路径 vs 我们闭环的用户旅程图。</p>
+    </section>
+
+    <section class="page" id="p3">
+      <h1>3. 产品与闭环</h1>
+      <ul>
+        <li><strong>学员端：</strong>上传图/视频 → 关键点与角度 → 即时评分 + 可解释纠偏。</li>
+        <li><strong>教练端：</strong>可视化标注与点评（含作者信息与版本）。</li>
+        <li><strong>平台端：</strong>预约/排课/消息/课程沉淀为动作知识库。</li>
+      </ul>
+      <p class="muted">建议配图：学员/教练/平台三端结构图。</p>
+    </section>
+
+    <section class="page" id="p4">
+      <h1>4. 技术路线与可解释评分</h1>
+      <ul>
+        <li>关键点提取 → 角度/速度/稳定性等特征 → 规则 + 学习的混合评分引擎。</li>
+        <li>可解释：角度区间、稳定性、对称性，骨架与角度叠加可视化。</li>
+        <li>个性化：基于学员“难点图谱”的下一步训练建议。</li>
+      </ul>
+      <p class="muted">建议配图：评分叠加层（关节点、角度标注、偏差提示）。</p>
+    </section>
+
+    <section class="page" id="p5">
+      <h1>5. 教练协同与数据资产</h1>
+      <ul>
+        <li>标注含作者与版本，投票/权重机制提升点评质量。</li>
+        <li>数据飞轮：标注 → 更优模型与建议 → 更高留存/转化 → 更多数据。</li>
+        <li>动作知识库：高质量点评与训练处方沉淀与迭代。</li>
+      </ul>
+      <p class="muted">建议配图：知识库结构与数据飞轮。</p>
+    </section>
+
+    <section class="page" id="p6">
+      <h1>6. 商业模式与单位经济</h1>
+      <ul>
+        <li>收入：学员订阅（月/年）、预约佣金、机构 SaaS 席位/年费、企业/校园授权。</li>
+        <li>单位经济：LTV 来自持续训练与进阶；工具提升教练产能，降低边际服务成本。</li>
+        <li>关键指标：留存[DX]、复训率[XX%]、预约转化[XX%]、客单价[¥X]。</li>
+      </ul>
+      <p class="muted">建议配图：收入结构、LTV/CAC 示意。</p>
+    </section>
+
+    <section class="page" id="p7">
+      <h1>7. 市场与竞争</h1>
+      <ul>
+        <li>赛道：体育/技能训练 + AI 辅助。</li>
+        <li>差异化：可解释评分 + 教练生态协同 + 平台闭环数据。</li>
+        <li>壁垒：高质量标注资产、训练标准/知识库、闭环数据。</li>
+      </ul>
+      <p class="muted">建议配图：竞争象限图（内容平台/工具/AI单点 vs 我们）。</p>
+    </section>
+
+    <section class="page" id="p8">
+      <h1>8. 进展与里程碑</h1>
+      <ul>
+        <li>当前：覆盖[动作数]、完成分析[次数]、合作试点[机构数]、满意度[XX%]。</li>
+        <li>12–18个月里程碑：模型版本[X→Y]、城市/机构拓展、SaaS 上线、指标目标。</li>
+      </ul>
+      <p class="muted">建议配图：时间轴 + 指标趋势图。</p>
+    </section>
+
+    <section class="page" id="p9">
+      <h1>9. 风险与合规体系</h1>
+      <ul>
+        <li>数据最小化、加密存储与传输、访问审计、可删除/导出。</li>
+        <li>未成年人保护、内容/滥用防护、灰度与回滚策略。</li>
+        <li>法规映射：PIPL/DSL/CSL，供应商 DPA 与定期评估。</li>
+      </ul>
+      <p class="muted">建议配图：数据流与权限矩阵。</p>
+    </section>
+
+    <section class="page" id="p10">
+      <h1>10. 融资与计划</h1>
+      <ul>
+        <li>用途：模型与数据治理、区域合规、渠道拓展、核心岗位。</li>
+        <li>关键目标：用户/教练/机构数、GMV、留存与转化、SaaS 签约。</li>
+        <li>投后协同：渠道/校园/赛事/品牌资源诉求。</li>
+      </ul>
+      <div class="kpi">
+        <div class="card"><div class="v">[融资金额]</div><div class="t muted">计划额度</div></div>
+        <div class="card"><div class="v">[资金周期]</div><div class="t muted">可支撑周期</div></div>
+      </div>
+      <p class="footer">导出方式：浏览器打印 → 另存为 PDF。</p>
+    </section>
+  </main>
+</body>
+</html>

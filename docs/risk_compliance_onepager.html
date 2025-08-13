@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>琪武智创 风控/合规一页纸（A4，PDF可打印）</title>
+  <style>
+    :root { --primary:#4F49FF; --text:#111; --muted:#555; }
+    body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans",sans-serif; color:var(--text); margin:0; background:#fff;}
+    .container{max-width:900px; margin:0 auto; padding:24px}
+    h1{color:var(--primary); margin:0 0 8px}
+    h2{margin:16px 0 8px}
+    p,li{line-height:1.6}
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+    .badge{display:inline-block; padding:4px 8px; border:1px solid rgba(79,73,255,.3); color:var(--primary); border-radius:999px; font-size:12px}
+    .muted{color:var(--muted)}
+    @media print{ .container{padding:0 8px} }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>风控/合规一页纸</h1>
+    <div class="badge">琪武智创-动作评估教练预约平台</div>
+
+    <div class="grid">
+      <section>
+        <h2>项目概况</h2>
+        <ul>
+          <li>数据主体：学员、教练、机构</li>
+          <li>场景：训练反馈、预约与教学管理</li>
+        </ul>
+        <h2>数据最小化与保留</h2>
+        <ul>
+          <li>收集：训练图/视频、评分/角度、点评、预约/消息、必要账户/支付信息</li>
+          <li>脱敏：人脸/背景可选模糊；训练素材与分析产物分库管理</li>
+          <li>保留：默认[天数]，可配置；到期自动清理；自助导出与删除</li>
+        </ul>
+        <h2>安全与访问控制</h2>
+        <ul>
+          <li>传输/存储：TLS、静态加密（KMS/磁盘）、跨AZ/地域备份（RPO/RTO）</li>
+          <li>鉴权审计：JWT 会话、角色/租户隔离、敏感操作/字段访问审计</li>
+          <li>上传防护：大小/类型/MIME 校验、频率限制、恶意内容与重放防护</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>模型治理与可解释性</h2>
+        <ul>
+          <li>版本化与血缘、评测基准、偏差/失效监测与回滚</li>
+          <li>可解释评分：角度、稳定性、对称性；图层叠加可视化</li>
+          <li>人在回路：教练复核、争议处理、版本冻结</li>
+        </ul>
+        <h2>第三方与合规</h2>
+        <ul>
+          <li>供应商管理：云/对象存储/CDN/WAF/支付 DPA、定期评估与渗透测试</li>
+          <li>法规映射：PIPL/DSL/CSL，未成年人保护，支付合规（不触敏感要素）</li>
+        </ul>
+        <h2>事件响应与演练</h2>
+        <ul>
+          <li>分级预案、SLA、通报与法务流程</li>
+          <li>日志留存与溯源、定期演练</li>
+        </ul>
+        <h2>文档信息</h2>
+        <ul>
+          <li>版本：[vX.Y]；审批/日期：[ ] / [ ]</li>
+        </ul>
+      </section>
+    </div>
+
+    <p class="muted">导出方式：浏览器打印（Ctrl/Cmd+P）→ 另存为 PDF。</p>
+  </main>
+</body>
+</html>

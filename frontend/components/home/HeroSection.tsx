@@ -46,13 +46,13 @@ const HeroSection: React.FC = () => {
             <br />武术动作分析与评价
           </GradientTitle>
           
-          <motion.p 
+          <motion.p
             className="text-gray-200 text-xl mb-8 max-w-3xl mx-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            武道智评平台利用先进的计算机视觉和人工智能技术，
+            琪武智创平台利用先进的计算机视觉和人工智能技术，
             为武术爱好者和教练提供精准的姿态分析与专业评价
           </motion.p>
           

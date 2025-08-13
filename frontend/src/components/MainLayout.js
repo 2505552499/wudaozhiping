@@ -261,7 +261,7 @@ const MainLayout = ({ children }) => {
   return (
     <Layout className="layout" style={{ minHeight: '100vh' }}>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
-        <div className="logo">武道智评</div>
+        <div className="logo">琪武智创</div>
         <Menu
           theme="dark"
           mode="horizontal"
@@ -300,7 +300,7 @@ const MainLayout = ({ children }) => {
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>
-        武道智评 {new Date().getFullYear()} 智能姿态分析系统
+        琪武智创-动作评估教练预约平台 {new Date().getFullYear()}
       </Footer>
     </Layout>
   );

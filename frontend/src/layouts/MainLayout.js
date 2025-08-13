@@ -95,7 +95,7 @@ function MainLayout({ children }) {
         justifyContent: 'space-between'
       }}>
         <div style={{ color: 'white', fontSize: '18px', fontWeight: 'bold' }}>
-          武道智评
+          琪武智创
         </div>
         
         <Menu 
@@ -156,7 +156,7 @@ function MainLayout({ children }) {
       </Content>
       
       <Footer style={{ textAlign: 'center' }}>
-        武道智评 ©{new Date().getFullYear()} 创建
+        琪武智创-动作评估教练预约平台 ©{new Date().getFullYear()}
       </Footer>
     </Layout>
   );

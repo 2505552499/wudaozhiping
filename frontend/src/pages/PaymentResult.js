@@ -70,7 +70,7 @@ const PaymentResult = () => {
       setPaymentInfo({
         amount: totalAmount,
         out_trade_no: outTradeNo,
-        coach_name: subject.replace('武道智评-教练预约 ', ''),
+        coach_name: subject.replace('琪武智创-教练预约 ', ''),
         appointment_date: '加载中...',
         appointment_time: '加载中...',
         duration: '加载中...'

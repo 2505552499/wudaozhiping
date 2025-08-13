@@ -135,7 +135,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             <div className="flex-shrink-0 flex items-center">
               <Link href="/" className="font-bold text-2xl">
                 <span className={`transition-colors duration-300 ${scrolled ? 'text-xtalpi-dark-blue' : 'text-white'}`}>
-                  u6b66u9053u667au8bc4
+                  琪武智创
                 </span>
               </Link>
             </div>
@@ -321,7 +321,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>u6b66u9053u667au8bc4 {new Date().getFullYear()} u667au80fdu59ffu6001u5206u6790u7cfbu7edf - u4fddu7559u6240u6709u6743u5229</p>
+            <p>琪武智创-动作评估教练预约平台 {new Date().getFullYear()} - 保留所有权利</p>
           </div>
         </div>
       </footer>

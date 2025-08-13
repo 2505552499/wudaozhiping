@@ -97,7 +97,7 @@ const HomePage = () => {
             </h2>
 
             <p className="text-blue-100 text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed opacity-90">
-              {t('home.cta.description', '无论您是武术初学者还是有经验的爱好者，武道智评平台都能为您提供专业的动作分析和建议，帮助您更快地掌握技巧，提高技术水平')}
+              {t('home.cta.description', '无论您是武术初学者还是有经验的爱好者，琪武智创平台都能为您提供专业的动作分析和建议，帮助您更快地掌握技巧，提高技术水平')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
