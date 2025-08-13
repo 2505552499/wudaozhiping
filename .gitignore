@@ -5,3 +5,6 @@
 !frontend/public/img/*.png
 !frontend/public/img/*.jpg
 node_modules
+# Data and uploads (exclude from repo)
+/data/
+/uploads/
